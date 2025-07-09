@@ -102,7 +102,7 @@ export const Producers: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b">
+      <div>
         <div className="container mx-auto py-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>

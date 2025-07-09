@@ -6,39 +6,38 @@ import { Producers } from './pages/Producers';
 import { ProducerDetail } from './pages/ProducerDetail';
 import { Itinerary } from './pages/Itinerary';
 import { ItineraryBuilder } from './pages/ItineraryBuilder';
+import { ActiveItinerary } from './pages/ActiveItinerary';
 import { About } from './pages/About';
 import { ItineraryProvider } from './contexts/ItineraryContext';
+import { LocationProvider } from './contexts/LocationContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
-  console.log('[APP] Component rendering...');
-  console.log('[APP] React version:', React.version);
-  
-  // DIAGNOSTIC: Track component lifecycle
-  React.useEffect(() => {
-    console.log('[APP] App component mounted');
-    return () => console.log('[APP] App component unmounting');
-  }, []);
-  
   return (
-    <BrowserRouter>
-      <ItineraryProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={
-              <React.Suspense fallback={<div>Loading ItineraryBuilder...</div>}>
-                <ItineraryBuilder />
-              </React.Suspense>
-            } />
-            <Route path="/home" element={<Home />} />
-            <Route path="/producers" element={<Producers />} />
-            <Route path="/producer/:id" element={<ProducerDetail />} />
-            <Route path="/itinerary" element={<Itinerary />} />
-            <Route path="/itinerary/create" element={<Producers />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </Layout>
-      </ItineraryProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <LocationProvider>
+          <ItineraryProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={
+                  <React.Suspense fallback={<div>Loading ItineraryBuilder...</div>}>
+                    <ItineraryBuilder />
+                  </React.Suspense>
+                } />
+                <Route path="/home" element={<Home />} />
+                <Route path="/producers" element={<Producers />} />
+                <Route path="/producer/:id" element={<ProducerDetail />} />
+                <Route path="/itinerary" element={<Itinerary />} />
+                <Route path="/active-itinerary" element={<ActiveItinerary />} />
+                <Route path="/itinerary/create" element={<Producers />} />
+                <Route path="/about" element={<About />} />
+              </Routes>
+            </Layout>
+          </ItineraryProvider>
+        </LocationProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

@@ -45,7 +45,7 @@ export const ItineraryBar: React.FC = () => {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className="relative overflow-hidden rounded-lg border bg-card w-40">
-                    <div className="aspect-video relative">
+                    <div className="aspect-square relative">
                       <img
                         src={producer.image}
                         alt={producer.name}
@@ -83,14 +83,17 @@ export const ItineraryBar: React.FC = () => {
 
               {/* Add more placeholder */}
               {selectedProducers.length < maxProducers && (
-                <div className="flex-shrink-0 w-40 rounded-lg border-2 border-dashed border-muted-foreground/30 flex items-center justify-center aspect-[16/11]">
+                <Link 
+                  to="/producers"
+                  className="flex-shrink-0 w-40 rounded-lg border-2 border-dashed border-muted-foreground/30 flex items-center justify-center aspect-square hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer"
+                >
                   <div className="text-center">
                     <MapPin className="h-6 w-6 text-muted-foreground/50 mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground">
                       Add {maxProducers - selectedProducers.length} more
                     </p>
                   </div>
-                </div>
+                </Link>
               )}
             </div>
           </div>

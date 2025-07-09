@@ -9,7 +9,13 @@ export const Home: React.FC = () => {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-background" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/src/assets/images/banner-home.jpg')`,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white/80" />
         <div className="relative container mx-auto px-4 py-20 sm:py-32">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Fuel, Leaf, Users, UsersRound, Route as RouteIcon, ChevronRight } from 'lucide-react';
+import { MapPin, Clock, Fuel, Leaf, Users, UsersRound, Route as RouteIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { WeatherWidget } from '@/components/WeatherWidget';
 import { useItinerary } from '@/hooks/useItinerary';
 import { calculateMetrics, formatDuration } from '@/utils/metrics';
+import { ProducerImage } from '@/components/ui/ProducerImage';
 import type { Producer } from '@/types';
 
 interface PredefinedTour {
@@ -29,7 +30,6 @@ export const ItineraryBuilder: React.FC = () => {
   const [predefinedTours, setPredefinedTours] = useState<PredefinedTour[]>([]);
   const [producers, setProducers] = useState<Producer[]>([]);
   const [isLargeGroup, setIsLargeGroup] = useState(false);
-  const [locationPermission, setLocationPermission] = useState<'pending' | 'granted' | 'denied'>('pending');
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -104,28 +104,9 @@ export const ItineraryBuilder: React.FC = () => {
     };
 
     loadData();
-
-    // Request location permission
-    if (navigator.geolocation) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        setLocationPermission(result.state as 'granted' | 'denied' | 'pending');
-      });
-    }
   }, [clearItinerary]);
 
   const handlePredefinedTour = async (tour: PredefinedTour) => {
-    // If location permission not granted, request it
-    if (locationPermission === 'pending') {
-      try {
-        await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-        setLocationPermission('granted');
-      } catch {
-        setLocationPermission('denied');
-      }
-    }
-
     // Clear existing itinerary
     clearItinerary();
     
@@ -174,31 +155,40 @@ export const ItineraryBuilder: React.FC = () => {
   }
 
   console.log('Rendering ItineraryBuilder with tours:', predefinedTours.length);
+  console.log('[ITINERARY] Banner image path: /images/banner-itinerary.jpg');
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section */}
-      <div className="bg-muted/30 border-b">
-        <div className="container mx-auto px-4 py-8">
+      {/* Header Section with Banner */}
+      <div 
+        className="relative bg-cover bg-center border-b"
+        style={{
+          backgroundImage: `url('/src/assets/images/banner-itinerary.jpg')`
+        }}
+      >
+        {/* Yellow gradient overlay - 30% more transparent (from 35% to 14%) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/35 to-yellow-500/14" />
+        
+        <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold">Plan Your Farm Tour</h1>
+            <h1 className="text-3xl font-bold text-gray-800">Plan Your Farm Tour</h1>
             <WeatherWidget />
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Create your perfect 3-stop agritourism adventure in Eastern Ontario. 
+          <p className="text-lg text-gray-800 max-w-2xl">
+            Discover local farms, wineries, and artisan producers across Eastern Ontario. 
             Choose from our curated tours or build your own custom itinerary.
           </p>
           
           {/* Group Size Toggle */}
           <div className="mt-4 flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">Group size:</span>
+            <span className="text-sm text-gray-800">Group size:</span>
             <button
               onClick={() => setIsLargeGroup(!isLargeGroup)}
               className="flex items-center gap-2 px-3 py-1 rounded-full border transition-colors"
               style={{
                 backgroundColor: isLargeGroup ? 'hsl(var(--primary))' : 'transparent',
-                color: isLargeGroup ? 'white' : 'inherit',
-                borderColor: isLargeGroup ? 'hsl(var(--primary))' : 'hsl(var(--border))'
+                color: isLargeGroup ? 'white' : '#374151',
+                borderColor: isLargeGroup ? 'hsl(var(--primary))' : '#9CA3AF'
               }}
             >
               {isLargeGroup ? (
@@ -217,74 +207,9 @@ export const ItineraryBuilder: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick Start Tours */}
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-semibold mb-6">Quick Start Tours</h2>
-        
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-12">
-          {predefinedTours.map((tour) => {
-            const metrics = calculateMetrics(tour.estimatedDistance, tour.producerIds.length, isLargeGroup);
-            
-            return (
-              <Card
-                key={tour.id}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handlePredefinedTour(tour)}
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        <span className="text-2xl">{tour.emoji}</span>
-                        <span className="text-lg">{tour.name}</span>
-                      </CardTitle>
-                      <CardDescription className="mt-1">
-                        {tour.description}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {/* Metrics */}
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span>{metrics.distance}km</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-muted-foreground" />
-                        <span>{formatDuration(metrics.duration)}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Fuel className="h-3 w-3 text-muted-foreground" />
-                        <span>${metrics.fuelCost.toFixed(2)}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Leaf className="h-3 w-3 text-muted-foreground" />
-                        <span>{metrics.carbon}kg CO₂</span>
-                      </div>
-                    </div>
-                    
-                    {/* Stops */}
-                    <div className="text-xs text-muted-foreground">
-                      {tour.producerIds.length} stops • {tour.familyFriendly ? 'Family friendly' : 'Adults preferred'}
-                    </div>
-                    
-                    {/* CTA */}
-                    <Button variant="ghost" size="sm" className="w-full justify-between">
-                      Start Tour
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
         {/* Custom Itinerary Options */}
-        <div className="border-t pt-8">
+        <div className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">Create Custom Itinerary</h2>
           <p className="text-muted-foreground mb-6">
             Build your own personalized tour by selecting individual producers or choosing from categories.
@@ -320,6 +245,110 @@ export const ItineraryBuilder: React.FC = () => {
                 </CardDescription>
               </CardHeader>
             </Card>
+          </div>
+        </div>
+
+        {/* Quick Start Tours */}
+        <div className="border-t pt-8">
+          <h2 className="text-2xl font-semibold mb-6">Quick Start Tours</h2>
+          
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {predefinedTours.map((tour) => {
+              const metrics = calculateMetrics(tour.estimatedDistance, tour.producerIds.length, isLargeGroup);
+              
+              return (
+                <Card
+                  key={tour.id}
+                  className="hover:shadow-lg transition-shadow flex flex-col h-full"
+                >
+                  <CardHeader className="flex-none">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <span className="text-2xl">{tour.emoji}</span>
+                          <span className="text-lg">{tour.name}</span>
+                        </CardTitle>
+                        <CardDescription className="mt-1 min-h-[2.5rem]">
+                          {tour.description}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col">
+                    {/* Top Section - Metrics (fixed height) */}
+                    <div className="flex-none mb-4">
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3 text-muted-foreground" />
+                          <span>{metrics.distance}km</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3 text-muted-foreground" />
+                          <span>{formatDuration(metrics.duration)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Fuel className="h-3 w-3 text-muted-foreground" />
+                          <span>${metrics.fuelCost.toFixed(2)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Leaf className="h-3 w-3 text-muted-foreground" />
+                          <span>{metrics.carbon}kg CO₂</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Middle Section - Spacer to push thumbnails down */}
+                    <div className="flex-1" />
+                    
+                    {/* Bottom Section - Thumbnails, stops info, and button */}
+                    <div className="flex-none space-y-3">
+                      {/* Producer Thumbnails */}
+                      <div className="space-y-2">
+                        {tour.producerIds.slice(0, 3).map((producerId, index) => {
+                          const producerData = producers.find(p => p.id === producerId);
+                          
+                          return (
+                            <div key={producerId} className="flex items-center gap-2">
+                              <span className="text-xs text-muted-foreground w-4">{index + 1}.</span>
+                              <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
+                                <ProducerImage
+                                  producerSlug={producerId}
+                                  alt={producerData?.name || producerId}
+                                  size="thumb"
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <span className="text-xs text-muted-foreground truncate">
+                                {producerData?.name || producerId}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      {/* Stops */}
+                      <div className="text-xs text-muted-foreground">
+                        {tour.producerIds.length} stops • {tour.familyFriendly ? 'Family friendly' : 'Adults preferred'}
+                      </div>
+                      
+                      {/* CTA */}
+                      <div className="pt-8">
+                        <Button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePredefinedTour(tour);
+                          }}
+                          size="default" 
+                          className="w-full text-sm"
+                        >
+                          Start My Itinerary
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ItineraryBar } from '@/components/itinerary/ItineraryBar';
+import { LocationPermissionBanner } from '@/components/LocationPermissionBanner';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,22 +18,30 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   console.log('Layout rendering, current path:', location.pathname);
 
   const navItems = [
-    { path: '/', icon: Route, label: 'Itinerary' },
-    { path: '/home', icon: Home, label: 'Home' },
+    { path: '/', icon: Route, label: 'Make Itinerary' },
+    { path: '/itinerary', icon: Route, label: 'Itinerary' },
+    { path: '/home', icon: Home, label: 'Discover' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
     { path: '/about', icon: Info, label: 'About' },
   ];
 
   return (
     <div className="relative min-h-screen bg-background">
+      {/* Location Permission Banner */}
+      <LocationPermissionBanner />
+      
       {/* Modern Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-14 items-center">
+        <div className="container mx-auto flex h-[67px] items-center">
           <div className="mr-4 hidden md:flex">
-            <Link to="/" className="mr-6 flex items-center space-x-2">
-              <MapPin className="h-6 w-6 text-primary" />
-              <span className="hidden font-bold sm:inline-block">
-                AGRO AI
+            <Link to="/" className="mr-12 flex items-center space-x-2">
+              <img 
+                src="/src/assets/images/savour-east-logo.png" 
+                alt="Savour East" 
+                className="h-10 w-auto"
+              />
+              <span className="hidden font-bold sm:inline-block text-lg">
+                Savour East
               </span>
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -43,7 +52,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className={cn(
                     'transition-colors hover:text-foreground/80',
                     location.pathname === item.path
-                      ? 'text-foreground'
+                      ? 'text-orange-600'
                       : 'text-foreground/60'
                   )}
                 >
@@ -54,8 +63,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <Link to="/" className="flex items-center space-x-2 md:hidden">
-              <MapPin className="h-6 w-6 text-primary" />
-              <span className="font-bold">AGRO AI</span>
+              <img 
+                src="/src/assets/images/savour-east-logo.png" 
+                alt="Savour East" 
+                className="h-10 w-auto"
+              />
+              <span className="font-bold text-lg">Savour East</span>
             </Link>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
@@ -67,8 +80,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="pr-0">
-                <nav className="grid gap-6 text-lg font-medium">
+              <SheetContent side="right" className="pr-6 pl-6 pt-6 pb-8 flex flex-col">
+                <nav className="grid gap-3 text-lg font-medium">
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     return (
@@ -77,8 +90,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         to={item.path}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          'flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground',
-                          location.pathname === item.path && 'text-foreground'
+                          'flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground py-2 px-2 -mx-2 rounded-md hover:bg-muted/50',
+                          location.pathname === item.path && 'text-orange-600 bg-muted/30'
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -87,6 +100,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     );
                   })}
                 </nav>
+                
+                {/* Footer info in mobile menu */}
+                <div className="mt-8 pt-4 border-t">
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p className="font-semibold text-foreground">Savour East</p>
+                    <p>Discover Eastern Ontario's agricultural heritage through personalized farm tours.</p>
+                    <p className="text-xs">© 2024 Savour East. All rights reserved.</p>
+                    <p className="text-xs">A project supporting local agriculture and sustainable tourism.</p>
+                  </div>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
@@ -97,6 +120,43 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="flex-1 pb-32">
         {children}
       </main>
+
+      {/* Footer - Desktop Only */}
+      <footer className="hidden md:block bg-muted/50 border-t mt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-semibold mb-3 flex items-center gap-2">
+                <img 
+                  src="/src/assets/images/savour-east-logo.png" 
+                  alt="Savour East" 
+                  className="h-6 w-auto"
+                />
+                Savour East
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Discover Eastern Ontario's agricultural heritage through personalized farm tours.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3">About the Project</h3>
+              <p className="text-sm text-muted-foreground">
+                Supporting local agriculture and sustainable tourism by connecting visitors with the region's finest producers.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3">Contact</h3>
+              <p className="text-sm text-muted-foreground">
+                Eastern Ontario, Canada<br />
+                info@savoureast.ca
+              </p>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+            <p>© 2024 Savour East. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
 
       {/* Itinerary Bar */}
       <ItineraryBar />

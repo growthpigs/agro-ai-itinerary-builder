@@ -10,16 +10,32 @@
         "address": "16365 4 Rd, Avonmore, ON K0C 1C0",
         "region": "Avonmore"
       },
-      "categories": ["fruits", "vegetables", "pick-your-own"],
-      "activities": ["pick-your-own", "farm-store"],
+      "categories": [
+        "fruits",
+        "vegetables",
+        "pick-your-own"
+      ],
+      "activities": [
+        "pick-your-own",
+        "farm-store"
+      ],
       "hours": "Mid-June to October 31st: 9am–5pm",
       "phone": "(613) 346-2336",
       "email": "pam@avonmoreberryfarm.com",
       "website": "https://avonmoreberryfarm.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Avonmore Berry Farm1.webp",
       "seasonal": "June-October",
       "featured": true,
-      "tags": ["Scenic Location", "On-site Activities"]
+      "tags": [
+        "Scenic Location",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Avonmore Berry Farm1.webp",
+        "/images/producers/webp/full/Avonmore Berry Farm2.webp",
+        "/images/producers/webp/full/Avonmore Berry Farm3.webp",
+        "/images/producers/webp/full/Avonmore Berry Farm4.webp"
+      ]
     },
     {
       "id": "bercier-catering",
@@ -31,14 +47,29 @@
         "address": "At Fruits du Poirier",
         "region": "St-Eugène"
       },
-      "categories": ["catering", "restaurant"],
-      "activities": ["catering", "take-out"],
+      "categories": [
+        "catering",
+        "restaurant"
+      ],
+      "activities": [
+        "catering",
+        "take-out"
+      ],
       "hours": "Not open to the public",
       "phone": "(613) 677-9539",
       "email": "berciercateringservice@gmail.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Bercier Catering1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location"]
+      "tags": [
+        "Local Food",
+        "Scenic Location"
+      ],
+      "images": [
+        "/images/producers/webp/full/Bercier Catering1.webp",
+        "/images/producers/webp/full/Bercier Catering2.webp",
+        "/images/producers/webp/full/Bercier Catering3.webp",
+        "/images/producers/webp/full/Bercier Catering4.webp"
+      ]
     },
     {
       "id": "bischoff-orchards",
@@ -50,15 +81,30 @@
         "address": "6025 4th Line Rd, Bainsville, ON K0C 1E0",
         "region": "Bainsville"
       },
-      "categories": ["fruits", "pick-your-own"],
-      "activities": ["pick-your-own", "farm-store"],
+      "categories": [
+        "fruits",
+        "pick-your-own"
+      ],
+      "activities": [
+        "pick-your-own",
+        "farm-store"
+      ],
       "hours": "By appointment, U-Pick on weekends starting mid-summer",
       "phone": "(514) 239-3949",
       "email": "mark@bischoff.farm",
       "website": "https://bischofforchards.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Bischoff Orchards1.webp",
       "seasonal": "July-October",
-      "tags": ["Local Food", "Scenic Location"]
+      "tags": [
+        "Local Food",
+        "Scenic Location"
+      ],
+      "images": [
+        "/images/producers/webp/full/Bischoff Orchards1.webp",
+        "/images/producers/webp/full/Bischoff Orchards2.webp",
+        "/images/producers/webp/full/Bischoff Orchards3.webp",
+        "/images/producers/webp/full/Bischoff Orchards4.webp"
+      ]
     },
     {
       "id": "brauwerk-hoffman",
@@ -66,20 +112,34 @@
       "description": "Rockland's microbrewery specializing in traditional German style beer and food 🥨🍻",
       "location": {
         "lat": 45.5501,
-        "lng": -75.2910,
+        "lng": -75.291,
         "address": "733 Rue Industrielle, Rockland, ON K4K 1T2",
         "region": "Rockland"
       },
-      "categories": ["beer", "restaurant"],
-      "activities": ["restaurant", "brewery-tours"],
+      "categories": [
+        "beer",
+        "restaurant"
+      ],
+      "activities": [
+        "restaurant",
+        "brewery-tours"
+      ],
       "hours": "Wed-Thu: 11AM-8PM, Fri: 11AM-9PM, Sat: 11AM-8PM",
       "phone": "(613) 446-4244",
       "email": "info@brauwerkhoffman.ca",
       "website": "https://brauwerkhoffman.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Brauwerk Hoffman1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Wine, Beer & Spirits"]
+      "tags": [
+        "Wine, Beer & Spirits"
+      ],
+      "images": [
+        "/images/producers/webp/full/Brauwerk Hoffman1.webp",
+        "/images/producers/webp/full/Brauwerk Hoffman2.webp",
+        "/images/producers/webp/full/Brauwerk Hoffman3.webp",
+        "/images/producers/webp/full/Brauwerk Hoffman4.webp"
+      ]
     },
     {
       "id": "brighter-with-blooms",
@@ -91,35 +151,68 @@
         "address": "14835 Concession 1-2 Rd Finch, ON K0C 1K0",
         "region": "Finch"
       },
-      "categories": ["flowers"],
-      "activities": ["pick-your-own", "workshops", "farm-store"],
+      "categories": [
+        "flowers"
+      ],
+      "activities": [
+        "pick-your-own",
+        "workshops",
+        "farm-store"
+      ],
       "hours": "By appointment only",
       "phone": "(514) 243-6174",
       "email": "brighterwithblooms@gmail.com",
       "website": "https://brighterwithblooms.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Brighter with Blooms1.webp",
       "seasonal": "June-September",
-      "tags": ["Local Food", "Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Brighter with Blooms1.webp",
+        "/images/producers/webp/full/Brighter with Blooms2.webp",
+        "/images/producers/webp/full/Brighter with Blooms3.webp",
+        "/images/producers/webp/full/Brighter with Blooms4.webp"
+      ]
     },
     {
       "id": "broken-stick",
       "name": "Broken Stick Brewing",
       "description": "Family-oriented brewery with Farm and Forage series featuring ingredients from Hammond Golf course. Dog-friendly patio and glamping available.",
       "location": {
-        "lat": 45.3400,
-        "lng": -75.0800,
+        "lat": 45.34,
+        "lng": -75.08,
         "address": "600 Du Golf Road, Hammond, ON, K0A 2A0",
         "region": "Hammond"
       },
-      "categories": ["beer", "restaurant"],
-      "activities": ["restaurant", "brewery-tours", "glamping"],
+      "categories": [
+        "beer",
+        "restaurant"
+      ],
+      "activities": [
+        "restaurant",
+        "brewery-tours",
+        "glamping"
+      ],
       "hours": "Monday-Sunday: 9am-9pm",
       "phone": "",
       "email": "aaron@brokenstickbrewing.com",
       "website": "https://brokenstickbrewing.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Broken Stick1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Wine, Beer & Spirits"]
+      "tags": [
+        "Local Food",
+        "Wine, Beer & Spirits"
+      ],
+      "images": [
+        "/images/producers/webp/full/Broken Stick1.webp",
+        "/images/producers/webp/full/Broken Stick2.webp",
+        "/images/producers/webp/full/Broken Stick3.webp",
+        "/images/producers/webp/full/Broken Stick4.webp"
+      ]
     },
     {
       "id": "cafe-joyeux",
@@ -131,15 +224,30 @@
         "address": "1600 Laurier Street, Rockland, ON K4K 1C7",
         "region": "Rockland"
       },
-      "categories": ["coffee", "bakery"],
-      "activities": ["cafe", "community-events"],
+      "categories": [
+        "coffee",
+        "bakery"
+      ],
+      "activities": [
+        "cafe",
+        "community-events"
+      ],
       "hours": "Mon-Sun: 9:00am-4:00pm",
       "phone": "(613) 517-0137",
       "email": "info@cjoy.ca",
       "website": "https://cafejoyeux.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Café Joyeux1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Café Joyeux1.webp",
+        "/images/producers/webp/full/Café Joyeux2.webp",
+        "/images/producers/webp/full/Café Joyeux3.webp",
+        "/images/producers/webp/full/Café Joyeux4.webp"
+      ]
     },
     {
       "id": "cedar-barn-homestead",
@@ -151,15 +259,31 @@
         "address": "3224 Main St, Avonmore, ON K0C 1C0",
         "region": "Avonmore"
       },
-      "categories": ["artisan", "beauty"],
-      "activities": ["farm-store", "animal-visits"],
+      "categories": [
+        "artisan",
+        "beauty"
+      ],
+      "activities": [
+        "farm-store",
+        "animal-visits"
+      ],
       "hours": "Wed-Fri: 10:00am-5:00pm, Sat-Sun: 10:00am-4:00pm",
       "phone": "(613) 346-7289",
       "email": "Huguettecromie@yahoo.com",
       "website": "https://cedarbarnhomestead.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Cedar Barn Homestead1.webp",
       "seasonal": "Year-round",
-      "tags": ["Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Cedar Barn Homestead1.webp",
+        "/images/producers/webp/full/Cedar Barn Homestead2.webp",
+        "/images/producers/webp/full/Cedar Barn Homestead3.webp",
+        "/images/producers/webp/full/Cedar Barn Homestead4.webp"
+      ]
     },
     {
       "id": "euphie-dici",
@@ -171,15 +295,34 @@
         "address": "At Vergers Villeneuve",
         "region": "Saint-Pascal-Baylon"
       },
-      "categories": ["coffee", "restaurant", "bakery"],
-      "activities": ["restaurant", "cafe"],
+      "categories": [
+        "coffee",
+        "restaurant",
+        "bakery"
+      ],
+      "activities": [
+        "restaurant",
+        "cafe"
+      ],
       "hours": "Mon-Tue: 7am-6pm, Wed-Thu: 7am-7pm, Fri: 7am-6pm, Sat-Sun: 8am-5pm",
       "phone": "(613) 265-9441",
       "email": "euphiedici@gmail.com",
       "website": "https://euphiedici.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Euphie d_ici1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location", "Wine, Beer & Spirits", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "Wine, Beer & Spirits",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Euphie d_ici1.webp",
+        "/images/producers/webp/full/Euphie d_ici2.webp",
+        "/images/producers/webp/full/Euphie d_ici3.webp",
+        "/images/producers/webp/full/Euphie d_ici4.webp"
+      ]
     },
     {
       "id": "ferme-butte-bine",
@@ -187,20 +330,39 @@
       "description": "Market garden, organic bakery and farmstay. Farm café showcasing fresh, seasonal ingredients expertly crafted into delicious dishes.",
       "location": {
         "lat": 45.0889,
-        "lng": -74.6500,
+        "lng": -74.65,
         "address": "5875 Glen Brook Rd, Williamstown, ON K0C 2J0",
         "region": "Williamstown"
       },
-      "categories": ["vegetables", "bakery", "accommodation"],
-      "activities": ["farm-store", "restaurant", "accommodation"],
+      "categories": [
+        "vegetables",
+        "bakery",
+        "accommodation"
+      ],
+      "activities": [
+        "farm-store",
+        "restaurant",
+        "accommodation"
+      ],
       "hours": "Thu-Sat: 9:00am-5:00pm, Sun: 9:00am-3:00pm",
       "phone": "(613) 870-0069",
       "email": "fermebuttebine@gmail.com",
       "website": "https://fermebuttebine.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Ferme Butte et Bine1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Local Food", "On-site Activities", "Artisan Gifts", "Scenic Location"]
+      "tags": [
+        "Local Food",
+        "On-site Activities",
+        "Artisan Gifts",
+        "Scenic Location"
+      ],
+      "images": [
+        "/images/producers/webp/full/Ferme Butte et Bine1.webp",
+        "/images/producers/webp/full/Ferme Butte et Bine2.webp",
+        "/images/producers/webp/full/Ferme Butte et Bine3.webp",
+        "/images/producers/webp/full/Ferme Butte et Bine4.webp"
+      ]
     },
     {
       "id": "fraser-creek-pizza",
@@ -212,15 +374,30 @@
         "address": "19569 County Road 2, Summerstown, ON K0C 2E0",
         "region": "Summerstown"
       },
-      "categories": ["restaurant", "vegetables"],
-      "activities": ["restaurant", "farm-tours"],
+      "categories": [
+        "restaurant",
+        "vegetables"
+      ],
+      "activities": [
+        "restaurant",
+        "farm-tours"
+      ],
       "hours": "Fri: 4:00pm-7:00pm, Sat: 12:00pm-7:00pm",
       "phone": "(613) 931-1662",
       "email": "frasercreekpizzafarm@gmail.com",
       "website": "https://frasercreekpizzafarm.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Fraser Creek Pizza Farm1.webp",
       "seasonal": "Seasonal",
-      "tags": ["Local Food", "Scenic Location"]
+      "tags": [
+        "Local Food",
+        "Scenic Location"
+      ],
+      "images": [
+        "/images/producers/webp/full/Fraser Creek Pizza Farm1.webp",
+        "/images/producers/webp/full/Fraser Creek Pizza Farm2.webp",
+        "/images/producers/webp/full/Fraser Creek Pizza Farm3.webp",
+        "/images/producers/webp/full/Fraser Creek Pizza Farm4.webp"
+      ]
     },
     {
       "id": "garden-path-soap",
@@ -232,16 +409,33 @@
         "address": "284 Pleasant Corner Rd, Vankleek Hill, ON K0B 1R0",
         "region": "Vankleek Hill"
       },
-      "categories": ["artisan", "beauty"],
-      "activities": ["garden-tours", "workshops", "farm-store"],
+      "categories": [
+        "artisan",
+        "beauty"
+      ],
+      "activities": [
+        "garden-tours",
+        "workshops",
+        "farm-store"
+      ],
       "hours": "Wed-Sun: 10:00am-5:00pm",
       "phone": "(613) 678-7298",
       "email": "info@gardenpathsoap.com",
       "website": "https://gardenpathsoap.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Garden Path Homemade Soap1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Scenic Location", "Artisan Gifts", "On-site Activities"]
+      "tags": [
+        "Scenic Location",
+        "Artisan Gifts",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Garden Path Homemade Soap1.webp",
+        "/images/producers/webp/full/Garden Path Homemade Soap2.webp",
+        "/images/producers/webp/full/Garden Path Homemade Soap3.webp",
+        "/images/producers/webp/full/Garden Path Homemade Soap4.webp"
+      ]
     },
     {
       "id": "gibbs-honey",
@@ -253,15 +447,31 @@
         "address": "501 MacCallums Lane, Vankleek Hill, ON K0B1R0",
         "region": "Vankleek Hill"
       },
-      "categories": ["honey"],
-      "activities": ["farm-store", "beekeeping-tours"],
+      "categories": [
+        "honey"
+      ],
+      "activities": [
+        "farm-store",
+        "beekeeping-tours"
+      ],
       "hours": "Mon-Sat: 10am-4pm, Sun: 10am-2pm",
       "phone": "(613) 699-1131",
       "email": "hello@gibbshoney.com",
       "website": "https://gibbshoney.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Gibbs Honey1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Gibbs Honey1.webp",
+        "/images/producers/webp/full/Gibbs Honey2.webp",
+        "/images/producers/webp/full/Gibbs Honey3.webp",
+        "/images/producers/webp/full/Gibbs Honey4.webp"
+      ]
     },
     {
       "id": "halls-apple-market",
@@ -273,16 +483,35 @@
         "address": "2930 Concession 2 Rd, Brockville, ON K6V 5T1",
         "region": "Brockville"
       },
-      "categories": ["fruits", "baked-goods", "artisan"],
-      "activities": ["pick-your-own", "farm-store", "bakery"],
+      "categories": [
+        "fruits",
+        "baked-goods",
+        "artisan"
+      ],
+      "activities": [
+        "pick-your-own",
+        "farm-store",
+        "bakery"
+      ],
       "hours": "Mon-Sun: 8am-5:30pm",
       "phone": "(613) 342-6320",
       "email": "hallorchards@gmail.com",
       "website": "https://hallsapplemarket.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Halls Apple Market1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Local Food", "Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Halls Apple Market1.webp",
+        "/images/producers/webp/full/Halls Apple Market2.webp",
+        "/images/producers/webp/full/Halls Apple Market3.webp",
+        "/images/producers/webp/full/Halls Apple Market4.webp"
+      ]
     },
     {
       "id": "jamink-farm",
@@ -294,15 +523,31 @@
         "address": "17141 Willy Allan Rd, St Andrews West, ON K0C 2A0",
         "region": "St Andrews West"
       },
-      "categories": ["meat", "eggs", "maple"],
-      "activities": ["farm-store", "accommodation"],
+      "categories": [
+        "meat",
+        "eggs",
+        "maple"
+      ],
+      "activities": [
+        "farm-store",
+        "accommodation"
+      ],
       "hours": "Tue-Sat: 10:00am-3:00pm",
       "phone": "(519) 788-1670",
       "email": "jaminkfarm@gmail.com",
       "website": "https://jaminkfarm.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Jamink Farm1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location"]
+      "tags": [
+        "Local Food",
+        "Scenic Location"
+      ],
+      "images": [
+        "/images/producers/webp/full/Jamink Farm1.webp",
+        "/images/producers/webp/full/Jamink Farm2.webp",
+        "/images/producers/webp/full/Jamink Farm3.webp",
+        "/images/producers/webp/full/Jamink Farm4.webp"
+      ]
     },
     {
       "id": "kirkview-farms",
@@ -314,15 +559,32 @@
         "address": "20921 Laggan Glenelg Rd, Dalkeith ON, K0B 1E0",
         "region": "Dalkeith"
       },
-      "categories": ["meat", "eggs", "maple"],
-      "activities": ["farm-store", "farm-tours"],
+      "categories": [
+        "meat",
+        "eggs",
+        "maple"
+      ],
+      "activities": [
+        "farm-store",
+        "farm-tours"
+      ],
       "hours": "Mon-Sat: 9am-6pm, Sun: 10am-5pm",
       "phone": "(613) 363-7125",
       "email": "mike@kirkviewfarms.ca",
       "website": "https://kirkviewfarms.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Kirkview Farms1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Kirkview Farms1.webp",
+        "/images/producers/webp/full/Kirkview Farms2.webp",
+        "/images/producers/webp/full/Kirkview Farms3.webp",
+        "/images/producers/webp/full/Kirkview Farms4.webp"
+      ]
     },
     {
       "id": "les-fruits-du-poirier",
@@ -334,15 +596,32 @@
         "address": "2535 Concession Rd 3, St-Eugène, ON K0B 1P0",
         "region": "St-Eugène"
       },
-      "categories": ["fruits", "preserves", "pick-your-own"],
-      "activities": ["pick-your-own", "farm-store"],
+      "categories": [
+        "fruits",
+        "preserves",
+        "pick-your-own"
+      ],
+      "activities": [
+        "pick-your-own",
+        "farm-store"
+      ],
       "hours": "Wed-Sun: 9:00am-5:00pm",
       "phone": "(514) 792-3599",
       "email": "lesfruitsdupoirier@ropoirier.com",
       "website": "https://lesfruitsdupoirier.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Les Fruits du Poirier1.webp",
       "seasonal": "May-October",
-      "tags": ["Local Food", "Scenic Location", "On-site Activities"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Les Fruits du Poirier1.webp",
+        "/images/producers/webp/full/Les Fruits du Poirier2.webp",
+        "/images/producers/webp/full/Les Fruits du Poirier3.webp",
+        "/images/producers/webp/full/Les Fruits du Poirier4.webp"
+      ]
     },
     {
       "id": "les-jardins-ecologistes",
@@ -350,39 +629,68 @@
       "description": "Medicinal plants and lavender fields creating a peaceful atmosphere. Also offering organic beef, lamb and chicken.",
       "location": {
         "lat": 45.3167,
-        "lng": -75.3000,
+        "lng": -75.3,
         "address": "2107 Route 700 Ouest St-Albert, Ontario K0A 3C0",
         "region": "St-Albert"
       },
-      "categories": ["lavender", "meat", "artisan"],
-      "activities": ["garden-tours", "farm-store"],
+      "categories": [
+        "lavender",
+        "meat",
+        "artisan"
+      ],
+      "activities": [
+        "garden-tours",
+        "farm-store"
+      ],
       "hours": "Thu-Sun: 10am-5pm",
       "phone": "(613) 807-5785",
       "email": "lesjardinsecolos@gmail.com",
       "website": "https://lesjardinsecologistes.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Les Jardins Écologistes Grégoire1.webp",
       "seasonal": "June-September",
-      "tags": ["Scenic Location", "Artisan Gifts", "On-site Activities"]
+      "tags": [
+        "Scenic Location",
+        "Artisan Gifts",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Les Jardins Écologistes Grégoire1.webp",
+        "/images/producers/webp/full/Les Jardins Écologistes Grégoire2.webp",
+        "/images/producers/webp/full/Les Jardins Écologistes Grégoire3.webp",
+        "/images/producers/webp/full/Les Jardins Écologistes Grégoire4.webp"
+      ]
     },
     {
       "id": "lorignal-packing",
       "name": "L'Orignal Packing",
       "description": "Family butcher shop since 1971 offering personalized service and irresistible homemade ham. Full service meat counter.",
       "location": {
-        "lat": 45.6200,
-        "lng": -74.6900,
+        "lat": 45.62,
+        "lng": -74.69,
         "address": "2567 County Rd 17, L'Orignal, ON K0B 1A0",
         "region": "L'Orignal"
       },
-      "categories": ["meat"],
-      "activities": ["butcher-shop"],
+      "categories": [
+        "meat"
+      ],
+      "activities": [
+        "butcher-shop"
+      ],
       "hours": "Mon-Wed: 8am-5pm, Thu-Fri: 8:30am-6pm, Sat: 8:30am-4pm",
       "phone": "(613) 675-4612",
       "email": "christine@lorignalpacking.ca",
       "website": "https://lorignalpacking.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/L_Orignal Packing1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food"]
+      "tags": [
+        "Local Food"
+      ],
+      "images": [
+        "/images/producers/webp/full/L_Orignal Packing1.webp",
+        "/images/producers/webp/full/L_Orignal Packing2.webp",
+        "/images/producers/webp/full/L_Orignal Packing3.webp",
+        "/images/producers/webp/full/L_Orignal Packing4.webp"
+      ]
     },
     {
       "id": "les-vergers-villeneuve",
@@ -394,16 +702,36 @@
         "address": "1341 Rollin Rd, Saint-Pascal-Baylon, ON K0A 3N0",
         "region": "Saint-Pascal-Baylon"
       },
-      "categories": ["fruits", "wine", "pick-your-own"],
-      "activities": ["pick-your-own", "wine-tasting", "farm-store", "events"],
+      "categories": [
+        "fruits",
+        "wine",
+        "pick-your-own"
+      ],
+      "activities": [
+        "pick-your-own",
+        "wine-tasting",
+        "farm-store",
+        "events"
+      ],
       "hours": "Sat-Sun: 11:00am-5:00pm, Weekdays by appointment",
       "phone": "(613) 488-3077",
       "email": "vergersvilleneuve@hotmail.com",
       "website": "https://vergersvilleneuve.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Les Vergers Villeneuve and Blueberry Farm1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Local Food", "Wine, Beer & Spirits", "Scenic Location", "On-site Activities"]
+      "tags": [
+        "Local Food",
+        "Wine, Beer & Spirits",
+        "Scenic Location",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Les Vergers Villeneuve and Blueberry Farm1.webp",
+        "/images/producers/webp/full/Les Vergers Villeneuve and Blueberry Farm2.webp",
+        "/images/producers/webp/full/Les Vergers Villeneuve and Blueberry Farm3.webp",
+        "/images/producers/webp/full/Les Vergers Villeneuve and Blueberry Farm4.webp"
+      ]
     },
     {
       "id": "mariposa-farm",
@@ -415,16 +743,34 @@
         "address": "6468 County Rd 17, Plantagenet, ON K0B 1L0",
         "region": "Plantagenet"
       },
-      "categories": ["meat", "vegetables", "accommodation"],
-      "activities": ["farm-store", "accommodation", "farm-tours"],
+      "categories": [
+        "meat",
+        "vegetables",
+        "accommodation"
+      ],
+      "activities": [
+        "farm-store",
+        "accommodation",
+        "farm-tours"
+      ],
       "hours": "Saturday: 9:30am-4:00pm",
       "phone": "(613) 673-5881",
       "email": "slavoie@mariposa-duck.on.ca",
       "website": "https://mariposa-duck.on.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Mariposa Farm1.webp",
       "seasonal": "Year-round",
       "featured": true,
-      "tags": ["Local Food", "Scenic Location", "On-site Activities"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities"
+      ],
+      "images": [
+        "/images/producers/webp/full/Mariposa Farm1.webp",
+        "/images/producers/webp/full/Mariposa Farm2.webp",
+        "/images/producers/webp/full/Mariposa Farm3.webp",
+        "/images/producers/webp/full/Mariposa Farm4.webp"
+      ]
     },
     {
       "id": "martines-kitchen",
@@ -436,14 +782,31 @@
         "address": "At Brighter With Blooms",
         "region": "Finch"
       },
-      "categories": ["catering", "restaurant"],
-      "activities": ["catering", "mobile-kitchen"],
+      "categories": [
+        "catering",
+        "restaurant"
+      ],
+      "activities": [
+        "catering",
+        "mobile-kitchen"
+      ],
       "hours": "By appointment: 9am-6pm",
       "phone": "(514) 433-7646",
       "email": "LegareMartine@gmail.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Martine_s Kitchen1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Martine_s Kitchen1.webp",
+        "/images/producers/webp/full/Martine_s Kitchen2.webp",
+        "/images/producers/webp/full/Martine_s Kitchen3.webp",
+        "/images/producers/webp/full/Martine_s Kitchen4.webp"
+      ]
     },
     {
       "id": "simply-baked-catering",
@@ -455,35 +818,65 @@
         "address": "493 Main St E, Winchester, ON K0C 2K0",
         "region": "Winchester"
       },
-      "categories": ["bakery", "catering"],
-      "activities": ["bakery", "catering"],
+      "categories": [
+        "bakery",
+        "catering"
+      ],
+      "activities": [
+        "bakery",
+        "catering"
+      ],
       "hours": "Mon-Fri: 9am-5pm (Fri til 6pm), Sat: 9am-4pm",
       "phone": "(613) 909-7211",
       "email": "order@simplybakedcatering.com",
       "website": "https://simplybakedcatering.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Simply Baked Catering1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food"]
+      "tags": [
+        "Local Food"
+      ],
+      "images": [
+        "/images/producers/webp/full/Simply Baked Catering1.webp",
+        "/images/producers/webp/full/Simply Baked Catering2.webp",
+        "/images/producers/webp/full/Simply Baked Catering3.webp",
+        "/images/producers/webp/full/Simply Baked Catering4.webp"
+      ]
     },
     {
       "id": "smirlholm-farms",
       "name": "Smirlholm Farms",
       "description": "Local family farm producing all natural unpasteurized wildflower honey. Dedicated to pollinator health and sustainability.",
       "location": {
-        "lat": 45.1500,
+        "lat": 45.15,
         "lng": -75.1833,
         "address": "65 Main Street, Morewood, ON K0A 2R0",
         "region": "Morewood"
       },
-      "categories": ["honey", "maple"],
-      "activities": ["farm-store"],
+      "categories": [
+        "honey",
+        "maple"
+      ],
+      "activities": [
+        "farm-store"
+      ],
       "hours": "Contact for hours",
       "phone": "(613) 371-0962",
       "email": "Glenn.smirle@sympatico.ca",
       "website": "https://smirlholmfarms.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Smirlholm Farms1.webp",
       "seasonal": "Year-round",
-      "tags": ["Local Food", "Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Local Food",
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Smirlholm Farms1.webp",
+        "/images/producers/webp/full/Smirlholm Farms2.webp",
+        "/images/producers/webp/full/Smirlholm Farms3.webp",
+        "/images/producers/webp/full/Smirlholm Farms4.webp"
+      ]
     },
     {
       "id": "springfield-farm",
@@ -495,15 +888,35 @@
         "address": "18709 County Road 25, Apple Hill, ON K0C 1B0",
         "region": "Apple Hill"
       },
-      "categories": ["vegetables", "maple", "honey", "accommodation"],
-      "activities": ["farm-store", "disc-golf", "nature-trails", "accommodation"],
+      "categories": [
+        "vegetables",
+        "maple",
+        "honey",
+        "accommodation"
+      ],
+      "activities": [
+        "farm-store",
+        "disc-golf",
+        "nature-trails",
+        "accommodation"
+      ],
       "hours": "Seasonal and posted on website",
       "phone": "(613) 528-0083",
       "email": "springfieldfarmorganics@gmail.com",
       "website": "https://springfieldfarm.ca",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Springfield Farm1.webp",
       "seasonal": "Year-round",
-      "tags": ["Scenic Location", "On-site Activities", "Artisan Gifts"]
+      "tags": [
+        "Scenic Location",
+        "On-site Activities",
+        "Artisan Gifts"
+      ],
+      "images": [
+        "/images/producers/webp/full/Springfield Farm1.webp",
+        "/images/producers/webp/full/Springfield Farm2.webp",
+        "/images/producers/webp/full/Springfield Farm3.webp",
+        "/images/producers/webp/full/Springfield Farm4.webp"
+      ]
     },
     {
       "id": "vankleek-hill-vineyard",
@@ -511,19 +924,34 @@
       "description": "Community gathering place offering wine tasting and socializing in a welcoming atmosphere.",
       "location": {
         "lat": 45.5167,
-        "lng": -74.6500,
+        "lng": -74.65,
         "address": "3725 Dandy Road (County Road 12), Vankleek Hill, ON K0B 1R0",
         "region": "Vankleek Hill"
       },
-      "categories": ["wine"],
-      "activities": ["wine-tasting", "events"],
+      "categories": [
+        "wine"
+      ],
+      "activities": [
+        "wine-tasting",
+        "events"
+      ],
       "hours": "Thu: 11am-6pm, Fri-Sat: 11am-9pm, Sun: 11am-6pm",
       "phone": "(613) 295-9463",
       "email": "info@vkhwine.com",
       "website": "https://vkhwine.com",
-      "image": "/images/placeholder.svg",
+      "image": "/images/producers/webp/full/Vankleek Hill Vineyard1.webp",
       "seasonal": "Year-round",
-      "tags": ["Wine, Beer & Spirits", "Scenic Location", "Local Food"]
+      "tags": [
+        "Wine, Beer & Spirits",
+        "Scenic Location",
+        "Local Food"
+      ],
+      "images": [
+        "/images/producers/webp/full/Vankleek Hill Vineyard1.webp",
+        "/images/producers/webp/full/Vankleek Hill Vineyard2.webp",
+        "/images/producers/webp/full/Vankleek Hill Vineyard3.webp",
+        "/images/producers/webp/full/Vankleek Hill Vineyard4.webp"
+      ]
     }
   ]
 }

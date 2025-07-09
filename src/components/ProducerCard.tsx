@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Clock, Phone, Globe, ChevronRight, Navigation, Plus, Check, Circle } from 'lucide-react';
+import { MapPin, Clock, Phone, Globe, Navigation, Plus, Check, Circle } from 'lucide-react';
 import type { Producer } from '@/types';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useItinerary } from '@/hooks/useItinerary';
 import { checkIfOpen } from '@/utils/hours';
+import { ProducerImage } from '@/components/ui/ProducerImage';
+import { producerImages } from '@/data/producerImages';
 
 interface ProducerCardProps {
   producer: Producer;
@@ -27,6 +29,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
   const { addProducer, removeProducer, isProducerSelected, canAddMore } = useItinerary();
   const inItinerary = isProducerSelected(producer.id);
   const openStatus = checkIfOpen(producer.hours || '');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const handleClick = () => {
     if (onSelect) {
@@ -51,7 +54,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
   return (
     <Card
       className={cn(
-        'overflow-hidden transition-all hover:shadow-lg cursor-pointer',
+        'overflow-hidden transition-all hover:shadow-lg cursor-pointer p-0 gap-0',
         isSelected && 'ring-2 ring-primary',
         onSelect && 'hover:border-primary'
       )}
@@ -64,14 +67,20 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         }
       }}
     >
-      {/* Image */}
-      <div className="aspect-video relative overflow-hidden bg-muted">
-        <img 
-          src={producer.image} 
+      {/* Banner Image with Gradient */}
+      <Link 
+        to={`/producer/${producer.id}`}
+        className="block aspect-[21/9] relative overflow-hidden bg-muted"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <ProducerImage
+          producerSlug={(producerImages[producer.id] || producer.id) + (selectedImageIndex + 1)}
           alt={producer.name}
-          className="w-full h-full object-cover"
+          size="full"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
+        
         {producer.featured && (
           <Badge className="absolute top-2 left-2">
             Featured
@@ -88,74 +97,11 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
             In Itinerary
           </Badge>
         )}
-      </div>
+      </Link>
 
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <CardTitle className="line-clamp-1">{producer.name}</CardTitle>
-            <CardDescription className="line-clamp-2 mt-1">
-              {producer.description}
-            </CardDescription>
-          </div>
-          {/* Open/Closed indicator */}
-          <div className={cn(
-            "flex items-center gap-1 text-xs font-medium ml-2",
-            openStatus.isOpen ? "text-green-600" : "text-red-600"
-          )}>
-            <Circle className={cn(
-              "h-2 w-2 fill-current",
-              openStatus.isOpen ? "text-green-600" : "text-red-600"
-            )} />
-            {openStatus.isOpen ? "Open" : "Closed"}
-          </div>
-        </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
-        {/* Categories */}
-        <div className="flex flex-wrap gap-1">
-          {producer.categories.slice(0, 3).map((category) => (
-            <Badge key={category} variant="outline">
-              {category}
-            </Badge>
-          ))}
-          {producer.categories.length > 3 && (
-            <Badge variant="outline" className="bg-muted">
-              +{producer.categories.length - 3}
-            </Badge>
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
-            <span className="truncate">{producer.location.region}</span>
-          </div>
-          
-          {producer.hours && (
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span className="truncate">{producer.hours}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Tags */}
-        {producer.tags && producer.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {producer.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-      </CardContent>
-
-      {showDetails && (
-        <CardFooter className="flex justify-between gap-2">
+      <CardHeader className="pb-4 pt-6">
+        {/* Icon buttons row */}
+        <div className="flex items-center justify-between mb-4">
           <div className="flex gap-2">
             {producer.phone && (
               <Button
@@ -200,38 +146,141 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
               </a>
             </Button>
           </div>
-          
-          <div className="flex gap-2">
-            <Button
-              variant={inItinerary ? "outline" : "default"}
-              size="sm"
-              onClick={handleItineraryToggle}
-              className="gap-1"
-            >
-              {inItinerary ? (
-                <>
-                  <Check className="h-4 w-4" />
-                  Added
-                </>
-              ) : (
-                <>
-                  <Plus className="h-4 w-4" />
-                  Add to Itinerary
-                </>
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Link to={`/producer/${producer.id}`}>
-                Details
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
+          {/* Open/Closed indicator */}
+          <div className={cn(
+            "flex items-center gap-1 text-xs font-medium",
+            openStatus.isOpen ? "text-green-600" : "text-red-600"
+          )}>
+            <Circle className={cn(
+              "h-2 w-2 fill-current",
+              openStatus.isOpen ? "text-green-600" : "text-red-600"
+            )} />
+            {openStatus.isOpen ? "Open" : "Closed"}
           </div>
+        </div>
+        {/* Title and description */}
+        <div>
+          <CardTitle className="line-clamp-1">{producer.name}</CardTitle>
+          <CardDescription className="line-clamp-2 mt-1">
+            {producer.description}
+          </CardDescription>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4 pb-6">
+        {/* Categories and See more button */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-wrap gap-1">
+            {producer.categories.slice(0, 3).map((category) => (
+              <Badge key={category} variant="outline">
+                {category}
+              </Badge>
+            ))}
+            {producer.categories.length > 3 && (
+              <Badge variant="outline" className="bg-muted">
+                +{producer.categories.length - 3}
+              </Badge>
+            )}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            onClick={(e) => e.stopPropagation()}
+            className="h-[22px] px-3 text-xs font-medium border-black hover:bg-gray-100 flex-shrink-0"
+          >
+            <Link to={`/producer/${producer.id}`}>
+              See more
+            </Link>
+          </Button>
+        </div>
+
+        {/* Info */}
+        <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-4 w-4" />
+            <span className="truncate">{producer.location.region}</span>
+          </div>
+          
+          {producer.hours && (
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span className="truncate">{producer.hours}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Tags - Fixed height container for consistent alignment */}
+        <div className="min-h-[52px] flex items-start">
+          {producer.tags && producer.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {producer.tags.map((tag) => (
+                <Badge key={tag} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Image Gallery - 1x4 on both mobile and desktop */}
+        {producer.images && producer.images.length > 0 && (
+          <div className="grid grid-cols-4 gap-2">
+            {[1, 2, 3, 4].map((num, index) => {
+              const baseSlug = producerImages[producer.id] || producer.id;
+              const imageSlug = baseSlug + num;
+              
+              return (
+                <div 
+                  key={num}
+                  className={cn(
+                    "aspect-square rounded-md overflow-hidden bg-muted cursor-pointer transition-all relative",
+                    selectedImageIndex === index && "ring-2 ring-primary ring-offset-2"
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(index);
+                  }}
+                >
+                  <ProducerImage
+                    producerSlug={imageSlug}
+                    alt={`${producer.name} - Image ${num}`}
+                    size="thumb"
+                    className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+
+      {showDetails && (
+        <CardFooter className="pt-0 pb-6">
+          <Button
+            variant={inItinerary ? "outline" : "default"}
+            size="lg"
+            onClick={handleItineraryToggle}
+            className={cn(
+              "w-full gap-2 h-12",
+              inItinerary 
+                ? "bg-white hover:bg-gray-50 text-orange-600 border-orange-600" 
+                : "bg-orange-600 hover:bg-orange-700 text-white border-orange-600"
+            )}
+          >
+            {inItinerary ? (
+              <>
+                <Check className="h-4 w-4" />
+                Added to Itinerary
+              </>
+            ) : (
+              <>
+                <Plus className="h-4 w-4" />
+                Add to Itinerary
+              </>
+            )}
+          </Button>
         </CardFooter>
       )}
     </Card>

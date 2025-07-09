@@ -96,3 +96,25 @@ These rules guide AI implementation of UI elements to ensure visual consistency,
 - Focus indicators on all interactive elements
 - Proper ARIA labels for screen readers
 - Color not sole indicator of information
+
+## Card Layout Consistency
+
+### Vertical Alignment in Card Grids
+- When displaying cards in a grid layout, ensure all cards maintain consistent vertical alignment
+- Variable content sections (like tags, badges, or metadata) should have fixed minimum heights
+- Use `min-h-[*px]` to reserve space for content that may span multiple lines
+- Example: For a tags section that may have 1-2 lines, use `min-h-[52px]` to accommodate two lines
+- This prevents cards from having different heights and ensures image galleries and action buttons align across all cards in the grid
+
+### Content Section Heights
+- Identify variable-height content sections in cards (tags, descriptions, etc.)
+- Calculate the maximum likely height based on:
+  - Line height of the text
+  - Maximum number of expected lines
+  - Gap between elements
+- Apply consistent minimum heights to these sections across all cards
+- This is especially important for:
+  - Tag/badge sections
+  - Multi-line descriptions
+  - Category listings
+  - Any content that wraps to multiple lines

@@ -54,10 +54,13 @@ export const WeatherWidget: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-      {getWeatherIcon(weather.icon)}
-      <span>{weather.temp}°C</span>
-      <span className="hidden sm:inline">• {weather.condition}</span>
+    <div className="text-right">
+      <div className="flex items-center gap-2 text-sm text-gray-800">
+        {getWeatherIcon(weather.icon)}
+        <span>{weather.temp}°C</span>
+        <span className="hidden sm:inline">• {weather.condition}</span>
+      </div>
+      <div className="text-xs text-gray-700 mt-1">Eastern Ontario, Canada</div>
     </div>
   );
 };

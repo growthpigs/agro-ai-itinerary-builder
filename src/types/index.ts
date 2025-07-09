@@ -15,6 +15,7 @@ export interface Producer {
   website?: string;
   email?: string;
   image: string;
+  images?: string[];
   seasonal: string;
   featured?: boolean;
   tags?: string[];

@@ -1,34 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
+import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
 
 export const Itinerary: React.FC = () => {
   const { selectedProducers, removeProducer, clearItinerary } = useItinerary();
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-
-  useEffect(() => {
-    // Try to get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.log('Location access denied:', error);
-          // Default to Ottawa
-          setUserLocation({ lat: 45.4215, lng: -75.6972 });
-        }
-      );
-    } else {
-      setUserLocation({ lat: 45.4215, lng: -75.6972 });
-    }
-  }, []);
+  const { latitude, longitude } = useLocation();
+  const navigate = useNavigate();
+  
+  const userLocation = latitude && longitude 
+    ? { lat: latitude, lng: longitude }
+    : null;
 
   const handleShare = async () => {
     const producerIds = selectedProducers.map(p => p.id).join(',');
@@ -181,6 +166,13 @@ export const Itinerary: React.FC = () => {
                   <div className="flex-shrink-0 w-10 h-10 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-semibold">
                     {index + 1}
                   </div>
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={producer.image} 
+                      alt={producer.name}
+                      className="w-20 h-20 object-cover rounded-lg"
+                    />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
@@ -222,6 +214,14 @@ export const Itinerary: React.FC = () => {
         </div>
 
         {/* Actions */}
+        <div className="mb-4">
+          <button
+            className="w-full px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-colors text-lg"
+            onClick={() => navigate('/active-itinerary')}
+          >
+            Start Itinerary
+          </button>
+        </div>
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
             to="/producers"

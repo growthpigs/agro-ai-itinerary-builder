@@ -16,7 +16,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   className,
   loading = 'lazy'
 }) => {
-  const basePath = '/src/assets/images/producers';
+  const basePath = '/images/producers';
   
   const sizeClasses = {
     full: 'w-[800px] h-[800px]',
