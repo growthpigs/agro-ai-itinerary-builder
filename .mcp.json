@@ -1,0 +1,9 @@
+{
+  "perplexity-mcp": {
+    "type": "stdio",
+    "command": "perplexity-mcp",
+    "env": {
+      "PERPLEXITY_API_KEY": "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"
+    }
+  }
+}

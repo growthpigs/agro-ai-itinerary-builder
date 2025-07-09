@@ -1,0 +1,239 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { MapPin, Clock, Phone, Globe, ChevronRight, Navigation, Plus, Check, Circle } from 'lucide-react';
+import type { Producer } from '@/types';
+import { cn } from '@/lib/utils';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useItinerary } from '@/hooks/useItinerary';
+import { checkIfOpen } from '@/utils/hours';
+
+interface ProducerCardProps {
+  producer: Producer;
+  distance?: number;
+  onSelect?: (producer: Producer) => void;
+  isSelected?: boolean;
+  showDetails?: boolean;
+}
+
+export const ProducerCard: React.FC<ProducerCardProps> = ({ 
+  producer, 
+  distance,
+  onSelect,
+  isSelected = false,
+  showDetails = true
+}) => {
+  const { addProducer, removeProducer, isProducerSelected, canAddMore } = useItinerary();
+  const inItinerary = isProducerSelected(producer.id);
+  const openStatus = checkIfOpen(producer.hours || '');
+
+  const handleClick = () => {
+    if (onSelect) {
+      onSelect(producer);
+    }
+  };
+
+  const handleItineraryToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inItinerary) {
+      removeProducer(producer.id);
+    } else {
+      if (!canAddMore) {
+        // Could show a toast here
+        alert('You can only add up to 4 producers to your itinerary');
+        return;
+      }
+      addProducer(producer);
+    }
+  };
+
+  return (
+    <Card
+      className={cn(
+        'overflow-hidden transition-all hover:shadow-lg cursor-pointer',
+        isSelected && 'ring-2 ring-primary',
+        onSelect && 'hover:border-primary'
+      )}
+      onClick={handleClick}
+      role={onSelect ? 'button' : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      onKeyPress={(e) => {
+        if (onSelect && (e.key === 'Enter' || e.key === ' ')) {
+          handleClick();
+        }
+      }}
+    >
+      {/* Image */}
+      <div className="aspect-video relative overflow-hidden bg-muted">
+        <img 
+          src={producer.image} 
+          alt={producer.name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+        {producer.featured && (
+          <Badge className="absolute top-2 left-2">
+            Featured
+          </Badge>
+        )}
+        {distance && (
+          <Badge variant="secondary" className="absolute top-2 right-2">
+            {distance}km
+          </Badge>
+        )}
+        {inItinerary && (
+          <Badge className="absolute bottom-2 left-2 bg-primary">
+            <Check className="h-3 w-3 mr-1" />
+            In Itinerary
+          </Badge>
+        )}
+      </div>
+
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="line-clamp-1">{producer.name}</CardTitle>
+            <CardDescription className="line-clamp-2 mt-1">
+              {producer.description}
+            </CardDescription>
+          </div>
+          {/* Open/Closed indicator */}
+          <div className={cn(
+            "flex items-center gap-1 text-xs font-medium ml-2",
+            openStatus.isOpen ? "text-green-600" : "text-red-600"
+          )}>
+            <Circle className={cn(
+              "h-2 w-2 fill-current",
+              openStatus.isOpen ? "text-green-600" : "text-red-600"
+            )} />
+            {openStatus.isOpen ? "Open" : "Closed"}
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        {/* Categories */}
+        <div className="flex flex-wrap gap-1">
+          {producer.categories.slice(0, 3).map((category) => (
+            <Badge key={category} variant="outline">
+              {category}
+            </Badge>
+          ))}
+          {producer.categories.length > 3 && (
+            <Badge variant="outline" className="bg-muted">
+              +{producer.categories.length - 3}
+            </Badge>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-4 w-4" />
+            <span className="truncate">{producer.location.region}</span>
+          </div>
+          
+          {producer.hours && (
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span className="truncate">{producer.hours}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Tags */}
+        {producer.tags && producer.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {producer.tags.map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </CardContent>
+
+      {showDetails && (
+        <CardFooter className="flex justify-between gap-2">
+          <div className="flex gap-2">
+            {producer.phone && (
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                onClick={(e) => e.stopPropagation()}
+              >
+                <a href={`tel:${producer.phone}`}>
+                  <Phone className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {producer.website && (
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                onClick={(e) => e.stopPropagation()}
+              >
+                <a 
+                  href={producer.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Globe className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              onClick={(e) => e.stopPropagation()}
+            >
+              <a 
+                href={`https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Navigation className="h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              variant={inItinerary ? "outline" : "default"}
+              size="sm"
+              onClick={handleItineraryToggle}
+              className="gap-1"
+            >
+              {inItinerary ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  Added
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" />
+                  Add to Itinerary
+                </>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Link to={`/producer/${producer.id}`}>
+                Details
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </CardFooter>
+      )}
+    </Card>
+  );
+};

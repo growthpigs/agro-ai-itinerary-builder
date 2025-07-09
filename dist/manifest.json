@@ -1,0 +1,42 @@
+{
+  "name": "AGRO AI Itinerary Builder",
+  "short_name": "AGRO AI",
+  "description": "Discover agricultural producers in Eastern Ontario and create personalized farm tour itineraries",
+  "theme_color": "#16a34a",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["travel", "productivity", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-1.png",
+      "type": "image/png",
+      "sizes": "540x720"
+    },
+    {
+      "src": "/images/screenshot-2.png",
+      "type": "image/png",
+      "sizes": "540x720"
+    }
+  ]
+}

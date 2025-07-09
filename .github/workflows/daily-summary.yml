@@ -1,0 +1,23 @@
+name: Daily Project Summary
+
+on:
+  schedule:
+    - cron: '0 18 * * *'   # Runs every day at 18:00 UTC
+  workflow_dispatch:        # Allows manual runs
+
+jobs:
+  generate-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate daily summary
+        run: scripts/create-summary.sh
+
+      - name: Commit and push summary
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add to-do-summaries/
+          git commit -m "Add daily summary for $(date +'%d.%m.%Y')" || echo "No changes"
+          git push
