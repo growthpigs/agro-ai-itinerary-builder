@@ -20,8 +20,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navItems = [
     { path: '/', icon: Route, label: 'Make Itinerary' },
     { path: '/itinerary', icon: Route, label: 'Itinerary' },
-    { path: '/home', icon: Home, label: 'Discover' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
+    { path: '/home', icon: Home, label: 'Discover' },
     { path: '/about', icon: Info, label: 'About' },
   ];
 
