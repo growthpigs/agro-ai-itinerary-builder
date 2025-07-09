@@ -32,13 +32,13 @@ export const Home: React.FC = () => {
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" asChild>
-                <Link to="/producers">
+                <Link to="/categories">
                   <MapPin className="mr-2 h-5 w-5" />
                   Explore Producers
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/itinerary">
+                <Link to="/categories">
                   <Route className="mr-2 h-5 w-5" />
                   Build Itinerary
                 </Link>
