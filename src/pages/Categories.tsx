@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, ArrowRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface Category {
@@ -109,28 +108,28 @@ export const Categories: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-6">
       {/* Header */}
-      <div className="mx-auto max-w-4xl text-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+      <div className="mx-auto max-w-4xl text-center mb-6">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl mb-2">
           What interests you?
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Select the categories that match your interests. Our AI will find the perfect producers for your farm tour.
         </p>
       </div>
 
       {/* Category Grid */}
-      <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {categories.map((category) => {
             const isSelected = selectedCategories.includes(category.id);
             
             return (
-              <Card
+              <div
                 key={category.id}
                 className={cn(
-                  "relative overflow-hidden cursor-pointer transition-all",
+                  "relative overflow-hidden cursor-pointer transition-all rounded-lg",
                   "hover:shadow-lg hover:scale-[1.02]",
                   isSelected && "ring-2 ring-primary ring-offset-2"
                 )}
@@ -138,49 +137,48 @@ export const Categories: React.FC = () => {
               >
                 {/* Category Image */}
                 <div className="aspect-square relative">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ 
-                      backgroundImage: `url('${category.image}')`,
-                      backgroundColor: '#f3f4f6'
-                    }}
+                  <img 
+                    src={category.image}
+                    alt={category.name}
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className={cn(
-                    "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent",
+                    "absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent",
                     isSelected && "from-primary/80"
                   )} />
                   
                   {/* Selection Indicator */}
                   {isSelected && (
                     <div className="absolute top-2 right-2 bg-white rounded-full p-1">
-                      <Check className="h-5 w-5 text-primary" />
+                      <Check className="h-4 w-4 text-primary" />
                     </div>
                   )}
                   
                   {/* Category Info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <h3 className="font-semibold text-lg mb-1">{category.name}</h3>
-                    <p className="text-sm opacity-90">{category.description}</p>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                    <h3 className="font-semibold text-base mb-0.5">{category.name}</h3>
+                    <p className="text-xs opacity-90 line-clamp-2">{category.description}</p>
                   </div>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
           {selectedCategories.length > 0 && (
             <div className="text-sm text-muted-foreground">
               {selectedCategories.length} {selectedCategories.length === 1 ? 'category' : 'categories'} selected
             </div>
           )}
           
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {selectedCategories.length > 0 && (
               <Button
                 variant="outline"
                 onClick={() => setSelectedCategories([])}
+                size="sm"
               >
                 <X className="mr-2 h-4 w-4" />
                 Clear Selection
@@ -190,18 +188,18 @@ export const Categories: React.FC = () => {
             <Button
               onClick={handleContinue}
               disabled={selectedCategories.length === 0}
-              size="lg"
+              size={selectedCategories.length > 0 ? "default" : "sm"}
             >
               Continue to AI Itinerary
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
 
         {/* Help Text */}
-        <div className="mt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-6 text-center text-sm text-muted-foreground">
           <p>Select at least one category to continue. The more you select, the more diverse your tour will be!</p>
-          <p className="mt-2">Prefer to browse all producers instead? <Button variant="link" className="p-0 h-auto" onClick={() => navigate('/producers')}>View all producers</Button></p>
+          <p className="mt-1">Prefer to browse all producers instead? <Button variant="link" className="p-0 h-auto" onClick={() => navigate('/producers')}>View all producers</Button></p>
         </div>
       </div>
     </div>
