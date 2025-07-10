@@ -1,10 +1,10 @@
 // Map producer IDs from JSON to actual image filenames
 // This fixes mismatches between data and image files
 export const imageIdMapping: Record<string, string> = {
-  // Fix mismatched IDs (base names)
-  'ferme-butte-bine': 'ferme-butte-et-bine',
-  'fraser-creek-pizza': 'fraser-creek-pizza-farm', 
-  'garden-path-soap': 'garden-path-homemade-soap',
+  // Fix mismatched IDs (base names) - map to numbered version for thumbnails
+  'ferme-butte-bine': 'ferme-butte-et-bine-1',
+  'fraser-creek-pizza': 'fraser-creek-pizza-farm-1', 
+  'garden-path-soap': 'garden-path-homemade-soap-1',
   
   // Also map numbered variants
   'ferme-butte-bine-1': 'ferme-butte-et-bine-1',
@@ -29,7 +29,12 @@ export const imageIdMapping: Record<string, string> = {
   'les-jardins-ecologistes-3': 'les-jardins-ecologistes-gregoire-3',
   'les-jardins-ecologistes-4': 'les-jardins-ecologistes-gregoire-4',
   
-  // Images now exist - removed placeholder mappings
+  // Hall's Apple Market - map base to numbered version for thumbnails
+  'halls-apple-market': 'halls-apple-market-1',
+  'halls-apple-market-1': 'halls-apple-market-1',
+  'halls-apple-market-2': 'halls-apple-market-2',
+  'halls-apple-market-3': 'halls-apple-market-3',
+  'halls-apple-market-4': 'halls-apple-market-4',
   
   // All others use their ID as-is
 };
