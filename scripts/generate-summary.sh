@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Get current date
-DATE=$(date +%d.%m)
-SUMMARY_FILE="to-do-summaries/${DATE}_summaries.md"
+# Get current date in ISO-8601 format
+DATE=$(date +%Y-%m-%d)
+DATE_SHORT=$(date +%d.%m)
+SUMMARY_FILE="to-do-summaries/${DATE_SHORT}_summaries.md"
 
 # Get git information
 BRANCH=$(git branch --show-current)
@@ -14,11 +15,11 @@ if [ -f "$SUMMARY_FILE" ]; then
     echo "" >> "$SUMMARY_FILE"
     echo "---" >> "$SUMMARY_FILE"
     echo "" >> "$SUMMARY_FILE"
-    echo "### Update - $(date +%H:%M)" >> "$SUMMARY_FILE"
+    echo "### Update - $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$SUMMARY_FILE"
 else
     echo "## Daily Summary - $DATE" > "$SUMMARY_FILE"
     echo "" >> "$SUMMARY_FILE"
-    echo "**Generated**: $(date '+%Y-%m-%d %H:%M:%S')" >> "$SUMMARY_FILE"
+    echo "**Generated**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$SUMMARY_FILE"
     echo "**Branch**: $BRANCH" >> "$SUMMARY_FILE"
     echo "" >> "$SUMMARY_FILE"
 fi
