@@ -160,23 +160,39 @@ export const ItineraryBuilder: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header Section */}
-          <div className="mb-8">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+      {/* Banner Section */}
+      <header className="relative">
+        <div 
+          className="relative w-full h-[30vh] max-h-[280px] bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/images/banner-itinerary.jpg')`
+          }}
+        >
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-transparent" />
+          
+          <div className="absolute inset-0 flex items-end">
+            <div className="container mx-auto px-6 pb-8">
+              <div className="max-w-4xl">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 drop-shadow-lg">
                   Plan Your Farm Tour
                 </h1>
-                <p className="text-lg text-gray-600">
+                <p className="text-base sm:text-lg text-white/90 drop-shadow">
                   Choose from curated tours or build your own custom itinerary
                 </p>
               </div>
-              <WeatherWidget />
             </div>
           </div>
+          
+          {/* Weather Widget - Top Right */}
+          <div className="absolute top-4 right-4">
+            <WeatherWidget />
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
           
           {/* Group Size Toggle */}
           <div className="mb-8 flex items-center gap-4">
