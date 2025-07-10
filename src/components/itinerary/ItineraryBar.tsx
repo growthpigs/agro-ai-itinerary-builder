@@ -3,6 +3,7 @@ import { X, MapPin, ArrowRight } from 'lucide-react';
 import { useItinerary } from '@/hooks/useItinerary';
 import { Button } from '@/components/ui/button';
 import { SafeLink } from '@/components/ui/SafeLink';
+import { ProducerImage } from '@/components/ui/ProducerImage';
 
 export const ItineraryBar: React.FC = () => {
   const { selectedProducers, removeProducer, maxProducers } = useItinerary();
@@ -51,9 +52,10 @@ export const ItineraryBar: React.FC = () => {
                 >
                   <div className="relative overflow-hidden rounded-lg border bg-card w-40">
                     <div className="aspect-square relative">
-                      <img
-                        src={producer.image}
+                      <ProducerImage
+                        producerSlug={`${producer.id}-1`}
                         alt={producer.name}
+                        size="full"
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

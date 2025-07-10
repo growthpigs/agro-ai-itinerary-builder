@@ -5,6 +5,7 @@ import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
+import { ProducerImage } from '@/components/ui/ProducerImage';
 
 export const Itinerary: React.FC = () => {
   const { selectedProducers, removeProducer, clearItinerary } = useItinerary();
@@ -167,9 +168,10 @@ export const Itinerary: React.FC = () => {
                     {index + 1}
                   </div>
                   <div className="flex-shrink-0">
-                    <img 
-                      src={producer.image} 
+                    <ProducerImage 
+                      producerSlug={`${producer.id}-1`}
                       alt={producer.name}
+                      size="medium"
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                   </div>

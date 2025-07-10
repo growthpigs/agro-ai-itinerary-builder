@@ -312,7 +312,7 @@ export const ItineraryBuilder: React.FC = () => {
                               <span className="text-xs text-muted-foreground w-4">{index + 1}.</span>
                               <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
                                 <ProducerImage
-                                  producerSlug={producerId}
+                                  producerSlug={`${producerId}-1`}
                                   alt={producerData?.name || producerId}
                                   size="thumb"
                                   className="w-full h-full object-cover"

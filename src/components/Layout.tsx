@@ -48,7 +48,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               alt="Savour East"
               className="h-6 w-auto sm:h-8 md:h-10"
             />
-            <span className="hidden font-bold sm:inline-block text-sm sm:text-base md:text-lg font-onset tracking-wide">
+            <span className="hidden font-bold sm:inline-block text-xs sm:text-sm md:text-base font-onset tracking-wide">
               Savour East
             </span>
           </SafeLink>

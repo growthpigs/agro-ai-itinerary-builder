@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Check, ArrowRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { ProducerImage } from '@/components/ui/ProducerImage';
 
 interface Category {
   id: string;
@@ -17,63 +18,63 @@ const categories: Category[] = [
     id: 'vegetables',
     name: 'Fresh Vegetables',
     description: 'Seasonal produce from local farms',
-    image: '/src/assets/images/producers/webp/medium/Les Jardins Écologistes Grégoire1.webp',
+    image: 'les-jardins-ecologistes-gregoire-1',
     keywords: ['vegetables', 'produce', 'greens', 'organic']
   },
   {
     id: 'fruits',
     name: 'Fruits & Berries',
     description: 'Pick-your-own and farm-fresh fruits',
-    image: '/src/assets/images/producers/webp/medium/Avonmore Berry Farm1.webp',
+    image: 'avonmore-berry-farm-1',
     keywords: ['fruits', 'berries', 'apples', 'strawberries']
   },
   {
     id: 'dairy',
     name: 'Dairy Products',
     description: 'Fresh milk, cheese, and yogurt',
-    image: '/src/assets/images/producers/webp/medium/Kirkview Farms1.webp',
+    image: 'kirkview-farms-1',
     keywords: ['dairy', 'milk', 'cheese', 'yogurt']
   },
   {
     id: 'meat',
     name: 'Meat & Poultry',
     description: 'Locally raised beef, pork, and chicken',
-    image: '/src/assets/images/producers/webp/medium/L_Orignal Packing 1.webp',
+    image: 'l-orignal-packing-1',
     keywords: ['meat', 'beef', 'pork', 'chicken', 'poultry']
   },
   {
     id: 'maple',
     name: 'Maple Products',
     description: 'Pure maple syrup and treats',
-    image: '/src/assets/images/producers/webp/medium/Springfield Farm 1.webp',
+    image: 'springfield-farm-1',
     keywords: ['maple', 'syrup', 'sugar bush']
   },
   {
     id: 'honey',
     name: 'Honey & Beeswax',
     description: 'Raw honey and bee products',
-    image: '/src/assets/images/producers/webp/medium/Gibbs Honey1.webp',
+    image: 'gibbs-honey-1',
     keywords: ['honey', 'beeswax', 'apiary']
   },
   {
     id: 'artisan',
     name: 'Artisan Crafts',
     description: 'Handmade goods and crafts',
-    image: '/src/assets/images/producers/webp/medium/Garden Path Homemade Soap1.webp',
+    image: 'garden-path-homemade-soap-1',
     keywords: ['crafts', 'artisan', 'handmade']
   },
   {
     id: 'beverages',
     name: 'Beverages',
     description: 'Wine, beer, and cider',
-    image: '/src/assets/images/producers/webp/medium/Vankleek Hill Vineyard1.webp',
+    image: 'vankleek-hill-vineyard-1',
     keywords: ['wine', 'beer', 'cider', 'brewery', 'winery']
   },
   {
     id: 'bakery',
     name: 'Baked Goods',
     description: 'Fresh bread and pastries',
-    image: '/src/assets/images/producers/webp/medium/Simply Baked Catering1.webp',
+    image: 'simply-baked-catering-1',
     keywords: ['bakery', 'bread', 'pastries', 'baked goods']
   }
 ];
@@ -137,9 +138,10 @@ export const Categories: React.FC = () => {
               >
                 {/* Category Image */}
                 <div className="aspect-square relative">
-                  <img 
-                    src={category.image}
+                  <ProducerImage 
+                    producerSlug={category.image}
                     alt={category.name}
+                    size="full"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className={cn(
