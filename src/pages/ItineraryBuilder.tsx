@@ -233,7 +233,7 @@ export const ItineraryBuilder: React.FC = () => {
 
             <Card 
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => handleCustomItinerary()}
+              onClick={() => navigate('/categories')}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

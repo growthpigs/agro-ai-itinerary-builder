@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { imageIdMapping } from '@/data/imageIdMapping';
 
@@ -17,6 +17,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   className,
   loading = 'lazy'
 }) => {
+  const [hasError, setHasError] = useState(false);
   const basePath = '/images/producers';
   
   const sizeClasses = {
@@ -28,8 +29,8 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   // Apply ID mapping to fix mismatches
   const mappedSlug = imageIdMapping[producerSlug] || producerSlug;
   
-  // Use placeholder for missing images
-  if (mappedSlug === 'placeholder') {
+  // Use placeholder for missing images or errors
+  if (mappedSlug === 'placeholder' || hasError) {
     return (
       <img
         src="/images/placeholder.svg"
@@ -82,6 +83,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
             size,
             error: 'Image failed to load'
           });
+          setHasError(true);
         }}
       />
     </picture>
