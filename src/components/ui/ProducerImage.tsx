@@ -173,6 +173,16 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       // Replace the number at the end with the requested number
       return baseMapping.replace(/\d+$/, imageNum);
     }
+    
+    // Special handling for cafe-joyeux numbered images
+    if (baseProducer === 'cafe-joyeux') {
+      return size === 'thumb' ? `Café Joyeux ${imageNum}` : `cafe-joyeux-${imageNum}`;
+    }
+    
+    // Special handling for les-jardins-ecologistes numbered images
+    if (baseProducer === 'les-jardins-ecologistes-gregoire') {
+      return `Les Jardins Écologistes Grégoire${imageNum}`;
+    }
   }
 
   // Default fallback: add -1 suffix
@@ -232,6 +242,8 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
             size,
             error: 'Image failed to load'
           });
+          // Fallback to placeholder
+          e.currentTarget.src = '/images/placeholder.svg';
         }}
       />
     </picture>
