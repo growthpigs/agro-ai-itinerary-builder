@@ -192,7 +192,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
 
           {/* Title and description */}
           <div>
-            <h3 className="leading-none font-semibold line-clamp-1">{producer.name}</h3>
+            <h3 className="leading-none font-semibold line-clamp-2">{producer.name}</h3>
             <p className="text-muted-foreground text-sm line-clamp-2 mt-1">
               {producer.description}
             </p>

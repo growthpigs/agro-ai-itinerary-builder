@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ItineraryMap } from '@/components/itinerary/ItineraryMap';
 import { CategoryIcon } from '@/utils/categoryIcons';
 import type { ProducerCategory } from '@/types';
+import { SafeLink } from '@/components/ui/SafeLink';
 
 export const Itinerary: React.FC = () => {
   const { selectedProducers, removeProducer, clearItinerary } = useItinerary();
@@ -226,12 +227,15 @@ export const Itinerary: React.FC = () => {
                         <Trash2 className="h-5 w-5" />
                       </button>
                     </div>
-                    <Link
-                      to={`/producer/${producer.id}`}
+                    <SafeLink
+                      href={`/producer/${producer.id}`}
+                      type="internal"
                       className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
+                      producerName={producer.name}
+                      linkLabel="view-details"
                     >
                       View details →
-                    </Link>
+                    </SafeLink>
                   </div>
                 </div>
               </div>
