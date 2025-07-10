@@ -22,6 +22,13 @@ export const imageIdMapping: Record<string, string> = {
   'garden-path-soap-3': 'garden-path-homemade-soap-3',
   'garden-path-soap-4': 'garden-path-homemade-soap-4',
   
+  // Les Jardins needs special handling - the images include "Grégoire" in the name
+  'les-jardins-ecologistes': 'les-jardins-ecologistes-gregoire',
+  'les-jardins-ecologistes-1': 'les-jardins-ecologistes-gregoire-1',
+  'les-jardins-ecologistes-2': 'les-jardins-ecologistes-gregoire-2',
+  'les-jardins-ecologistes-3': 'les-jardins-ecologistes-gregoire-3',
+  'les-jardins-ecologistes-4': 'les-jardins-ecologistes-gregoire-4',
+  
   // Images now exist - removed placeholder mappings
   
   // All others use their ID as-is
