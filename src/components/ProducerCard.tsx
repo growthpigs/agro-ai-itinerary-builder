@@ -52,9 +52,9 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
   return (
     <article
       className={cn(
-        // CSS Grid container with explicit rows
+        // Flexbox container for vertical layout
         'bg-card text-card-foreground rounded-xl border shadow-sm overflow-hidden transition-all hover:shadow-lg cursor-pointer',
-        'grid grid-rows-[auto_1fr_auto_auto] h-full',
+        'flex flex-col h-full',
         isSelected && 'ring-2 ring-primary',
         onSelect && 'hover:border-primary'
       )}
@@ -67,7 +67,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         }
       }}
     >
-      {/* Row 1: Banner Image */}
+      {/* Banner Image */}
       <header className="relative">
         <Link 
           to={`/producer/${producer.id}`}
@@ -101,8 +101,8 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         </Link>
       </header>
 
-      {/* Row 2: Main content (flexbox container that grows) */}
-      <div className="flex flex-col p-6 gap-4">
+      {/* Main content area that grows to push images/button down */}
+      <div className="flex flex-col flex-grow p-6 gap-4">
         {/* Icon buttons row */}
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
@@ -224,7 +224,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         )}
       </div>
 
-      {/* Row 3: Image Gallery (anchored above button) */}
+      {/* Image Gallery (anchored above button) */}
       {producer.images && producer.images.length > 0 && (
         <div className="px-6 pb-4">
           <div className="grid grid-cols-4 gap-2">
@@ -257,7 +257,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         </div>
       )}
 
-      {/* Row 4: Add to Itinerary Button (always anchored at bottom) */}
+      {/* Add to Itinerary Button (always anchored at bottom) */}
       {showDetails && (
         <footer className="p-6 pt-0">
           <Button
