@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Producers } from './pages/Producers';
 import { ProducerDetail } from './pages/ProducerDetail';
+import { Categories } from './pages/Categories';
 import { Itinerary } from './pages/Itinerary';
 import { ItineraryBuilder } from './pages/ItineraryBuilder';
 import { ActiveItinerary } from './pages/ActiveItinerary';
@@ -26,6 +27,7 @@ function App() {
                   </Suspense>
                 } />
                 <Route path="/home" element={<Home />} />
+                <Route path="/categories" element={<Categories />} />
                 <Route path="/producers" element={<Producers />} />
                 <Route path="/producer/:id" element={<ProducerDetail />} />
                 <Route path="/itinerary" element={<Itinerary />} />

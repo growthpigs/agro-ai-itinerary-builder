@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Map, List } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import type { Producer } from '@/types';
 import { ProducerList } from '@/components/ProducerList';
 import { FilterBar } from '@/components/FilterBar';
@@ -8,6 +9,7 @@ import { MapView } from '@/components/map/MapView';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const Producers: React.FC = () => {
+  const navigate = useNavigate();
   const [producers, setProducers] = useState<Producer[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
@@ -149,7 +151,7 @@ export const Producers: React.FC = () => {
             <MapView 
               producers={filteredProducers}
               onProducerClick={(producer) => {
-                window.location.href = `/producer/${producer.id}`;
+                navigate(`/producer/${producer.id}`);
               }}
             />
           </div>

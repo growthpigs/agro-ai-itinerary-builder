@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { MapPin, Clock, Phone, Globe, Navigation, Plus, Check, Circle } from 'lucide-react';
 import type { Producer } from '@/types';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useItinerary } from '@/hooks/useItinerary';
 import { checkIfOpen } from '@/utils/hours';
 import { ProducerImage } from '@/components/ui/ProducerImage';
-import { validateLink, logLinkClick } from '@/utils/linkValidator';
+import { SafeLink } from '@/components/ui/SafeLink';
 
 interface ProducerCardProps {
   producer: Producer;
@@ -31,25 +29,10 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
   const openStatus = checkIfOpen(producer.hours || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Validate all links on mount and when producer changes
-  useEffect(() => {
-    console.log(`[ProducerCard - ${producer.name}] Validating links...`);
-    
-    // Validate phone
-    const phoneValidation = validateLink('phone', producer.phone, producer.name);
-    if (!phoneValidation.isValid) console.warn(phoneValidation.warning);
-
-    // Validate website
-    const websiteValidation = validateLink('website', producer.website, producer.name);
-    if (!websiteValidation.isValid) console.warn(websiteValidation.warning);
-
-    // Validate maps (using coordinates)
-    const mapsUrl = producer.location?.lat && producer.location?.lng 
-      ? `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`
-      : null;
-    const mapsValidation = validateLink('maps', mapsUrl, producer.name);
-    if (!mapsValidation.isValid) console.warn(mapsValidation.warning);
-  }, [producer]);
+  // Create maps URL from coordinates
+  const mapsUrl = producer.location?.lat && producer.location?.lng 
+    ? `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`
+    : null;
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't trigger card selection if clicking on a link or button
@@ -68,7 +51,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
 
   const handleItineraryToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    logLinkClick(e, 'itinerary-button', 'N/A', producer.name);
+    console.log(`[ProducerCard - ${producer.name}] Itinerary button clicked`);
     
     if (inItinerary) {
       removeProducer(producer.id);
@@ -81,17 +64,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
     }
   };
 
-  // Prepare validated links
-  const phoneValidation = validateLink('phone', producer.phone, producer.name);
-  const websiteValidation = validateLink('website', producer.website, producer.name);
-  const mapsUrl = producer.location?.lat && producer.location?.lng 
-    ? `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`
-    : null;
-  const mapsValidation = validateLink('maps', mapsUrl, producer.name);
-  const seeMoreValidation = validateLink('see-more', `/producer/${producer.id}`, producer.name);
-
   return (
-    <TooltipProvider>
       <article
         className={cn(
           // Flexbox container for vertical layout
@@ -111,13 +84,12 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
       >
         {/* Banner Image */}
         <header className="relative">
-          <Link 
-            to={`/producer/${producer.id}`}
+          <SafeLink
+            href={`/producer/${producer.id}`}
+            type="internal"
             className="block aspect-[21/9] relative overflow-hidden bg-muted"
-            onClick={(e) => {
-              e.stopPropagation();
-              logLinkClick(e, 'banner-image', `/producer/${producer.id}`, producer.name);
-            }}
+            producerName={producer.name}
+            linkLabel="banner-image"
           >
             <ProducerImage
               producerSlug={`${producer.id}-${selectedImageIndex + 1}`}
@@ -143,7 +115,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
                 In Itinerary
               </Badge>
             )}
-          </Link>
+          </SafeLink>
         </header>
 
         {/* Main content area that grows to push images/button down */}
@@ -152,116 +124,58 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
               {/* Phone Button */}
-              {phoneValidation.isValid ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  onClick={(e) => e.stopPropagation()}
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                onClick={(e) => e.stopPropagation()}
+              >
+                <SafeLink
+                  href={producer.phone}
+                  type="phone"
+                  producerName={producer.name}
+                  linkLabel="phone-button"
+                  disabledMessage="Invalid phone number"
                 >
-                  <a 
-                    href={phoneValidation.href}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      logLinkClick(e, 'phone', phoneValidation.href, producer.name);
-                    }}
-                  >
-                    <Phone className="h-4 w-4" />
-                  </a>
-                </Button>
-              ) : producer.phone !== undefined && producer.phone !== null ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled
-                      className="opacity-50"
-                    >
-                      <Phone className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Invalid phone number</p>
-                  </TooltipContent>
-                </Tooltip>
-              ) : null}
+                  <Phone className="h-4 w-4" />
+                </SafeLink>
+              </Button>
 
               {/* Website Button */}
-              {websiteValidation.isValid ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  onClick={(e) => e.stopPropagation()}
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                onClick={(e) => e.stopPropagation()}
+              >
+                <SafeLink
+                  href={producer.website}
+                  type="external"
+                  producerName={producer.name}
+                  linkLabel="website-button"
+                  disabledMessage="Invalid website URL"
                 >
-                  <a 
-                    href={websiteValidation.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      logLinkClick(e, 'website', websiteValidation.href, producer.name);
-                    }}
-                  >
-                    <Globe className="h-4 w-4" />
-                  </a>
-                </Button>
-              ) : producer.website !== undefined && producer.website !== null ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled
-                      className="opacity-50"
-                    >
-                      <Globe className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Invalid website URL</p>
-                  </TooltipContent>
-                </Tooltip>
-              ) : null}
+                  <Globe className="h-4 w-4" />
+                </SafeLink>
+              </Button>
 
               {/* Maps Button */}
-              {mapsValidation.isValid ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  onClick={(e) => e.stopPropagation()}
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                onClick={(e) => e.stopPropagation()}
+              >
+                <SafeLink
+                  href={mapsUrl}
+                  type="external"
+                  producerName={producer.name}
+                  linkLabel="maps-button"
+                  disabledMessage="Location unavailable"
                 >
-                  <a 
-                    href={mapsValidation.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      logLinkClick(e, 'maps', mapsValidation.href, producer.name);
-                    }}
-                  >
-                    <Navigation className="h-4 w-4" />
-                  </a>
-                </Button>
-              ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled
-                      className="opacity-50"
-                    >
-                      <Navigation className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Location unavailable</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
+                  <Navigation className="h-4 w-4" />
+                </SafeLink>
+              </Button>
             </div>
             {/* Open/Closed indicator */}
             <div className={cn(
@@ -278,7 +192,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
 
           {/* Title and description */}
           <div>
-            <h3 className="leading-none font-semibold line-clamp-1">{producer.name}</h3>
+            <h3 className="leading-none font-semibold line-clamp-2">{producer.name}</h3>
             <p className="text-muted-foreground text-sm line-clamp-2 mt-1">
               {producer.description}
             </p>
@@ -305,15 +219,14 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
               onClick={(e) => e.stopPropagation()}
               className="h-[22px] px-3 text-xs font-medium border-black hover:bg-gray-100 flex-shrink-0"
             >
-              <Link 
-                to={seeMoreValidation.href}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  logLinkClick(e, 'see-more', seeMoreValidation.href, producer.name);
-                }}
+              <SafeLink
+                href={`/producer/${producer.id}`}
+                type="internal"
+                producerName={producer.name}
+                linkLabel="see-more-button"
               >
                 See more
-              </Link>
+              </SafeLink>
             </Button>
           </div>
 
@@ -360,7 +273,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
                     )}
                     onClick={(e) => {
                       e.stopPropagation();
-                      logLinkClick(e, 'thumbnail', imageSlug, producer.name);
+                      console.log(`[ProducerCard - ${producer.name}] Thumbnail clicked: ${imageSlug}`);
                       setSelectedImageIndex(index);
                     }}
                   >
@@ -407,6 +320,5 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
           </footer>
         )}
       </article>
-    </TooltipProvider>
   );
 };

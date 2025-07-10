@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { debugLog } from './utils/debugLogger'
 
 // DIAGNOSTIC: Track script execution
 console.log('[MAIN] Script starting...');
@@ -19,6 +20,9 @@ if (document.readyState === 'loading') {
 
 function mountApp() {
   console.log('[MAIN] Attempting to mount React app...');
+  
+  // Initialize debug logging
+  debugLog.init();
   
   // DIAGNOSTIC: Check DOM state
   console.log('[MAIN] Document body exists:', !!document.body);
