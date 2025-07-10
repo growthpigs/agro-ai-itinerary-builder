@@ -159,50 +159,25 @@ export const ItineraryBuilder: React.FC = () => {
   console.log('[ITINERARY] Banner image path: /images/banner-itinerary.jpg');
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Full Width Banner */}
-      <header className="relative -mx-4 sm:-mx-6 lg:-mx-8">
-        <div 
-          className="relative w-full h-[45vh] max-h-[400px] bg-cover bg-center"
-          style={{
-            backgroundImage: `url('/images/banner-itinerary.jpg')`
-          }}
-        >
-          {/* Yellow gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/40 via-yellow-500/25 to-transparent" />
-          
-          {/* Benday dot pattern overlay */}
-          <div 
-            className="absolute inset-0 opacity-15"
-            style={{
-              backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)`,
-              backgroundSize: '4px 4px',
-              backgroundPosition: '0 0, 2px 2px'
-            }}
-          />
-          
-          <div className="absolute inset-0 flex items-end">
-            <div className="container mx-auto px-4 pb-6 sm:pb-8">
-              <div className="max-w-4xl">
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 drop-shadow-sm">
-                  Plan Your Farm Tour
-                </h1>
-                <p className="text-base sm:text-lg text-gray-700 drop-shadow-sm">
-                  Choose from curated tours or build your own custom itinerary
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Weather Widget - Top Right */}
-          <div className="absolute top-4 right-4">
-            <WeatherWidget />
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
+          {/* Header Section */}
+          <div className="mb-8">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                  Plan Your Farm Tour
+                </h1>
+                <p className="text-lg text-gray-600">
+                  Choose from curated tours or build your own custom itinerary
+                </p>
+              </div>
+              <WeatherWidget />
+            </div>
+          </div>
+          
           {/* Group Size Toggle */}
           <div className="mb-8 flex items-center gap-4">
             <span className="text-sm text-gray-600">Planning for:</span>
@@ -333,7 +308,7 @@ export const ItineraryBuilder: React.FC = () => {
                               <span className="text-xs text-muted-foreground w-4">{index + 1}.</span>
                               <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
                                 <ProducerImage
-                                  producerSlug={producerId}
+                                  producerSlug={`${producerId}-1`}
                                   alt={producerData?.name || producerId}
                                   size="thumb"
                                   className="w-full h-full object-cover"

@@ -88,54 +88,30 @@ export const ProducerDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      {/* Full Width Banner - Breaking out of container */}
-      <header className="relative -mx-4 sm:-mx-6 lg:-mx-8">
-        <div className="relative w-full h-[45vh] max-h-[400px] overflow-hidden bg-gray-200">
-          <ProducerImage
-            producerSlug={producer.id + '-1'}
-            alt={`${producer.name} banner`}
-            size="full"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            loading="eager"
-          />
-          
-          {/* White gradient overlay with opacity */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/40 to-white/20" />
-          
-          {/* Benday dot pattern overlay */}
-          <div 
-            className="absolute inset-0 opacity-15"
-            style={{
-              backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)`,
-              backgroundSize: '4px 4px',
-              backgroundPosition: '0 0, 2px 2px'
-            }}
-          />
-          
-          {/* Back button */}
-          <button
-            onClick={() => navigate(-1)}
-            className="absolute top-4 left-4 sm:left-6 lg:left-8 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-all hover:scale-105 shadow-lg"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50">
 
       {/* Content - Better width for readability */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-4 inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span className="text-sm">Back</span>
+        </button>
+        
         {/* Producer Header Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 -mt-12 relative z-10 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Header with Image and Title */}
           <div className="p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row gap-6">
-              {/* Producer Thumbnail */}
+              {/* Producer Thumbnail - Using first image */}
               <div className="flex-shrink-0">
                 <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden shadow-md">
                   <ProducerImage
-                    producerSlug={producer.id}
+                    producerSlug={producer.id + '-1'}
                     alt={producer.name}
                     size="thumb"
                     className="w-full h-full object-cover"
@@ -286,34 +262,35 @@ export const ProducerDetail: React.FC = () => {
             )}
           </div>
 
-          {/* Categories & Activities */}
-          <div className="border-t border-gray-100 mt-6 pt-6">
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Products</h3>
-                <div className="flex flex-wrap gap-2">
-                  {producer.categories.map((category) => (
-                    <span
-                      key={category}
-                      className="bg-primary-50 text-primary-700 text-xs px-2.5 py-1 rounded-full font-medium"
-                    >
-                      {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] || category}
-                    </span>
-                  ))}
-                </div>
+        </div>
+        
+        {/* Categories & Activities - Formatted like fact grid */}
+        <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="grid sm:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Products</h3>
+              <div className="flex flex-wrap gap-2">
+                {producer.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="bg-primary-50 text-primary-700 text-xs px-2.5 py-1 rounded-full font-medium"
+                  >
+                    {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] || category}
+                  </span>
+                ))}
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Activities</h3>
-                <div className="flex flex-wrap gap-2">
-                  {producer.activities.map((activity) => (
-                    <span
-                      key={activity}
-                      className="bg-earth-50 text-earth-700 text-xs px-2.5 py-1 rounded-full font-medium"
-                    >
-                      {ACTIVITY_LABELS[activity as keyof typeof ACTIVITY_LABELS] || activity}
-                    </span>
-                  ))}
-                </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Activities</h3>
+              <div className="flex flex-wrap gap-2">
+                {producer.activities.map((activity) => (
+                  <span
+                    key={activity}
+                    className="bg-earth-50 text-earth-700 text-xs px-2.5 py-1 rounded-full font-medium"
+                  >
+                    {ACTIVITY_LABELS[activity as keyof typeof ACTIVITY_LABELS] || activity}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -329,13 +306,13 @@ export const ProducerDetail: React.FC = () => {
               return (
                 <div 
                   key={num}
-                  className="aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-sm"
+                  className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-sm"
                 >
                   <ProducerImage
                     producerSlug={imageSlug}
                     alt={`${producer.name} - Image ${num}`}
                     size="medium"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
                 </div>

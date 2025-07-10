@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Route, Calendar, Users, Sparkles, Clock, ArrowRight, CheckCircle, Navigation, Share2 } from 'lucide-react';
+import { MapPin, Route, Calendar, Users, Sparkles, Clock, CheckCircle, Navigation, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SafeLink } from '@/components/ui/SafeLink';
@@ -52,16 +52,27 @@ export const Home: React.FC = () => {
               </div>
             </div>
             
-            <div className="mt-12 flex justify-center">
-              <Button size="lg" asChild>
+            <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="outline" asChild>
                 <SafeLink 
-                  href="/itinerary"
+                  href="/producers"
                   type="internal"
                   producerName="Home"
-                  linkLabel="get-started-hero"
+                  linkLabel="browse-producers-hero"
                 >
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Browse Producers
+                </SafeLink>
+              </Button>
+              <Button size="lg" asChild>
+                <SafeLink 
+                  href="/categories"
+                  type="internal"
+                  producerName="Home"
+                  linkLabel="browse-categories-hero"
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Browse by Category
                 </SafeLink>
               </Button>
             </div>
