@@ -24,7 +24,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/itinerary', icon: Route, label: 'Itinerary' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
     { path: '/categories', icon: Grid3X3, label: 'Categories' },
-    { path: '/home', icon: Home, label: 'Discover' },
+    { path: '/home', icon: Home, label: 'How it Works' },
     { path: '/about', icon: Info, label: 'About' },
   ];
 
