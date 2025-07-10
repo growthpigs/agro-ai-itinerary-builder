@@ -18,6 +18,16 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
 }) => {
   const basePath = '/images/producers';
   
+  // DEBUG: Log every image path attempt
+  console.log('[ProducerImage Debug]', {
+    producerSlug,
+    size,
+    webpPath: `${basePath}/webp/${size}/${producerSlug}.webp`,
+    jpgPath: `${basePath}/jpg/${size}/${producerSlug}.jpg`,
+    currentURL: window.location.href,
+    baseURI: document.baseURI
+  });
+  
   const sizeClasses = {
     full: 'w-[800px] h-[800px]',
     medium: 'w-[400px] h-[400px]',
@@ -43,6 +53,14 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
           sizeClasses[size],
           'max-w-full h-auto'
         )}
+        onError={(e) => {
+          console.error('[ProducerImage Error]', {
+            failedSrc: e.currentTarget.src,
+            producerSlug,
+            size,
+            error: 'Image failed to load'
+          });
+        }}
       />
     </picture>
   );

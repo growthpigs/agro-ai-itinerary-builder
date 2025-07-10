@@ -111,6 +111,18 @@ export const SafeLink: React.FC<SafeLinkProps> = ({
 
   const { isValid, validatedHref, reason } = validateHref();
 
+  // DEBUG: Log validation results
+  if (!isValid) {
+    console.warn(`[SafeLink Invalid - ${producerName}]`, {
+      type,
+      originalHref: href,
+      validatedHref,
+      reason,
+      linkLabel,
+      currentURL: window.location.href
+    });
+  }
+
   // Handle click with proper event management
   const handleClick = (e: React.MouseEvent) => {
     // Always stop propagation to prevent card clicks
