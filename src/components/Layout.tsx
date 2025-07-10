@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ItineraryBar } from '@/components/itinerary/ItineraryBar';
 import { LocationPermissionBanner } from '@/components/LocationPermissionBanner';
+import savourEastLogo from '@/assets/images/savour-east-logo.png';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,10 +35,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-[67px] items-center">
           <div className="mr-4 hidden md:flex">
-            <Link to="/" className="mr-12 flex items-center space-x-2">
-              <img 
-                src="/src/assets/images/savour-east-logo.png" 
-                alt="Savour East" 
+            <Link to="/" className="mr-6 flex items-center space-x-2">
+              <img
+                src={savourEastLogo}
+                alt="Savour East"
                 className="h-10 w-auto"
               />
               <span className="hidden font-bold sm:inline-block text-lg">
@@ -64,7 +65,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <Link to="/" className="flex items-center space-x-2 md:hidden">
               <img 
-                src="/src/assets/images/savour-east-logo.png" 
+                src={savourEastLogo} 
                 alt="Savour East" 
                 className="h-10 w-auto"
               />
@@ -128,7 +129,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <img 
-                  src="/src/assets/images/savour-east-logo.png" 
+                  src={savourEastLogo} 
                   alt="Savour East" 
                   className="h-6 w-auto"
                 />
