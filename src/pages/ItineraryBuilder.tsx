@@ -124,6 +124,10 @@ export const ItineraryBuilder: React.FC = () => {
     navigate('/producers');
   };
 
+  const handleCategoryItinerary = () => {
+    navigate('/categories');
+  };
+
   // Add loading state
   if (isLoading) {
     return (
@@ -233,7 +237,7 @@ export const ItineraryBuilder: React.FC = () => {
 
             <Card 
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => handleCustomItinerary()}
+              onClick={() => handleCategoryItinerary()}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
