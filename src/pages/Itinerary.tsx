@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon } from 'lucide-react';
+import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon, Grid3X3 } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
@@ -77,22 +77,33 @@ export const Itinerary: React.FC = () => {
 
   if (selectedProducers.length === 0) {
     return (
-      <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
-        <div className="text-center max-w-md mx-auto">
+      <div className="bg-muted/30 py-12 px-4">
+        <div className="text-center max-w-lg mx-auto">
           <div className="bg-background rounded-lg shadow-lg p-8">
             <RouteIcon className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Start Planning Your Farm Tour</h2>
             <p className="text-muted-foreground mb-6">
-              Browse our agricultural producers and add 3-4 farms to create your perfect Eastern Ontario tour route.
+              Create your perfect Eastern Ontario tour route by choosing producers or exploring by categories.
             </p>
-            <Button asChild size="lg" className="gap-2">
-              <Link to="/producers">
-                <MapPin className="h-5 w-5" />
-                Start Building Itinerary
-              </Link>
-            </Button>
-            <p className="text-sm text-muted-foreground mt-4">
-              Tip: Look for the "Add to Itinerary" button on producer cards
+            
+            {/* Two buttons for different approaches */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <Button asChild size="lg" className="gap-2 flex-1">
+                <Link to="/producers">
+                  <MapPin className="h-5 w-5" />
+                  Browse Producers
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="gap-2 flex-1">
+                <Link to="/categories">
+                  <Grid3X3 className="h-5 w-5" />
+                  Choose Categories
+                </Link>
+              </Button>
+            </div>
+            
+            <p className="text-sm text-muted-foreground">
+              Tip: Add 3-4 farms to build your ideal tour route
             </p>
           </div>
         </div>
