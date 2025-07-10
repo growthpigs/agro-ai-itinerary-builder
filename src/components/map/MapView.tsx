@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Producer } from '@/types';
 import { getProducerEmoji } from '@/utils/hours';
+import { SafeLink } from '@/components/ui/SafeLink';
 
 // Fix for default markers in React Leaflet
 // @ts-expect-error - Leaflet typing issue
@@ -156,21 +157,27 @@ export const MapView: React.FC<MapViewProps> = ({
                     ))}
                   </div>
                   {producer.phone && (
-                    <a
-                      href={`tel:${producer.phone}`}
+                    <SafeLink
+                      href={producer.phone}
+                      type="phone"
                       className="text-sm text-blue-600 hover:underline block mb-1"
+                      producerName={producer.name}
+                      linkLabel="map-popup-phone"
+                      disabledMessage="Invalid phone number"
                     >
                       {producer.phone}
-                    </a>
+                    </SafeLink>
                   )}
-                  <a
+                  <SafeLink
                     href={`https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    type="external"
                     className="text-sm text-blue-600 hover:underline"
+                    producerName={producer.name}
+                    linkLabel="map-popup-directions"
+                    disabledMessage="Location unavailable"
                   >
                     Get Directions →
-                  </a>
+                  </SafeLink>
                 </div>
               </Popup>
             </Marker>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { MapPin, Home, Route, Info, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ItineraryBar } from '@/components/itinerary/ItineraryBar';
 import { LocationPermissionBanner } from '@/components/LocationPermissionBanner';
+import { SafeLink } from '@/components/ui/SafeLink';
 import savourEastLogo from '@/assets/images/savour-east-logo.png';
 
 interface LayoutProps {
@@ -35,7 +36,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-[67px] items-center">
           <div className="mr-4 hidden md:flex">
-            <Link to="/" className="mr-6 flex items-center space-x-2">
+            <SafeLink 
+              href="/" 
+              type="internal"
+              className="mr-6 flex items-center space-x-2"
+              producerName="Layout"
+              linkLabel="logo-desktop"
+            >
               <img
                 src={savourEastLogo}
                 alt="Savour East"
@@ -44,33 +51,42 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span className="hidden font-bold sm:inline-block text-lg">
                 Savour East
               </span>
-            </Link>
+            </SafeLink>
             <nav className="flex items-center space-x-6 text-sm font-medium">
               {navItems.map((item) => (
-                <Link
+                <SafeLink
                   key={item.path}
-                  to={item.path}
+                  href={item.path}
+                  type="internal"
                   className={cn(
                     'transition-colors hover:text-foreground/80',
                     location.pathname === item.path
                       ? 'text-orange-600'
                       : 'text-foreground/60'
                   )}
+                  producerName="Layout"
+                  linkLabel={`nav-${item.label.toLowerCase()}`}
                 >
                   {item.label}
-                </Link>
+                </SafeLink>
               ))}
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-            <Link to="/" className="flex items-center space-x-2 md:hidden">
+            <SafeLink 
+              href="/" 
+              type="internal"
+              className="flex items-center space-x-2 md:hidden"
+              producerName="Layout"
+              linkLabel="logo-mobile"
+            >
               <img 
                 src={savourEastLogo} 
                 alt="Savour East" 
                 className="h-10 w-auto"
               />
               <span className="font-bold text-lg">Savour East</span>
-            </Link>
+            </SafeLink>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
                 <Button
@@ -86,18 +102,21 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     return (
-                      <Link
+                      <SafeLink
                         key={item.path}
-                        to={item.path}
+                        href={item.path}
+                        type="internal"
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           'flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground py-2 px-2 -mx-2 rounded-md hover:bg-muted/50',
                           location.pathname === item.path && 'text-orange-600 bg-muted/30'
                         )}
+                        producerName="Layout"
+                        linkLabel={`mobile-nav-${item.label.toLowerCase()}`}
                       >
                         <Icon className="h-5 w-5" />
                         <span>{item.label}</span>
-                      </Link>
+                      </SafeLink>
                     );
                   })}
                 </nav>

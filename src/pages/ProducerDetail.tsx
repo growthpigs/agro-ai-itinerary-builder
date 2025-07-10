@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Phone, Globe, Mail, ArrowLeft, Plus, Check } from 'lucide-react';
 import type { Producer } from '@/types';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { CATEGORY_LABELS, ACTIVITY_LABELS } from '@/types';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { SafeLink } from '@/components/ui/SafeLink';
 import { producerImages } from '@/data/producerImages';
 import { producerDescriptions } from '@/data/producerDescriptions';
 
@@ -73,12 +74,15 @@ export const ProducerDetail: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 mb-4">Producer not found</p>
-          <Link
-            to="/producers"
+          <SafeLink
+            href="/producers"
+            type="internal"
             className="text-primary-600 hover:text-primary-700 font-medium"
+            producerName="ProducerDetail"
+            linkLabel="back-to-producers-error"
           >
             Back to producers
-          </Link>
+          </SafeLink>
         </div>
       </div>
     );
@@ -231,14 +235,16 @@ export const ProducerDetail: React.FC = () => {
               <div>
                 <p className="font-medium text-gray-900">Location</p>
                 <p className="text-gray-600">{producer.location.address}</p>
-                <a
-                  href={`https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <SafeLink
+                  href={producer.location?.lat && producer.location?.lng ? `https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}` : null}
+                  type="external"
                   className="text-primary-600 hover:text-primary-700 text-sm"
+                  producerName={producer.name}
+                  linkLabel="get-directions"
+                  disabledMessage="Location coordinates unavailable"
                 >
                   Get directions
-                </a>
+                </SafeLink>
               </div>
             </div>
 
@@ -255,33 +261,43 @@ export const ProducerDetail: React.FC = () => {
             {(producer.phone || producer.email || producer.website) && (
               <div className="border-t border-gray-200 pt-4 space-y-3">
                 {producer.phone && (
-                  <a
-                    href={`tel:${producer.phone}`}
+                  <SafeLink
+                    href={producer.phone}
+                    type="phone"
                     className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
+                    producerName={producer.name}
+                    linkLabel="phone-detail"
+                    disabledMessage="Invalid phone number"
                   >
                     <Phone className="h-5 w-5" />
                     <span>{producer.phone}</span>
-                  </a>
+                  </SafeLink>
                 )}
                 {producer.email && (
-                  <a
-                    href={`mailto:${producer.email}`}
+                  <SafeLink
+                    href={producer.email}
+                    type="email"
                     className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
+                    producerName={producer.name}
+                    linkLabel="email-detail"
+                    disabledMessage="Invalid email address"
                   >
                     <Mail className="h-5 w-5" />
                     <span>{producer.email}</span>
-                  </a>
+                  </SafeLink>
                 )}
                 {producer.website && (
-                  <a
+                  <SafeLink
                     href={producer.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    type="external"
                     className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
+                    producerName={producer.name}
+                    linkLabel="website-detail"
+                    disabledMessage="Invalid website URL"
                   >
                     <Globe className="h-5 w-5" />
                     <span>Visit website</span>
-                  </a>
+                  </SafeLink>
                 )}
               </div>
             )}
@@ -290,12 +306,15 @@ export const ProducerDetail: React.FC = () => {
 
         {/* Back Button */}
         <div className="mt-8">
-          <Link
-            to="/producers"
+          <SafeLink
+            href="/producers"
+            type="internal"
             className="text-primary-600 hover:text-primary-700 font-medium"
+            producerName="ProducerDetail"
+            linkLabel="back-to-all-producers"
           >
             ← Back to all producers
-          </Link>
+          </SafeLink>
         </div>
       </div>
     </div>

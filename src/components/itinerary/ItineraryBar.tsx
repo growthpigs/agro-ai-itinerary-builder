@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { X, MapPin, ArrowRight } from 'lucide-react';
 import { useItinerary } from '@/hooks/useItinerary';
 import { Button } from '@/components/ui/button';
+import { SafeLink } from '@/components/ui/SafeLink';
 
 export const ItineraryBar: React.FC = () => {
   const { selectedProducers, removeProducer, maxProducers } = useItinerary();
@@ -29,10 +29,15 @@ export const ItineraryBar: React.FC = () => {
                 </p>
               </div>
               <Button asChild size="sm" className="gap-2">
-                <Link to="/itinerary">
+                <SafeLink 
+                  href="/itinerary"
+                  type="internal"
+                  producerName="ItineraryBar"
+                  linkLabel="view-itinerary"
+                >
                   View Itinerary
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </SafeLink>
               </Button>
             </div>
 
@@ -83,9 +88,12 @@ export const ItineraryBar: React.FC = () => {
 
               {/* Add more placeholder */}
               {selectedProducers.length < maxProducers && (
-                <Link 
-                  to="/producers"
+                <SafeLink 
+                  href="/producers"
+                  type="internal"
                   className="flex-shrink-0 w-40 rounded-lg border-2 border-dashed border-muted-foreground/30 flex items-center justify-center aspect-square hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer"
+                  producerName="ItineraryBar"
+                  linkLabel="add-more-producers"
                 >
                   <div className="text-center">
                     <MapPin className="h-6 w-6 text-muted-foreground/50 mx-auto mb-1" />
@@ -93,7 +101,7 @@ export const ItineraryBar: React.FC = () => {
                       Add {maxProducers - selectedProducers.length} more
                     </p>
                   </div>
-                </Link>
+                </SafeLink>
               )}
             </div>
           </div>

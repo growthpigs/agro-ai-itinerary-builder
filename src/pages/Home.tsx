@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { MapPin, Route, Calendar, Users, Sparkles, Clock, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { SafeLink } from '@/components/ui/SafeLink';
 
 export const Home: React.FC = () => {
   return (
@@ -32,16 +32,26 @@ export const Home: React.FC = () => {
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" asChild>
-                <Link to="/producers">
+                <SafeLink 
+                  href="/producers"
+                  type="internal"
+                  producerName="Home"
+                  linkLabel="explore-producers-hero"
+                >
                   <MapPin className="mr-2 h-5 w-5" />
                   Explore Producers
-                </Link>
+                </SafeLink>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/itinerary">
+                <SafeLink 
+                  href="/itinerary"
+                  type="internal"
+                  producerName="Home"
+                  linkLabel="build-itinerary-hero"
+                >
                   <Route className="mr-2 h-5 w-5" />
                   Build Itinerary
-                </Link>
+                </SafeLink>
               </Button>
             </div>
           </div>
@@ -146,10 +156,15 @@ export const Home: React.FC = () => {
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" asChild>
-                <Link to="/producers">
+                <SafeLink 
+                  href="/producers"
+                  type="internal"
+                  producerName="Home"
+                  linkLabel="start-exploring-cta"
+                >
                   Start Exploring
                   <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
+                </SafeLink>
               </Button>
             </div>
           </div>
