@@ -118,7 +118,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
               </SheetContent>
             </Sheet>
-          </div>
         </div>
       </header>
 
