@@ -7,6 +7,7 @@ import { ProducerDetail } from './pages/ProducerDetail';
 import { Itinerary } from './pages/Itinerary';
 import { ItineraryBuilder } from './pages/ItineraryBuilder';
 import { ActiveItinerary } from './pages/ActiveItinerary';
+import { Categories } from './pages/Categories';
 import { About } from './pages/About';
 import { ItineraryProvider } from './contexts/ItineraryContext';
 import { LocationProvider } from './contexts/LocationContext';
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/producers" element={<Producers />} />
                 <Route path="/producer/:id" element={<ProducerDetail />} />
+                <Route path="/categories" element={<Categories />} />
                 <Route path="/itinerary" element={<Itinerary />} />
                 <Route path="/active-itinerary" element={<ActiveItinerary />} />
                 <Route path="/itinerary/create" element={<Producers />} />
