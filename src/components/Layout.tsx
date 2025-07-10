@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MapPin, Home, Route, Info, Menu } from 'lucide-react';
+import { MapPin, Home, Route, Info, Menu, Grid3X3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -23,7 +23,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/', icon: Route, label: 'Make Itinerary' },
     { path: '/itinerary', icon: Route, label: 'Itinerary' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
-    { path: '/home', icon: Home, label: 'Discover' },
+    { path: '/categories', icon: Grid3X3, label: 'Categories' },
+    { path: '/home', icon: Home, label: 'How it Works' },
     { path: '/about', icon: Info, label: 'About' },
   ];
 
@@ -34,69 +35,54 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       
       {/* Modern Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-[67px] items-center">
-          <div className="mr-4 hidden md:flex">
-            <SafeLink 
-              href="/" 
-              type="internal"
-              className="mr-6 flex items-center space-x-2"
-              producerName="Layout"
-              linkLabel="logo-desktop"
-            >
-              <img
-                src={savourEastLogo}
-                alt="Savour East"
-                className="h-10 w-auto"
-              />
-              <span className="hidden font-bold sm:inline-block text-lg">
-                Savour East
-              </span>
-            </SafeLink>
-            <nav className="flex items-center space-x-6 text-sm font-medium">
-              {navItems.map((item) => (
-                <SafeLink
-                  key={item.path}
-                  href={item.path}
-                  type="internal"
-                  className={cn(
-                    'transition-colors hover:text-foreground/80',
-                    location.pathname === item.path
-                      ? 'text-orange-600'
-                      : 'text-foreground/60'
-                  )}
-                  producerName="Layout"
-                  linkLabel={`nav-${item.label.toLowerCase()}`}
-                >
-                  {item.label}
-                </SafeLink>
-              ))}
-            </nav>
-          </div>
-          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-            <SafeLink 
-              href="/" 
-              type="internal"
-              className="flex items-center space-x-2 md:hidden"
-              producerName="Layout"
-              linkLabel="logo-mobile"
-            >
-              <img 
-                src={savourEastLogo} 
-                alt="Savour East" 
-                className="h-10 w-auto"
-              />
-              <span className="font-bold text-lg">Savour East</span>
-            </SafeLink>
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="md:hidden">
-                <Button
-                  variant="ghost"
-                  className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
-                >
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle Menu</span>
-                </Button>
-              </SheetTrigger>
+        <div className="container mx-auto flex h-[67px] items-center justify-between">
+          <SafeLink 
+            href="/" 
+            type="internal"
+            className="flex items-center space-x-2"
+            producerName="Layout"
+            linkLabel="logo-desktop"
+          >
+            <img
+              src={savourEastLogo}
+              alt="Savour East"
+              className="h-6 w-auto sm:h-8 md:h-10"
+            />
+            <span className="hidden font-bold sm:inline-block text-sm sm:text-base md:text-lg font-onset tracking-wide">
+              Savour East
+            </span>
+          </SafeLink>
+          
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+            {navItems.map((item) => (
+              <SafeLink
+                key={item.path}
+                href={item.path}
+                type="internal"
+                className={cn(
+                  'transition-colors hover:text-foreground/80',
+                  location.pathname === item.path
+                    ? 'text-orange-600'
+                    : 'text-foreground/60'
+                )}
+                producerName="Layout"
+                linkLabel={`nav-${item.label.toLowerCase()}`}
+              >
+                {item.label}
+              </SafeLink>
+            ))}
+          </nav>
+          
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button
+                variant="ghost"
+                className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
               <SheetContent side="right" className="pr-6 pl-6 pt-6 pb-8 flex flex-col">
                 <nav className="grid gap-3 text-lg font-medium">
                   {navItems.map((item) => {

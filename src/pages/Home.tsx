@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Route, Calendar, Users, Sparkles, Clock, ArrowRight } from 'lucide-react';
+import { MapPin, Route, Calendar, Users, Sparkles, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SafeLink } from '@/components/ui/SafeLink';
@@ -146,13 +146,13 @@ export const Home: React.FC = () => {
 
       {/* CTA Section */}
       <section className="border-t bg-muted/50">
-        <div className="container mx-auto px-4 py-16 sm:py-24">
+        <div className="container mx-auto px-4 py-12 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold">
-              Start Your Agricultural Adventure
+              Ready to Start Planning?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Join thousands discovering the rich agricultural heritage of Eastern Ontario
+              Choose your preferred way to discover Eastern Ontario's agricultural heritage
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" asChild>
@@ -160,10 +160,21 @@ export const Home: React.FC = () => {
                   href="/producers"
                   type="internal"
                   producerName="Home"
-                  linkLabel="start-exploring-cta"
+                  linkLabel="browse-producers-cta"
                 >
-                  Start Exploring
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Browse Producers
+                </SafeLink>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <SafeLink 
+                  href="/categories"
+                  type="internal"
+                  producerName="Home"
+                  linkLabel="browse-categories-cta"
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Browse by Category
                 </SafeLink>
               </Button>
             </div>
