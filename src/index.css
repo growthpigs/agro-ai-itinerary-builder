@@ -165,3 +165,9 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
 }
+
+/* Custom styles for Leaflet divIcon */
+.custom-div-icon {
+  background: transparent;
+  border: none;
+}

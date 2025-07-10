@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon } from 'lucide-react';
+import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon, Map, List } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
+import { ItineraryMap } from '@/components/itinerary/ItineraryMap';
+import { CategoryIcon } from '@/utils/categoryIcons';
+import type { ProducerCategory } from '@/types';
 
 export const Itinerary: React.FC = () => {
   const { selectedProducers, removeProducer, clearItinerary } = useItinerary();
   const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   
   const userLocation = latitude && longitude 
     ? { lat: latitude, lng: longitude }
@@ -122,6 +126,13 @@ export const Itinerary: React.FC = () => {
                 <Share2 className="h-4 w-4" />
                 <span className="hidden sm:inline">Share</span>
               </button>
+              <button
+                onClick={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                {viewMode === 'map' ? <List className="h-4 w-4" /> : <Map className="h-4 w-4" />}
+                <span className="hidden sm:inline">{viewMode === 'map' ? 'List' : 'Map'}</span>
+              </button>
               <a
                 href={getGoogleMapsUrl()}
                 target="_blank"
@@ -129,7 +140,7 @@ export const Itinerary: React.FC = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
                 <Navigation className="h-4 w-4" />
-                <span className="hidden sm:inline">Navigate</span>
+                <span className="hidden sm:inline">Google Maps</span>
               </a>
             </div>
           </div>
@@ -138,6 +149,13 @@ export const Itinerary: React.FC = () => {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Map View */}
+        {viewMode === 'map' && (
+          <div className="mb-8">
+            <ItineraryMap producers={selectedProducers} />
+          </div>
+        )}
+        
         {/* Stops List */}
         <div className="space-y-4 mb-8">
           {selectedProducers.map((producer, index) => {
@@ -163,8 +181,16 @@ export const Itinerary: React.FC = () => {
                 className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-semibold">
-                    {index + 1}
+                  <div className="flex-shrink-0 relative">
+                    <div className="w-10 h-10 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-semibold">
+                      {index + 1}
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-sm flex items-center justify-center">
+                      <CategoryIcon 
+                        category={producer.categories[0] as ProducerCategory} 
+                        className="h-4 w-4 text-gray-600" 
+                      />
+                    </div>
                   </div>
                   <div className="flex-shrink-0">
                     <img 
