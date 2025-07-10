@@ -7,6 +7,7 @@ import { WeatherWidget } from '@/components/WeatherWidget';
 import { useItinerary } from '@/hooks/useItinerary';
 import { calculateMetrics, formatDuration } from '@/utils/metrics';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { cn } from '@/lib/utils';
 import type { Producer } from '@/types';
 
 interface PredefinedTour {
@@ -159,57 +160,67 @@ export const ItineraryBuilder: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section with Banner */}
-      <div 
-        className="relative bg-cover bg-center border-b"
-        style={{
-          backgroundImage: `url('/src/assets/images/banner-itinerary.jpg')`
-        }}
-      >
-        {/* Yellow gradient overlay - 30% more transparent (from 35% to 14%) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/35 to-yellow-500/14" />
-        
-        <div className="container mx-auto px-4 py-8 relative z-10">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">Plan Your Farm Tour</h1>
+      {/* Shallow Banner - Edge to Edge */}
+      <header className="relative w-screen -mx-[50vw] left-[50%] right-[50%]">
+        <div 
+          className="relative w-full h-[35vh] max-h-[280px] md:max-h-[320px] bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/images/banner-itinerary.jpg')`
+          }}
+        >
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-transparent" />
+          
+          <div className="absolute inset-0 flex items-end">
+            <div className="container mx-auto px-4 pb-6 sm:pb-8">
+              <div className="max-w-[650px]">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 drop-shadow-lg">
+                  Plan Your Farm Tour
+                </h1>
+                <p className="text-base sm:text-lg text-white/90 drop-shadow">
+                  Choose from curated tours or build your own custom itinerary
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Weather Widget - Top Right */}
+          <div className="absolute top-4 right-4">
             <WeatherWidget />
           </div>
-          <p className="text-lg text-gray-800 max-w-2xl">
-            Discover local farms, wineries, and artisan producers across Eastern Ontario. 
-            Choose from our curated tours or build your own custom itinerary.
-          </p>
-          
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-[650px] mx-auto">
           {/* Group Size Toggle */}
-          <div className="mt-4 flex items-center gap-4">
-            <span className="text-sm text-gray-800">Group size:</span>
+          <div className="mb-8 flex items-center gap-4">
+            <span className="text-sm text-gray-600">Planning for:</span>
             <button
               onClick={() => setIsLargeGroup(!isLargeGroup)}
-              className="flex items-center gap-2 px-3 py-1 rounded-full border transition-colors"
-              style={{
-                backgroundColor: isLargeGroup ? 'hsl(var(--primary))' : 'transparent',
-                color: isLargeGroup ? 'white' : '#374151',
-                borderColor: isLargeGroup ? 'hsl(var(--primary))' : '#9CA3AF'
-              }}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-full border transition-all",
+                isLargeGroup 
+                  ? "bg-primary-600 text-white border-primary-600" 
+                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+              )}
             >
               {isLargeGroup ? (
                 <>
                   <UsersRound className="h-4 w-4" />
-                  <span className="text-sm">Large Group</span>
+                  <span className="text-sm font-medium">Large Group (8+)</span>
                 </>
               ) : (
                 <>
                   <Users className="h-4 w-4" />
-                  <span className="text-sm">Small Group</span>
+                  <span className="text-sm font-medium">Small Group (1-7)</span>
                 </>
               )}
             </button>
           </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Custom Itinerary Options */}
-        <div className="mb-12">
+          
+          {/* Custom Itinerary Options */}
+          <div className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">Create Custom Itinerary</h2>
           <p className="text-muted-foreground mb-6">
             Build your own personalized tour by selecting individual producers or choosing from categories.
@@ -350,6 +361,7 @@ export const ItineraryBuilder: React.FC = () => {
               );
             })}
           </div>
+        </div>
         </div>
       </div>
     </div>

@@ -22,8 +22,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navItems = [
     { path: '/', icon: Route, label: 'Make Itinerary' },
     { path: '/itinerary', icon: Route, label: 'Itinerary' },
-    { path: '/categories', icon: Grid3X3, label: 'Categories' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
+    { path: '/categories', icon: Grid3X3, label: 'Categories' },
     { path: '/home', icon: Home, label: 'Discover' },
     { path: '/about', icon: Info, label: 'About' },
   ];

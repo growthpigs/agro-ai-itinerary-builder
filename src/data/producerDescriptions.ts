@@ -3,19 +3,15 @@
 
 export const producerDescriptions: Record<string, string> = {
   'avonmore-berry-farm': `
-    Avonmore Berry Farm has been a cornerstone of the Eastern Ontario agricultural community for over three decades. Located just one mile north of the charming village of Avonmore, this family-owned farm spans 150 acres of pristine farmland. The Markell family has cultivated not just crops, but a tradition of excellence in sustainable farming practices.
+    This beloved family farm welcomes visitors to pick their own strawberries, raspberries, and seasonal vegetables on 150 acres of beautiful farmland. The Markell family's dedication to sustainable farming means you'll taste the difference in every sun-ripened berry and crisp vegetable.
     
-    During strawberry season, visitors can experience the joy of picking sun-ripened berries straight from the field, with over 20 acres dedicated to various strawberry cultivars. The farm's raspberry patches offer both summer and fall-bearing varieties, ensuring fresh berries from July through October. Beyond berries, the farm features a diverse selection of vegetables, including heirloom tomatoes, sweet corn, and crisp lettuce varieties.
-    
-    The fall season transforms the farm into a autumn wonderland, with apple orchards offering over 15 varieties of apples perfect for eating fresh, baking, or making cider. The pumpkin patch becomes a family destination, featuring everything from tiny decorative gourds to massive carving pumpkins. The farm store showcases not only their fresh produce but also locally-made preserves, honey, and maple syrup from neighboring producers.
+    Summer brings u-pick strawberries and raspberries, while fall transforms the farm into a harvest destination with 15 apple varieties and a sprawling pumpkin patch. The farm store features their fresh produce alongside local preserves, honey, and maple syrup—perfect for taking a taste of the farm home with you.
   `,
   
   'bercier-catering': `
-    Bercier Catering Services represents the pinnacle of farm-to-table catering in Eastern Ontario. Chef Marie Bercier brings over 20 years of culinary expertise to every event, specializing in showcasing the region's finest agricultural products. Operating from the picturesque Les Fruits du Poirier location, the catering service has become synonymous with exceptional quality and personalized service.
+    Chef Marie Bercier creates unforgettable farm-to-table experiences from her base at Les Fruits du Poirier. With ingredients sourced directly from local farms—often harvested the same day they're served—every dish celebrates Eastern Ontario's agricultural bounty.
     
-    What sets Bercier Catering apart is their commitment to sourcing ingredients directly from local farms, often harvesting produce the same day it's served. Their signature cold buffets feature artisanal cheeses from regional dairies, charcuterie from local meat producers, and seasonal fruits and vegetables at their peak freshness. The personalized lunch box service has become particularly popular for corporate events and outdoor gatherings, offering gourmet meals in eco-friendly packaging.
-    
-    Chef Bercier's philosophy centers on letting the natural flavors of fresh, local ingredients shine. Whether catering an intimate gathering of 20 or a grand celebration of 200, each menu is crafted to reflect the season and celebrate the bounty of Eastern Ontario.
+    From elegant cold buffets featuring regional cheeses and charcuterie to personalized lunch boxes perfect for outdoor gatherings, Bercier Catering brings 20 years of expertise to events both intimate and grand. Their commitment to seasonal menus means your celebration will showcase the very best of what's fresh right now.
   `,
   
   'bischoff-orchards': `

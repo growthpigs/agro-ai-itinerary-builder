@@ -89,235 +89,255 @@ export const ProducerDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Producer Banner - Full width with proper aspect ratio */}
-      <header className="relative w-full bg-gray-200">
-        {/* Banner container with aspect ratio */}
-        <div className="relative w-full" style={{ aspectRatio: '3 / 1' }}>
-          {/* Responsive height classes for minimum heights */}
-          <div className="relative w-full h-full min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px] max-h-[400px]">
-            <ProducerImage
-              producerSlug={producer.id + '-1'}
-              alt={`${producer.name} banner`}
-              size="full"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-            
-            {/* Gradient overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/30" />
-            
-            {/* Benday dot pattern overlay */}
-            <div 
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)`,
-                backgroundSize: '3px 3px',
-                backgroundPosition: '0 0, 1.5px 1.5px'
-              }}
-            />
-          </div>
+      {/* Shallow Banner - Edge to Edge */}
+      <header className="relative w-screen -mx-[50vw] left-[50%] right-[50%]">
+        <div className="relative w-full h-[35vh] max-h-[280px] md:max-h-[320px] overflow-hidden">
+          <ProducerImage
+            producerSlug={producer.id + '-1'}
+            alt={`${producer.name} banner`}
+            size="full"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            loading="eager"
+          />
+          
+          {/* Subtle gradient for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          
+          {/* Back button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute top-4 left-4 sm:left-6 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-all hover:scale-105 shadow-lg"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
         </div>
-        
-        {/* Back button positioned over the banner */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 sm:left-6 lg:left-8 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors z-10 shadow-md"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
       </header>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{producer.name}</h1>
-              {producer.featured && (
-                <span className="inline-block bg-primary-600 text-white text-sm px-3 py-1 rounded-full">
-                  Featured Producer
-                </span>
-              )}
+      {/* Content - Max width for readability */}
+      <div className="max-w-[650px] mx-auto px-4 sm:px-6 py-8">
+        {/* Producer Header Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 -mt-12 relative z-10 overflow-hidden">
+          {/* Header with Image and Title */}
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Producer Thumbnail */}
+              <div className="flex-shrink-0">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden shadow-md">
+                  <ProducerImage
+                    producerSlug={producer.id}
+                    alt={producer.name}
+                    size="thumb"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              
+              {/* Title and Quick Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">{producer.name}</h1>
+                    {producer.featured && (
+                      <span className="inline-block mt-2 bg-primary-600 text-white text-xs px-2 py-1 rounded-full">
+                        Featured Producer
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleAddToItinerary}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap',
+                      inItinerary
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-primary-600 text-white hover:bg-primary-700 hover:scale-105'
+                    )}
+                  >
+                    {inItinerary ? (
+                      <>
+                        <Check className="h-4 w-4" />
+                        In Itinerary
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" />
+                        Add to Itinerary
+                      </>
+                    )}
+                  </button>
+                </div>
+                <p className="mt-3 text-gray-600 font-medium">{producer.description}</p>
+              </div>
             </div>
-            <button
-              onClick={handleAddToItinerary}
-              className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors',
-                inItinerary
-                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
-              )}
-            >
-              {inItinerary ? (
-                <>
-                  <Check className="h-5 w-5" />
-                  In Itinerary
-                </>
-              ) : (
-                <>
-                  <Plus className="h-5 w-5" />
-                  Add to Itinerary
-                </>
-              )}
-            </button>
-          </div>
 
-          {/* Description */}
-          <div className="text-gray-600 mb-6">
-            <p className="font-medium mb-2">{producer.description}</p>
+            {/* Concise Description - 2 paragraphs max */}
             {producerDescriptions[producer.id] && (
-              <div className="mt-4 space-y-4">
-                {producerDescriptions[producer.id].trim().split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="leading-relaxed">
-                    {paragraph.trim()}
-                  </p>
-                ))}
+              <div className="mt-6 space-y-4 text-gray-600 leading-relaxed">
+                {producerDescriptions[producer.id]
+                  .trim()
+                  .split('\n\n')
+                  .slice(0, 2)
+                  .map((paragraph, index) => (
+                    <p key={index} className="text-base">
+                      {paragraph.trim()}
+                    </p>
+                  ))}
               </div>
             )}
           </div>
 
-          {/* Image Gallery - 2x2 on mobile, 1x4 on desktop */}
-          <div className="mb-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Gallery</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((num) => {
-                const imageSlug = `${producer.id}-${num}`;
-                
-                return (
-                  <div 
-                    key={num}
-                    className="aspect-square rounded-lg overflow-hidden bg-gray-100"
-                  >
-                    <ProducerImage
-                      producerSlug={imageSlug}
-                      alt={`${producer.name} - Image ${num}`}
-                      size="medium"
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
-                  </div>
-                );
-              })}
+          {/* Divider */}
+          <div className="border-t border-gray-100 mt-6 mb-6" />
+          
+          {/* Fact Grid */}
+          <div className="grid sm:grid-cols-2 gap-6 text-sm">
+            {/* Location */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary-600" />
+                Location
+              </h3>
+              <p className="text-gray-600">{producer.location.address}</p>
+              <SafeLink
+                href={producer.location?.lat && producer.location?.lng ? `https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}` : null}
+                type="external"
+                className="text-primary-600 hover:text-primary-700 text-sm inline-flex items-center gap-1 mt-1"
+                producerName={producer.name}
+                linkLabel="get-directions"
+                disabledMessage="Location coordinates unavailable"
+              >
+                Get directions →
+              </SafeLink>
             </div>
+            
+            {/* Hours */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary-600" />
+                Hours & Season
+              </h3>
+              <p className="text-gray-600">{producer.hours}</p>
+              <p className="text-gray-500 text-sm mt-1">{producer.seasonal}</p>
+            </div>
+            
+            {/* Contact */}
+            {(producer.phone || producer.email || producer.website) && (
+              <div className="sm:col-span-2">
+                <h3 className="font-semibold text-gray-900 mb-2">Contact</h3>
+                <div className="space-y-2">
+                  {producer.phone && (
+                    <SafeLink
+                      href={producer.phone}
+                      type="phone"
+                      className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors"
+                      producerName={producer.name}
+                      linkLabel="phone-detail"
+                      disabledMessage="Invalid phone number"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span>{producer.phone}</span>
+                    </SafeLink>
+                  )}
+                  {producer.email && (
+                    <SafeLink
+                      href={producer.email}
+                      type="email"
+                      className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors"
+                      producerName={producer.name}
+                      linkLabel="email-detail"
+                      disabledMessage="Invalid email address"
+                    >
+                      <Mail className="h-4 w-4" />
+                      <span>{producer.email}</span>
+                    </SafeLink>
+                  )}
+                  {producer.website && (
+                    <SafeLink
+                      href={producer.website}
+                      type="external"
+                      className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors"
+                      producerName={producer.name}
+                      linkLabel="website-detail"
+                      disabledMessage="Invalid website URL"
+                    >
+                      <Globe className="h-4 w-4" />
+                      <span>Visit website</span>
+                    </SafeLink>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Categories & Activities */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Products</h3>
-              <div className="flex flex-wrap gap-2">
-                {producer.categories.map((category) => (
-                  <span
-                    key={category}
-                    className="bg-primary-100 text-primary-700 text-sm px-3 py-1 rounded-full"
-                  >
-                    {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] || category}
-                  </span>
-                ))}
+          <div className="border-t border-gray-100 mt-6 pt-6">
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Products</h3>
+                <div className="flex flex-wrap gap-2">
+                  {producer.categories.map((category) => (
+                    <span
+                      key={category}
+                      className="bg-primary-50 text-primary-700 text-xs px-2.5 py-1 rounded-full font-medium"
+                    >
+                      {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] || category}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Activities</h3>
-              <div className="flex flex-wrap gap-2">
-                {producer.activities.map((activity) => (
-                  <span
-                    key={activity}
-                    className="bg-earth-100 text-earth-700 text-sm px-3 py-1 rounded-full"
-                  >
-                    {ACTIVITY_LABELS[activity as keyof typeof ACTIVITY_LABELS] || activity}
-                  </span>
-                ))}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Activities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {producer.activities.map((activity) => (
+                    <span
+                      key={activity}
+                      className="bg-earth-50 text-earth-700 text-xs px-2.5 py-1 rounded-full font-medium"
+                    >
+                      {ACTIVITY_LABELS[activity as keyof typeof ACTIVITY_LABELS] || activity}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Details */}
-          <div className="border-t border-gray-200 pt-6 space-y-4">
-            <div className="flex items-start gap-3">
-              <MapPin className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-gray-900">Location</p>
-                <p className="text-gray-600">{producer.location.address}</p>
-                <SafeLink
-                  href={producer.location?.lat && producer.location?.lng ? `https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}` : null}
-                  type="external"
-                  className="text-primary-600 hover:text-primary-700 text-sm"
-                  producerName={producer.name}
-                  linkLabel="get-directions"
-                  disabledMessage="Location coordinates unavailable"
+        </div>
+        
+        {/* Image Gallery */}
+        <div className="mt-6">
+          <h3 className="font-semibold text-gray-900 mb-3">Gallery</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {[1, 2, 3, 4].map((num) => {
+              const imageSlug = `${producer.id}-${num}`;
+              
+              return (
+                <div 
+                  key={num}
+                  className="aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-sm"
                 >
-                  Get directions
-                </SafeLink>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Clock className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-gray-900">Hours</p>
-                <p className="text-gray-600">{producer.hours}</p>
-                <p className="text-sm text-gray-500">Season: {producer.seasonal}</p>
-              </div>
-            </div>
-
-            {/* Contact Info */}
-            {(producer.phone || producer.email || producer.website) && (
-              <div className="border-t border-gray-200 pt-4 space-y-3">
-                {producer.phone && (
-                  <SafeLink
-                    href={producer.phone}
-                    type="phone"
-                    className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
-                    producerName={producer.name}
-                    linkLabel="phone-detail"
-                    disabledMessage="Invalid phone number"
-                  >
-                    <Phone className="h-5 w-5" />
-                    <span>{producer.phone}</span>
-                  </SafeLink>
-                )}
-                {producer.email && (
-                  <SafeLink
-                    href={producer.email}
-                    type="email"
-                    className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
-                    producerName={producer.name}
-                    linkLabel="email-detail"
-                    disabledMessage="Invalid email address"
-                  >
-                    <Mail className="h-5 w-5" />
-                    <span>{producer.email}</span>
-                  </SafeLink>
-                )}
-                {producer.website && (
-                  <SafeLink
-                    href={producer.website}
-                    type="external"
-                    className="flex items-center gap-3 text-gray-600 hover:text-primary-600"
-                    producerName={producer.name}
-                    linkLabel="website-detail"
-                    disabledMessage="Invalid website URL"
-                  >
-                    <Globe className="h-5 w-5" />
-                    <span>Visit website</span>
-                  </SafeLink>
-                )}
-              </div>
-            )}
+                  <ProducerImage
+                    producerSlug={imageSlug}
+                    alt={`${producer.name} - Image ${num}`}
+                    size="medium"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Back Button */}
-        <div className="mt-8">
+        <div className="mt-8 pb-8">
           <SafeLink
             href="/producers"
             type="internal"
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium transition-colors"
             producerName="ProducerDetail"
             linkLabel="back-to-all-producers"
           >
-            ← Back to all producers
+            <ArrowLeft className="h-4 w-4" />
+            Back to all producers
           </SafeLink>
         </div>
       </div>
