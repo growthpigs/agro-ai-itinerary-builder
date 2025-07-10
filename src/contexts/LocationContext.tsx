@@ -7,6 +7,7 @@ interface LocationContextType {
   error: string | null;
   loading: boolean;
   permissionState: PermissionState | null;
+  requestLocation: () => void;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);

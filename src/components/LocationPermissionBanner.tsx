@@ -4,7 +4,7 @@ import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
 
 export const LocationPermissionBanner: React.FC = () => {
-  const { permissionState, error, loading } = useLocation();
+  const { permissionState, error, loading, requestLocation } = useLocation();
   const [dismissed, setDismissed] = React.useState(false);
 
   // Don't show if loading, permission granted, or dismissed
@@ -18,8 +18,8 @@ export const LocationPermissionBanner: React.FC = () => {
   }
 
   const handleEnableLocation = () => {
-    // Trigger a new location request
-    window.location.reload();
+    // Request location permission
+    requestLocation();
   };
 
   return (
