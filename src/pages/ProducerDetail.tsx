@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Phone, Globe, Mail, ArrowLeft, Plus, Check } from 'lucide-react';
+import { MapPin, Clock, Phone, Globe, Mail, ArrowLeft, Plus, Check, Navigation } from 'lucide-react';
 import type { Producer } from '@/types';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { CATEGORY_LABELS, ACTIVITY_LABELS } from '@/types';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { SafeLink } from '@/components/ui/SafeLink';
 import { producerDescriptions } from '@/data/producerDescriptions';
+import { useItinerary } from '@/hooks/useItinerary';
+import { Button } from '@/components/ui/button';
 
 export const ProducerDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +16,7 @@ export const ProducerDetail: React.FC = () => {
   const [producer, setProducer] = useState<Producer | null>(null);
   const [loading, setLoading] = useState(true);
   const [inItinerary, setInItinerary] = useState(false);
+  const { selectedProducers, addProducer, removeProducer } = useItinerary();
 
   useEffect(() => {
     const loadProducer = async () => {
@@ -24,12 +27,8 @@ export const ProducerDetail: React.FC = () => {
         
         if (found) {
           setProducer(found);
-          // Check if producer is in itinerary (would be in real app state)
-          const savedItinerary = localStorage.getItem('itinerary');
-          if (savedItinerary) {
-            const itinerary = JSON.parse(savedItinerary);
-            setInItinerary(itinerary.includes(found.id));
-          }
+          // Check if producer is in itinerary
+          setInItinerary(selectedProducers.some(p => p.id === found.id));
         }
       } catch (error) {
         console.error('Failed to load producer:', error);
@@ -39,24 +38,15 @@ export const ProducerDetail: React.FC = () => {
     };
 
     loadProducer();
-  }, [id]);
+  }, [id, selectedProducers]);
 
   const handleAddToItinerary = () => {
     if (!producer) return;
-
-    const savedItinerary = localStorage.getItem('itinerary');
-    const itinerary = savedItinerary ? JSON.parse(savedItinerary) : [];
     
     if (inItinerary) {
-      // Remove from itinerary
-      const updated = itinerary.filter((pid: string) => pid !== producer.id);
-      localStorage.setItem('itinerary', JSON.stringify(updated));
-      setInItinerary(false);
+      removeProducer(producer.id);
     } else {
-      // Add to itinerary
-      const updated = [...itinerary, producer.id];
-      localStorage.setItem('itinerary', JSON.stringify(updated));
-      setInItinerary(true);
+      addProducer(producer);
     }
   };
 
@@ -231,16 +221,23 @@ export const ProducerDetail: React.FC = () => {
               <div>
                 <p className="font-medium text-gray-900">Location</p>
                 <p className="text-gray-600">{producer.location.address}</p>
-                <SafeLink
-                  href={producer.location?.lat && producer.location?.lng ? `https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}` : null}
-                  type="external"
-                  className="text-primary-600 hover:text-primary-700 text-sm"
-                  producerName={producer.name}
-                  linkLabel="get-directions"
-                  disabledMessage="Location coordinates unavailable"
+                <Button
+                  size="sm"
+                  variant="link"
+                  className="p-0 h-auto text-primary-600 hover:text-primary-700"
+                  onClick={() => {
+                    // Ensure producer is in itinerary first
+                    if (!selectedProducers.find(p => p.id === producer.id)) {
+                      addProducer(producer);
+                    }
+                    // Navigate to active itinerary for in-app navigation
+                    navigate('/active-itinerary');
+                  }}
+                  disabled={!producer.location?.lat || !producer.location?.lng}
                 >
-                  Get directions
-                </SafeLink>
+                  <Navigation className="h-4 w-4 mr-1" />
+                  Navigate in app
+                </Button>
               </div>
             </div>
 

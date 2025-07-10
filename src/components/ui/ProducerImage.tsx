@@ -25,12 +25,22 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       medium: 'ferme-butte-et-bine-1',
       thumb: 'ferme-butte-et-bine-1'
     },
+    'ferme-butte-et-bine-1': {
+      full: 'ferme-butte-et-bine-1',
+      medium: 'ferme-butte-et-bine-1',
+      thumb: 'ferme-butte-et-bine-1'
+    },
     'fraser-creek-pizza': {
       full: 'fraser-creek-pizza-farm-1',
       medium: 'fraser-creek-pizza-farm-1',
       thumb: 'fraser-creek-pizza-farm-1'
     },
     'garden-path-soap': {
+      full: 'garden-path-homemade-soap-1',
+      medium: 'garden-path-homemade-soap-1',
+      thumb: 'garden-path-homemade-soap-1'
+    },
+    'garden-path-homemade-soap-1': {
       full: 'garden-path-homemade-soap-1',
       medium: 'garden-path-homemade-soap-1',
       thumb: 'garden-path-homemade-soap-1'
@@ -156,6 +166,11 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       thumb: 'springfield-farm-1'
     },
     'vankleek-hill-vineyard': {
+      full: 'vankleek-hill-vineyard-1',
+      medium: 'vankleek-hill-vineyard-1',
+      thumb: 'vankleek-hill-vineyard-1'
+    },
+    'vankleek-hill-vineyard-1': {
       full: 'vankleek-hill-vineyard-1',
       medium: 'vankleek-hill-vineyard-1',
       thumb: 'vankleek-hill-vineyard-1'

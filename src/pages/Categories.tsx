@@ -22,7 +22,7 @@ const categories: Category[] = [
     id: 'vegetables',
     name: 'Fresh Vegetables',
     description: 'Seasonal produce from local farms',
-    image: 'les-jardins-ecologistes-gregoire-1',
+    image: 'springfield-farm-1',
     keywords: ['vegetables', 'produce', 'greens', 'organic']
   },
   {
@@ -183,6 +183,38 @@ export const Categories: React.FC = () => {
         <p className="text-base text-muted-foreground">
           Select the categories that match your interests. Our AI will find the perfect producers for your farm tour.
         </p>
+      </div>
+
+      {/* Prominent Action Button */}
+      <div className="mx-auto max-w-md mb-8">
+        <Button
+          onClick={handleContinue}
+          disabled={selectedCategories.length === 0 || isLoading || producers.length === 0}
+          size="lg"
+          className="w-full h-14 text-lg font-semibold bg-orange-600 hover:bg-orange-700"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+              Building Your Itinerary...
+            </>
+          ) : selectedCategories.length > 0 ? (
+            <>
+              Build My Itinerary ({selectedCategories.length} {selectedCategories.length === 1 ? 'category' : 'categories'})
+              <ArrowRight className="ml-3 h-6 w-6" />
+            </>
+          ) : (
+            <>
+              Select Categories to Build Itinerary
+              <ArrowRight className="ml-3 h-6 w-6" />
+            </>
+          )}
+        </Button>
+        {selectedCategories.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground mt-2">
+            Choose one or more categories below to get started
+          </p>
+        )}
       </div>
 
       {/* Category Grid */}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon, Grid3X3, Info } from 'lucide-react';
+import { MapPin, Clock, Share2, Trash2, Route as RouteIcon, Grid3X3, Info, List, Map } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { ItineraryMap } from '@/components/ItineraryMap';
+import { cn } from '@/lib/utils';
 
 interface CategoryItineraryInfo {
   selectedCategories: string[];
@@ -18,6 +20,9 @@ export const Itinerary: React.FC = () => {
   const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
   const [categoryInfo, setCategoryInfo] = useState<CategoryItineraryInfo | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [visitedProducers, setVisitedProducers] = useState<Set<string>>(new Set());
+  const [currentProducerIndex, setCurrentProducerIndex] = useState(0);
   
   const userLocation = latitude && longitude 
     ? { lat: latitude, lng: longitude }
@@ -35,6 +40,28 @@ export const Itinerary: React.FC = () => {
       }
     }
   }, []);
+
+  const handleMarkVisited = (producerId: string) => {
+    setVisitedProducers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(producerId)) {
+        newSet.delete(producerId);
+      } else {
+        newSet.add(producerId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleProducerClick = (producer: any, index: number) => {
+    setCurrentProducerIndex(index);
+    if (viewMode === 'map') {
+      // Stay in map view, just update current producer
+      // Could also show a modal or slide-up panel here
+    } else {
+      navigate(`/producer/${producer.id}`);
+    }
+  };
 
   const handleShare = async () => {
     const producerIds = selectedProducers.map(p => p.id).join(',');
@@ -57,16 +84,6 @@ export const Itinerary: React.FC = () => {
     }
   };
 
-  const getGoogleMapsUrl = () => {
-    if (selectedProducers.length === 0) return '';
-    
-    const baseUrl = 'https://www.google.com/maps/dir/';
-    const waypoints = selectedProducers.map(p => 
-      `${p.location.lat},${p.location.lng}`
-    ).join('/');
-    
-    return `${baseUrl}${waypoints}`;
-  };
 
   const calculateTotalDistance = () => {
     if (!userLocation || selectedProducers.length === 0) return 0;
@@ -147,6 +164,32 @@ export const Itinerary: React.FC = () => {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              <div className="flex bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors",
+                    viewMode === 'list'
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  )}
+                >
+                  <List className="h-4 w-4" />
+                  <span className="hidden sm:inline">List</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors",
+                    viewMode === 'map'
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  )}
+                >
+                  <Map className="h-4 w-4" />
+                  <span className="hidden sm:inline">Map</span>
+                </button>
+              </div>
               <button
                 onClick={handleShare}
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -154,15 +197,6 @@ export const Itinerary: React.FC = () => {
                 <Share2 className="h-4 w-4" />
                 <span className="hidden sm:inline">Share</span>
               </button>
-              <a
-                href={getGoogleMapsUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <Navigation className="h-4 w-4" />
-                <span className="hidden sm:inline">Navigate</span>
-              </a>
             </div>
           </div>
         </div>
@@ -209,8 +243,26 @@ export const Itinerary: React.FC = () => {
           </div>
         )}
 
-        {/* Stops List */}
-        <div className="space-y-4 mb-8">
+        {/* Map View */}
+        {viewMode === 'map' && (
+          <div className="mb-8">
+            <ItineraryMap
+              producers={selectedProducers.map(p => ({
+                ...p,
+                coordinates: p.location
+              }))}
+              currentProducerIndex={currentProducerIndex}
+              onProducerClick={handleProducerClick}
+              onMarkVisited={handleMarkVisited}
+              visitedProducers={visitedProducers}
+              userLocation={userLocation || undefined}
+            />
+          </div>
+        )}
+
+        {/* List View */}
+        {viewMode === 'list' && (
+          <div className="space-y-4 mb-8">
           {selectedProducers.map((producer, index) => {
             const distance = userLocation && index === 0
               ? calculateDistance(
@@ -283,7 +335,8 @@ export const Itinerary: React.FC = () => {
               </div>
             );
           })}
-        </div>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="mb-4">
