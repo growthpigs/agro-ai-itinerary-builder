@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { useItinerary } from '@/hooks/useItinerary';
 import { checkIfOpen } from '@/utils/hours';
 import { ProducerImage } from '@/components/ui/ProducerImage';
-import { producerImages } from '@/data/producerImages';
 
 interface ProducerCardProps {
   producer: Producer;
@@ -74,7 +73,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <ProducerImage
-          producerSlug={(producerImages[producer.id] || producer.id) + (selectedImageIndex + 1)}
+          producerSlug={`${producer.id}-${selectedImageIndex + 1}`}
           alt={producer.name}
           size="full"
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
@@ -227,8 +226,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         {producer.images && producer.images.length > 0 && (
           <div className="grid grid-cols-4 gap-2">
             {[1, 2, 3, 4].map((num, index) => {
-              const baseSlug = producerImages[producer.id] || producer.id;
-              const imageSlug = baseSlug + num;
+              const imageSlug = `${producer.id}-${num}`;
               
               return (
                 <div 
