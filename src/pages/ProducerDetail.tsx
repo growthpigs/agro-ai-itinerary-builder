@@ -90,71 +90,63 @@ export const ProducerDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Image with Gradient and Dot Pattern - Full width */}
-      <div className="relative h-32 sm:h-48 bg-gray-200">
-        <ProducerImage
-          producerSlug={(producerImages[producer.id] || producer.id) + '1'}
-          alt={producer.name}
-          size="full"
-          className="w-full h-full object-cover"
-        />
-        {/* Gradient overlay - more opaque */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 to-white/50" />
-        
-        {/* Benday dot pattern overlay - tighter halftone pattern */}
-        <div 
-          className="absolute inset-0 opacity-25"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.9) 0.5px, transparent 0.5px)`,
-            backgroundSize: '2px 2px',
-            backgroundPosition: '0 0'
-          }}
-        />
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <button
-            onClick={() => navigate(-1)}
-            className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors z-10"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          Back
+        </button>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{producer.name}</h1>
-              {producer.featured && (
-                <span className="inline-block bg-primary-600 text-white text-sm px-3 py-1 rounded-full">
-                  Featured Producer
-                </span>
-              )}
+          {/* Header with thumbnail */}
+          <div className="flex items-start gap-6 mb-6">
+            {/* Producer thumbnail */}
+            <div className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden">
+              <ProducerImage
+                producerSlug={`${producer.id}-1`}
+                alt={producer.name}
+                size="medium"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <button
-              onClick={handleAddToItinerary}
-              className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors',
-                inItinerary
-                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
-              )}
-            >
-              {inItinerary ? (
-                <>
-                  <Check className="h-5 w-5" />
-                  In Itinerary
-                </>
-              ) : (
-                <>
-                  <Plus className="h-5 w-5" />
-                  Add to Itinerary
-                </>
-              )}
-            </button>
+            
+            {/* Header content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div className="min-w-0">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">{producer.name}</h1>
+                  {producer.featured && (
+                    <span className="inline-block bg-primary-600 text-white text-sm px-3 py-1 rounded-full">
+                      Featured Producer
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={handleAddToItinerary}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors flex-shrink-0',
+                    inItinerary
+                      ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                      : 'bg-primary-600 text-white hover:bg-primary-700'
+                  )}
+                >
+                  {inItinerary ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      In Itinerary
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-5 w-5" />
+                      Add to Itinerary
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Description */}

@@ -101,7 +101,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         linkLabel={`mobile-nav-${item.label.toLowerCase()}`}
                       >
                         <Icon className="h-5 w-5" />
-                        <span>{item.label}</span>
+                        <span className="leading-tight">{item.label}</span>
                       </SafeLink>
                     );
                   })}
