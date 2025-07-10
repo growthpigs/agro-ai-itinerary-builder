@@ -15,8 +15,8 @@ export const Home: React.FC = () => {
               Plan Your Eastern Ontario Farm Tour in 3 Simple Steps
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
-              Our AI-powered itinerary builder connects you with 26 local agricultural producers. 
-              Create a personalized GPS-enabled loop route that fits your interests and schedule.
+              Connect with 26 local agricultural producers. Create a personalized GPS-enabled 
+              loop route using AI recommendations or by hand-picking your favorite farms.
             </p>
             
             {/* Visual Process Steps */}
@@ -25,9 +25,9 @@ export const Home: React.FC = () => {
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white">
                   <span className="text-2xl font-bold">1</span>
                 </div>
-                <h3 className="mb-2 font-semibold">Choose Your Interests</h3>
+                <h3 className="mb-2 font-semibold">Choose Your Path</h3>
                 <p className="text-sm text-muted-foreground">
-                  Select from fresh produce, farm tours, artisan crafts, or seasonal activities
+                  Start with AI recommendations based on your interests, or browse all producers to build your own custom route
                 </p>
               </div>
               
@@ -35,9 +35,9 @@ export const Home: React.FC = () => {
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white">
                   <span className="text-2xl font-bold">2</span>
                 </div>
-                <h3 className="mb-2 font-semibold">Get AI Recommendations</h3>
+                <h3 className="mb-2 font-semibold">Build Your Itinerary</h3>
                 <p className="text-sm text-muted-foreground">
-                  Our AI matches you with 3-4 producers based on location and preferences
+                  Get 3-4 AI-matched producers or manually select any farms that interest you
                 </p>
               </div>
               
@@ -73,10 +73,10 @@ export const Home: React.FC = () => {
       <section className="container mx-auto px-4 py-16 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-4 text-2xl font-bold sm:text-3xl">
-            How the AGRO AI Itinerary Builder Works
+            How the AGRO Itinerary Builder Works
           </h2>
           <p className="mb-12 text-lg text-muted-foreground">
-            Follow these steps to create your perfect agricultural tour
+            Two ways to create your perfect agricultural tour
           </p>
           
           {/* Step-by-step guide */}
@@ -101,9 +101,11 @@ export const Home: React.FC = () => {
                   <CheckCircle className="h-5 w-5 text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <CardTitle className="text-xl">Step 2: Select Your Preferences</CardTitle>
+                  <CardTitle className="text-xl">Step 2: Choose Your Planning Method</CardTitle>
                   <CardDescription className="text-base">
-                    Choose what interests you: vegetables, fruits, dairy, meat, maple syrup, honey, or artisan crafts. Specify activities like farm tours, pick-your-own, or shopping at farm stores.
+                    <strong>Option A - AI Itinerary:</strong> Select categories like vegetables, fruits, dairy, or activities like farm tours and pick-your-own. Our AI will match you with the best producers.
+                    <br /><br />
+                    <strong>Option B - Browse & Select:</strong> Explore all 26 producers yourself and hand-pick the farms you want to visit. Perfect when you know exactly where you want to go.
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -115,9 +117,11 @@ export const Home: React.FC = () => {
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <CardTitle className="text-xl">Step 3: AI Creates Your Itinerary</CardTitle>
+                  <CardTitle className="text-xl">Step 3: Build Your Itinerary</CardTitle>
                   <CardDescription className="text-base">
-                    Our AI analyzes all 26 producers to find the best matches for you. It considers distance, operating hours, seasonal availability, and creates an efficient route with 3-4 stops.
+                    <strong>If using AI:</strong> Our system analyzes all producers to find 3-4 perfect matches based on your preferences, distance, hours, and seasonal availability.
+                    <br /><br />
+                    <strong>If browsing:</strong> Add any producers you like to your itinerary. View details, photos, and offerings to make your selections.
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -131,7 +135,7 @@ export const Home: React.FC = () => {
                 <div className="space-y-2">
                   <CardTitle className="text-xl">Step 4: Navigate Your Tour</CardTitle>
                   <CardDescription className="text-base">
-                    View your route on an interactive map. Get turn-by-turn directions to each stop. The app works offline once your itinerary is loaded, perfect for rural areas with limited cell coverage.
+                    View your route on an interactive map with all your selected stops. Get turn-by-turn directions to each location. The app works offline once loaded—perfect for rural areas.
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -145,7 +149,7 @@ export const Home: React.FC = () => {
                 <div className="space-y-2">
                   <CardTitle className="text-xl">Step 5: Save and Share</CardTitle>
                   <CardDescription className="text-base">
-                    Save your itinerary for future use or share it with friends and family. Export to your favorite navigation app or print a summary with all producer details.
+                    Save your custom or AI-generated itinerary for future use. Share with friends and family, export to your favorite navigation app, or print a summary with all producer details.
                   </CardDescription>
                 </div>
               </CardHeader>
