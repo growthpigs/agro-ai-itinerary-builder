@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, X } from 'lucide-react';
+import { Check, ArrowRight, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { useItinerary } from '@/hooks/useItinerary';
+import { useLocation } from '@/contexts/LocationContext';
+import { buildCategoryItinerary } from '@/services/categoryItinerary';
+import type { Producer } from '@/types';
 
 interface Category {
   id: string;
@@ -81,7 +85,31 @@ const categories: Category[] = [
 
 export const Categories: React.FC = () => {
   const navigate = useNavigate();
+  const { clearItinerary, addProducer } = useItinerary();
+  const { latitude, longitude } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [producers, setProducers] = useState<Producer[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load producers data
+  useEffect(() => {
+    const loadProducers = async () => {
+      try {
+        const response = await fetch('/data/producers.json');
+        if (!response.ok) {
+          throw new Error('Failed to load producers data');
+        }
+        const data = await response.json();
+        setProducers(data.producers || []);
+      } catch (err) {
+        console.error('Failed to load producers:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      }
+    };
+
+    loadProducers();
+  }, []);
 
   const toggleCategory = (categoryId: string) => {
     setSelectedCategories(prev => 
@@ -91,21 +119,58 @@ export const Categories: React.FC = () => {
     );
   };
 
-  const handleContinue = () => {
-    if (selectedCategories.length === 0) return;
+  const handleContinue = async () => {
+    if (selectedCategories.length === 0 || producers.length === 0) return;
     
-    // Store the selected categories in sessionStorage for now
-    const selectedKeywords = categories
-      .filter(cat => selectedCategories.includes(cat.id))
-      .flatMap(cat => cat.keywords);
+    setIsLoading(true);
+    setError(null);
     
-    sessionStorage.setItem('selectedCategories', JSON.stringify({
-      categories: selectedCategories,
-      keywords: selectedKeywords
-    }));
-    
-    // Navigate to itinerary page
-    navigate('/itinerary');
+    try {
+      console.log('[Categories] Building itinerary for:', selectedCategories);
+      
+      // Clear existing itinerary
+      clearItinerary();
+      
+      // Build category-based itinerary
+      const userLocation = latitude && longitude 
+        ? { lat: latitude, lng: longitude }
+        : undefined;
+        
+      const result = buildCategoryItinerary({
+        selectedCategoryIds: selectedCategories,
+        producers,
+        userLocation,
+        maxStops: 5
+      });
+      
+      console.log('[Categories] Itinerary built:', result);
+      
+      if (result.selectedProducers.length === 0) {
+        setError(result.reasoning);
+        return;
+      }
+      
+      // Add selected producers to itinerary
+      result.selectedProducers.forEach(producer => {
+        addProducer(producer);
+      });
+      
+      // Store additional metadata for the itinerary page
+      sessionStorage.setItem('categoryItineraryInfo', JSON.stringify({
+        selectedCategories,
+        reasoning: result.reasoning,
+        categoryBreakdown: result.categoryBreakdown
+      }));
+      
+      // Navigate to populated itinerary
+      navigate('/itinerary');
+      
+    } catch (err) {
+      console.error('[Categories] Error building itinerary:', err);
+      setError(err instanceof Error ? err.message : 'Failed to build itinerary');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -167,6 +232,13 @@ export const Categories: React.FC = () => {
           })}
         </div>
 
+        {/* Error Display */}
+        {error && (
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 text-sm">{error}</p>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
           {selectedCategories.length > 0 && (
@@ -181,6 +253,7 @@ export const Categories: React.FC = () => {
                 variant="outline"
                 onClick={() => setSelectedCategories([])}
                 size="sm"
+                disabled={isLoading}
               >
                 <X className="mr-2 h-4 w-4" />
                 Clear Selection
@@ -189,11 +262,20 @@ export const Categories: React.FC = () => {
             
             <Button
               onClick={handleContinue}
-              disabled={selectedCategories.length === 0}
+              disabled={selectedCategories.length === 0 || isLoading || producers.length === 0}
               size={selectedCategories.length > 0 ? "default" : "sm"}
             >
-              Continue to AI Itinerary
-              <ArrowRight className="ml-2 h-4 w-4" />
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Building Itinerary...
+                </>
+              ) : (
+                <>
+                  Build AI Itinerary
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </div>
         </div>

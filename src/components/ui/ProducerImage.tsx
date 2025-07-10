@@ -240,11 +240,13 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
     thumb: 'w-[200px] h-[200px]'
   };
 
-  // TEMPORARY DEBUG: Test direct JPG loading for cafe-joyeux
-  const isDebugging = producerSlug.includes('cafe-joyeux');
+  // TEMPORARY DEBUG: Test direct JPG loading for problem producers
+  const isDebugging = producerSlug.includes('cafe-joyeux') || producerSlug.includes('bercier-catering');
   
   if (isDebugging) {
-    console.log('[ProducerImage] TEMP DEBUG - Testing direct JPG for cafe-joyeux:', {
+    console.log('[ProducerImage] TEMP DEBUG - Testing direct JPG for problem producers:', {
+      producerSlug,
+      actualSlug,
       directJpgPath: `${basePath}/jpg/${size}/${actualSlug}.jpg`
     });
     

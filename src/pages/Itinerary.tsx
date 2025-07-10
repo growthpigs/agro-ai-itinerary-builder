@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon, Grid3X3 } from 'lucide-react';
+import { MapPin, Clock, Navigation, Share2, Trash2, Route as RouteIcon, Grid3X3, Info } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 
+interface CategoryItineraryInfo {
+  selectedCategories: string[];
+  reasoning: string;
+  categoryBreakdown: Record<string, number>;
+}
+
 export const Itinerary: React.FC = () => {
   const { selectedProducers, removeProducer, clearItinerary } = useItinerary();
   const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
+  const [categoryInfo, setCategoryInfo] = useState<CategoryItineraryInfo | null>(null);
   
   const userLocation = latitude && longitude 
     ? { lat: latitude, lng: longitude }
     : null;
+
+  // Load category itinerary info if available
+  useEffect(() => {
+    const stored = sessionStorage.getItem('categoryItineraryInfo');
+    if (stored) {
+      try {
+        const info = JSON.parse(stored);
+        setCategoryInfo(info);
+      } catch (err) {
+        console.error('Failed to parse category itinerary info:', err);
+      }
+    }
+  }, []);
 
   const handleShare = async () => {
     const producerIds = selectedProducers.map(p => p.id).join(',');
@@ -150,6 +170,45 @@ export const Itinerary: React.FC = () => {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Category-based Itinerary Info */}
+        {categoryInfo && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold text-blue-900 mb-2">AI-Generated Category Itinerary</h3>
+                <p className="text-blue-800 text-sm mb-2">{categoryInfo.reasoning}</p>
+                <div className="flex flex-wrap gap-2">
+                  {categoryInfo.selectedCategories.map(cat => {
+                    const categoryNames: Record<string, string> = {
+                      'vegetables': 'Fresh Vegetables',
+                      'fruits': 'Fruits & Berries',
+                      'dairy': 'Dairy Products', 
+                      'meat': 'Meat & Poultry',
+                      'maple': 'Maple Products',
+                      'honey': 'Honey & Beeswax',
+                      'artisan': 'Artisan Crafts',
+                      'beverages': 'Beverages',
+                      'bakery': 'Baked Goods'
+                    };
+                    return (
+                      <span 
+                        key={cat}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                      >
+                        {categoryNames[cat] || cat}
+                        {categoryInfo.categoryBreakdown[cat] && (
+                          <span className="ml-1 text-blue-600">({categoryInfo.categoryBreakdown[cat]})</span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Stops List */}
         <div className="space-y-4 mb-8">
           {selectedProducers.map((producer, index) => {

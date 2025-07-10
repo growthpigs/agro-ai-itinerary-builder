@@ -5,6 +5,7 @@ import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
+import { ProducerImage } from '@/components/ui/ProducerImage';
 
 export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
@@ -117,9 +118,10 @@ export const ActiveItinerary: React.FC = () => {
             {/* Current Stop Details */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
               <div className="flex items-start gap-4">
-                <img 
-                  src={currentStop.image} 
+                <ProducerImage 
+                  producerSlug={`${currentStop.id}-1`}
                   alt={currentStop.name}
+                  size="medium"
                   className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
                 />
                 <div className="flex-1">
@@ -268,9 +270,10 @@ export const ActiveItinerary: React.FC = () => {
             {/* Current Stop Info Card */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
               <div className="flex items-start gap-3">
-                <img 
-                  src={currentStop.image} 
+                <ProducerImage 
+                  producerSlug={`${currentStop.id}-1`}
                   alt={currentStop.name}
+                  size="medium"
                   className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                 />
                 <div className="flex-1">
