@@ -10,6 +10,9 @@ interface ProducerImageProps {
 }
 
 const getActualImageSlug = (producerSlug: string, size: string): string => {
+  let debugTrace: string[] = [];
+  debugTrace.push(`Input: producerSlug="${producerSlug}", size="${size}"`);
+  
   // Map producer IDs to actual image file names based on size
   const imageSlugMap: Record<string, Record<string, string>> = {
     'cafe-joyeux': {
@@ -160,33 +163,55 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
   };
 
   // Check if we have a specific mapping for this producer and size
+  debugTrace.push(`Checking direct mapping for "${producerSlug}"`);
   if (imageSlugMap[producerSlug] && imageSlugMap[producerSlug][size]) {
-    return imageSlugMap[producerSlug][size];
+    const result = imageSlugMap[producerSlug][size];
+    debugTrace.push(`Found direct mapping: "${result}"`);
+    console.log('[getActualImageSlug] Direct mapping found:', { producerSlug, size, result, trace: debugTrace });
+    return result;
   }
+  debugTrace.push('No direct mapping found, checking numbered variations');
 
   // Handle numbered variations (producer-id-2, producer-id-3, etc.)
   const baseProducerMatch = producerSlug.match(/^(.+)-(\d+)$/);
+  debugTrace.push(`Regex match result: ${baseProducerMatch ? 'found' : 'not found'}`);
+  
   if (baseProducerMatch) {
     const [, baseProducer, imageNum] = baseProducerMatch;
+    debugTrace.push(`Extracted: baseProducer="${baseProducer}", imageNum="${imageNum}"`);
+    
     if (imageSlugMap[baseProducer] && imageSlugMap[baseProducer][size]) {
       const baseMapping = imageSlugMap[baseProducer][size];
-      // Replace the number at the end with the requested number
-      return baseMapping.replace(/\d+$/, imageNum);
+      const result = baseMapping.replace(/\d+$/, imageNum);
+      debugTrace.push(`Using base mapping: "${baseMapping}" -> "${result}"`);
+      console.log('[getActualImageSlug] Base mapping used:', { producerSlug, size, baseProducer, imageNum, baseMapping, result, trace: debugTrace });
+      return result;
     }
     
     // Special handling for cafe-joyeux numbered images
     if (baseProducer === 'cafe-joyeux') {
-      return size === 'thumb' ? `Café Joyeux ${imageNum}` : `cafe-joyeux-${imageNum}`;
+      const result = size === 'thumb' ? `Café Joyeux ${imageNum}` : `cafe-joyeux-${imageNum}`;
+      debugTrace.push(`Using cafe-joyeux special handling: "${result}"`);
+      console.log('[getActualImageSlug] Cafe-joyeux special handling:', { producerSlug, size, baseProducer, imageNum, result, trace: debugTrace });
+      return result;
     }
     
     // Special handling for les-jardins-ecologistes numbered images
     if (baseProducer === 'les-jardins-ecologistes-gregoire') {
-      return `Les Jardins Écologistes Grégoire${imageNum}`;
+      const result = `Les Jardins Écologistes Grégoire${imageNum}`;
+      debugTrace.push(`Using les-jardins special handling: "${result}"`);
+      console.log('[getActualImageSlug] Les-jardins special handling:', { producerSlug, size, baseProducer, imageNum, result, trace: debugTrace });
+      return result;
     }
+    
+    debugTrace.push(`No special handling for baseProducer="${baseProducer}"`);
   }
 
   // Default fallback: add -1 suffix
-  return `${producerSlug}-1`;
+  const result = `${producerSlug}-1`;
+  debugTrace.push(`Using default fallback: "${result}"`);
+  console.log('[getActualImageSlug] Default fallback used:', { producerSlug, size, result, trace: debugTrace });
+  return result;
 };
 
 export const ProducerImage: React.FC<ProducerImageProps> = ({
@@ -199,8 +224,8 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   const basePath = '/images/producers';
   const actualSlug = getActualImageSlug(producerSlug, size);
   
-  // DEBUG: Log every image path attempt
-  console.log('[ProducerImage Debug]', {
+  // DEBUG: Log every image path attempt with detailed mapping info
+  console.log('[ProducerImage Debug - DETAILED]', {
     originalSlug: producerSlug,
     mappedSlug: actualSlug,
     requestedSize: size,
@@ -214,6 +239,37 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
     medium: 'w-[400px] h-[400px]',
     thumb: 'w-[200px] h-[200px]'
   };
+
+  // TEMPORARY DEBUG: Test direct JPG loading for cafe-joyeux
+  const isDebugging = producerSlug.includes('cafe-joyeux');
+  
+  if (isDebugging) {
+    console.log('[ProducerImage] TEMP DEBUG - Testing direct JPG for cafe-joyeux:', {
+      directJpgPath: `${basePath}/jpg/${size}/${actualSlug}.jpg`
+    });
+    
+    return (
+      <img
+        src={`${basePath}/jpg/${size}/${actualSlug}.jpg`}
+        alt={alt}
+        loading={loading}
+        className={cn(
+          'object-cover',
+          sizeClasses[size],
+          'max-w-full h-auto'
+        )}
+        onError={(e) => {
+          console.error('[ProducerImage] TEMP DEBUG ERROR:', {
+            failedSrc: e.currentTarget.src,
+            producerSlug,
+            actualSlug,
+            size
+          });
+          e.currentTarget.src = '/images/placeholder.svg';
+        }}
+      />
+    );
+  }
 
   return (
     <picture className={cn('block overflow-hidden', className)}>
@@ -235,15 +291,23 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
           'max-w-full h-auto'
         )}
         onError={(e) => {
-          console.error('[ProducerImage Error]', {
+          console.error('[ProducerImage Error - DETAILED]', {
             failedSrc: e.currentTarget.src,
             producerSlug,
             actualSlug,
             size,
-            error: 'Image failed to load'
+            webpAttempted: `${basePath}/webp/${size}/${actualSlug}.webp`,
+            jpgAttempted: `${basePath}/jpg/${size}/${actualSlug}.jpg`,
+            error: 'Image failed to load',
+            currentTarget: e.currentTarget,
+            imageElement: e.currentTarget.outerHTML
           });
-          // Fallback to placeholder
-          e.currentTarget.src = '/images/placeholder.svg';
+          
+          // Check if this is already the placeholder to avoid infinite loops
+          if (!e.currentTarget.src.includes('placeholder.svg')) {
+            console.log('[ProducerImage] Switching to placeholder due to error');
+            e.currentTarget.src = '/images/placeholder.svg';
+          }
         }}
       />
     </picture>
