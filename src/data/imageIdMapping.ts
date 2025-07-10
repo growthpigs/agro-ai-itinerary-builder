@@ -22,18 +22,7 @@ export const imageIdMapping: Record<string, string> = {
   'garden-path-soap-3': 'garden-path-homemade-soap-3',
   'garden-path-soap-4': 'garden-path-homemade-soap-4',
   
-  // Missing images - use placeholders
-  'cafe-joyeux': 'placeholder',
-  'cafe-joyeux-1': 'placeholder',
-  'cafe-joyeux-2': 'placeholder',
-  'cafe-joyeux-3': 'placeholder',
-  'cafe-joyeux-4': 'placeholder',
-  
-  'les-jardins-ecologistes': 'placeholder',
-  'les-jardins-ecologistes-1': 'placeholder',
-  'les-jardins-ecologistes-2': 'placeholder',
-  'les-jardins-ecologistes-3': 'placeholder',
-  'les-jardins-ecologistes-4': 'placeholder',
+  // Images now exist - removed placeholder mappings
   
   // All others use their ID as-is
 };

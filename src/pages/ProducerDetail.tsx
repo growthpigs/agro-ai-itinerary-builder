@@ -6,7 +6,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { CATEGORY_LABELS, ACTIVITY_LABELS } from '@/types';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { SafeLink } from '@/components/ui/SafeLink';
-import { producerImages } from '@/data/producerImages';
 import { producerDescriptions } from '@/data/producerDescriptions';
 
 export const ProducerDetail: React.FC = () => {
@@ -90,36 +89,43 @@ export const ProducerDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Image with Gradient and Dot Pattern - Full width */}
-      <div className="relative h-32 sm:h-48 bg-gray-200">
-        <ProducerImage
-          producerSlug={(producerImages[producer.id] || producer.id) + '1'}
-          alt={producer.name}
-          size="full"
-          className="w-full h-full object-cover"
-        />
-        {/* Gradient overlay - more opaque */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 to-white/50" />
-        
-        {/* Benday dot pattern overlay - tighter halftone pattern */}
-        <div 
-          className="absolute inset-0 opacity-25"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.9) 0.5px, transparent 0.5px)`,
-            backgroundSize: '2px 2px',
-            backgroundPosition: '0 0'
-          }}
-        />
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <button
-            onClick={() => navigate(-1)}
-            className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors z-10"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
+      {/* Producer Banner - Full width with proper aspect ratio */}
+      <header className="relative w-full bg-gray-200">
+        {/* Banner container with aspect ratio */}
+        <div className="relative w-full" style={{ aspectRatio: '3 / 1' }}>
+          {/* Responsive height classes for minimum heights */}
+          <div className="relative w-full h-full min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px] max-h-[400px]">
+            <ProducerImage
+              producerSlug={producer.id + '-1'}
+              alt={`${producer.name} banner`}
+              size="full"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            
+            {/* Gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/30" />
+            
+            {/* Benday dot pattern overlay */}
+            <div 
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)`,
+                backgroundSize: '3px 3px',
+                backgroundPosition: '0 0, 1.5px 1.5px'
+              }}
+            />
+          </div>
         </div>
-      </div>
+        
+        {/* Back button positioned over the banner */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 sm:left-6 lg:left-8 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors z-10 shadow-md"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+      </header>
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -176,9 +182,7 @@ export const ProducerDetail: React.FC = () => {
             <h3 className="font-semibold text-gray-900 mb-3">Gallery</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((num) => {
-                const baseSlug = producerImages[producer.id] || producer.id;
-                // Extract the base name and add the number
-                const imageSlug = baseSlug.replace(/\d+$/, '') + num;
+                const imageSlug = `${producer.id}-${num}`;
                 
                 return (
                   <div 
