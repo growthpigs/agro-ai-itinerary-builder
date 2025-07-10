@@ -15,19 +15,15 @@ export const producerDescriptions: Record<string, string> = {
   `,
   
   'bischoff-orchards': `
-    Bischoff Orchards stands as one of the oldest continuously operating orchards in the Ottawa Valley, with trees planted over a century ago still bearing fruit. The Bischoff family's dedication to preserving heritage apple varieties has made their orchard a living museum of pomology. Visitors can taste apple varieties that have nearly vanished from commercial production, each with its own unique flavor profile and historical significance.
+    Step into history at this century-old orchard where you can taste heritage apple varieties that have nearly vanished from commercial production. The Bischoff family tends 30+ varieties across 75 acres, offering fresh apples from August through March.
     
-    The orchard spans 75 acres of gently rolling hills, providing ideal growing conditions for over 30 apple varieties. From the earliest summer apples to late-season storage varieties, Bischoff Orchards offers fresh apples from August through March. Their commitment to integrated pest management and organic practices ensures that every apple meets the highest standards of quality and environmental stewardship.
-    
-    Beyond fresh apples, the farm has developed a reputation for their artisanal apple products. Their small-batch apple cider (non-alcoholic) is pressed on-site using a blend of sweet and tart apples for perfect balance. The farm store also features apple butter made from an 1890s family recipe, dried apple rings, and their famous apple cider donuts, made fresh on weekends during apple season.
+    Don't miss their artisanal products: small-batch cider pressed on-site, apple butter from an 1890s family recipe, and famous apple cider donuts made fresh on weekends. A true taste of the Ottawa Valley's apple heritage.
   `,
   
   'brauwerk-hoffman': `
-    Brauwerk Hoffman represents a unique fusion of traditional German brewing techniques and Eastern Ontario's agricultural heritage. Master Brewer Klaus Hoffman, a third-generation brewmaster from Bavaria, established this craft brewery on a working farm to ensure the freshest ingredients for his distinctive beers. The brewery's commitment to using locally-grown hops and grains has created a true farm-to-glass experience.
+    Experience authentic German brewing on a working farm where Master Brewer Klaus Hoffman crafts distinctive beers using hops and grains grown right on site. Enjoy traditional styles and local innovations in the beer garden overlooking the hop fields.
     
-    The brewery's lineup features both traditional German styles and innovative creations that celebrate local flavors. Their flagship Märzen uses heritage barley varieties grown on-site, while their seasonal offerings incorporate everything from local honey to maple syrup. The brewery's beer garden, overlooking the hop fields, has become a beloved gathering place where visitors can enjoy fresh beer alongside locally-sourced bratwurst and pretzels.
-    
-    Tours of the brewing facility offer insights into both the brewing process and the agricultural practices that support it. Visitors can walk through the hop yards, learn about grain cultivation, and understand how terroir influences beer just as it does wine. The brewery also hosts special events throughout the year, including harvest festivals and traditional German celebrations.
+    Tours showcase the complete farm-to-glass process, from walking the hop yards to understanding grain cultivation. Special events include harvest festivals and traditional German celebrations with fresh beer, bratwurst, and pretzels.
   `,
   
   'broken-stick': `
@@ -55,11 +51,9 @@ export const producerDescriptions: Record<string, string> = {
   `,
   
   'cedar-barn-homestead': `
-    Cedar Barn Homestead exemplifies the modern homesteading movement while honoring traditional farming practices. The Thompson family has created a diverse, small-scale farm that demonstrates how sustainable agriculture can thrive on just 25 acres. Their holistic approach integrates vegetable production, pastured poultry, heritage breed pigs, and a thriving apiary, all working in harmony to create a resilient farm ecosystem.
+    See sustainable farming in action on this 25-acre homestead where vegetables, pastured poultry, heritage pigs, and honeybees work together in perfect harmony. The Thompson family demonstrates how small-scale farming can thrive using traditional practices.
     
-    Visitors to Cedar Barn experience farming as it was meant to be, with animals playing crucial roles in soil fertility and pest management. The heritage breed Tamworth pigs help clear and fertilize new garden areas, while the pastured chickens provide pest control and fresh eggs. The farm's market garden produces over 50 varieties of vegetables using no-till methods that build soil health year after year. Their honey operation includes 20 hives strategically placed to ensure pollination throughout the farm.
-    
-    Educational programs form a cornerstone of Cedar Barn's mission. Weekend workshops cover topics from beekeeping basics to preserving the harvest, while their popular "Farmer for a Day" program gives participants hands-on experience with daily farm operations. The farm store offers not just fresh produce and eggs, but also value-added products like raw honey, handmade soaps using farm ingredients, and seasonal preserves that capture the essence of each harvest.
+    Join weekend workshops on beekeeping or preserving, or try the "Farmer for a Day" program for hands-on experience. The farm store features fresh produce, eggs, raw honey, handmade soaps, and seasonal preserves.
   `,
   
   'euphie-dici': `
@@ -87,11 +81,9 @@ export const producerDescriptions: Record<string, string> = {
   `,
   
   'garden-path-homemade-soap': `
-    Garden Path Homemade Soap transforms the bounty of Eastern Ontario farms into luxurious, natural body care products. Founded by herbalist and soap maker Rachel Winters, this artisanal operation began in a farmhouse kitchen and has grown into a thriving business that celebrates the healing and aromatic properties of locally grown plants. Every bar of soap tells a story of collaboration with regional farmers and wildcrafters.
+    Watch herbs from the garden transform into luxurious soaps and skincare products. Rachel Winters cultivates 40+ varieties of medicinal plants, partnering with local farms for goat milk, honey, and beeswax to create all-natural body care.
     
-    The production process begins in the extensive herb gardens surrounding the workshop, where over 40 varieties of medicinal and aromatic plants are cultivated using organic methods. Calendula, lavender, chamomile, and comfrey are harvested at their peak potency and carefully dried for use throughout the year. Additional ingredients like goat milk, honey, and beeswax come from neighboring farms, creating a network of producers committed to natural, sustainable practices.
-    
-    Visitors to Garden Path can tour the herb gardens, learning about the properties of different plants and their traditional uses in skincare. The workshop offers soap-making classes where participants create their own bars using traditional cold-process methods. The retail space showcases not just soaps but also salves, lip balms, and bath products, all made with the same commitment to natural ingredients and local sourcing. Special seasonal products, like pine tar soap for winter or cucumber-mint for summer, connect users to the rhythms of the Eastern Ontario seasons.
+    Tour the herb gardens, take a soap-making class, or browse the retail space filled with handmade soaps, salves, and bath products. Seasonal specialties like pine tar soap for winter connect you to Eastern Ontario's natural rhythms.
   `,
   
   'gibbs-honey': `

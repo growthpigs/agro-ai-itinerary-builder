@@ -88,10 +88,10 @@ export const ProducerDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Shallow Banner - Edge to Edge */}
-      <header className="relative w-screen -mx-[50vw] left-[50%] right-[50%]">
-        <div className="relative w-full h-[35vh] max-h-[280px] md:max-h-[320px] overflow-hidden">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+      {/* Full Width Banner - Breaking out of container */}
+      <header className="relative -mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="relative w-full h-[45vh] max-h-[400px] overflow-hidden bg-gray-200">
           <ProducerImage
             producerSlug={producer.id + '-1'}
             alt={`${producer.name} banner`}
@@ -100,13 +100,23 @@ export const ProducerDetail: React.FC = () => {
             loading="eager"
           />
           
-          {/* Subtle gradient for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          {/* White gradient overlay with opacity */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/40 to-white/20" />
+          
+          {/* Benday dot pattern overlay */}
+          <div 
+            className="absolute inset-0 opacity-15"
+            style={{
+              backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)`,
+              backgroundSize: '4px 4px',
+              backgroundPosition: '0 0, 2px 2px'
+            }}
+          />
           
           {/* Back button */}
           <button
             onClick={() => navigate(-1)}
-            className="absolute top-4 left-4 sm:left-6 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-all hover:scale-105 shadow-lg"
+            className="absolute top-4 left-4 sm:left-6 lg:left-8 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-all hover:scale-105 shadow-lg"
             aria-label="Go back"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -114,8 +124,8 @@ export const ProducerDetail: React.FC = () => {
         </div>
       </header>
 
-      {/* Content - Max width for readability */}
-      <div className="max-w-[650px] mx-auto px-4 sm:px-6 py-8">
+      {/* Content - Better width for readability */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Producer Header Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 -mt-12 relative z-10 overflow-hidden">
           {/* Header with Image and Title */}
@@ -170,18 +180,25 @@ export const ProducerDetail: React.FC = () => {
               </div>
             </div>
 
-            {/* Concise Description - 2 paragraphs max */}
+            {/* Concise Description - 2 short paragraphs max */}
             {producerDescriptions[producer.id] && (
-              <div className="mt-6 space-y-4 text-gray-600 leading-relaxed">
+              <div className="mt-6 space-y-3 text-gray-600 leading-relaxed">
                 {producerDescriptions[producer.id]
                   .trim()
                   .split('\n\n')
                   .slice(0, 2)
-                  .map((paragraph, index) => (
-                    <p key={index} className="text-base">
-                      {paragraph.trim()}
-                    </p>
-                  ))}
+                  .map((paragraph, index) => {
+                    // Limit each paragraph to ~150 characters for better readability
+                    const shortened = paragraph.trim().length > 150 
+                      ? paragraph.trim().substring(0, paragraph.trim().lastIndexOf(' ', 150)) + '...'
+                      : paragraph.trim();
+                    
+                    return (
+                      <p key={index} className="text-sm sm:text-base">
+                        {shortened}
+                      </p>
+                    );
+                  })}
               </div>
             )}
           </div>
@@ -189,8 +206,8 @@ export const ProducerDetail: React.FC = () => {
           {/* Divider */}
           <div className="border-t border-gray-100 mt-6 mb-6" />
           
-          {/* Fact Grid */}
-          <div className="grid sm:grid-cols-2 gap-6 text-sm">
+          {/* Fact Grid with proper padding */}
+          <div className="bg-gray-50 rounded-lg p-6 grid sm:grid-cols-2 gap-6 text-sm">
             {/* Location */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
