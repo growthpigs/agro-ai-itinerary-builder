@@ -21,9 +21,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = [
     { path: '/', icon: Route, label: 'Make Itinerary' },
-    { path: '/itinerary', icon: Route, label: 'Itinerary' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
     { path: '/categories', icon: Grid3X3, label: 'Categories' },
+    { path: '/itinerary', icon: Route, label: 'Itinerary' },
     { path: '/home', icon: Home, label: 'How it Works' },
     { path: '/about', icon: Info, label: 'About' },
   ];
@@ -62,7 +62,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className={cn(
                   'transition-colors hover:text-foreground/80',
                   location.pathname === item.path
-                    ? 'text-orange-600'
+                    ? 'text-orange-800'
                     : 'text-foreground/60'
                 )}
                 producerName="Layout"
@@ -95,7 +95,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           'flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground py-2 px-2 -mx-2 rounded-md hover:bg-muted/50',
-                          location.pathname === item.path && 'text-orange-600 bg-muted/30'
+                          location.pathname === item.path && 'text-orange-800 bg-muted/30'
                         )}
                         producerName="Layout"
                         linkLabel={`mobile-nav-${item.label.toLowerCase()}`}

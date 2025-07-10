@@ -6,7 +6,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { CATEGORY_LABELS, ACTIVITY_LABELS } from '@/types';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { SafeLink } from '@/components/ui/SafeLink';
-import { producerImages } from '@/data/producerImages';
 import { producerDescriptions } from '@/data/producerDescriptions';
 
 export const ProducerDetail: React.FC = () => {
@@ -106,7 +105,7 @@ export const ProducerDetail: React.FC = () => {
             {/* Producer thumbnail */}
             <div className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden">
               <ProducerImage
-                producerSlug={`${producer.id}-1`}
+                producerSlug={producer.id}
                 alt={producer.name}
                 size="medium"
                 className="w-full h-full object-cover"
@@ -168,9 +167,14 @@ export const ProducerDetail: React.FC = () => {
             <h3 className="font-semibold text-gray-900 mb-3">Gallery</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((num) => {
-                const baseSlug = producerImages[producer.id] || producer.id;
-                // Extract the base name and add the number
-                const imageSlug = baseSlug.replace(/\d+$/, '') + num;
+                // Simple approach: use producer.id + image number
+                const imageSlug = `${producer.id}-${num}`;
+                
+                console.log('[ProducerDetail Gallery Debug]', {
+                  producerId: producer.id,
+                  imageNumber: num,
+                  finalSlug: imageSlug
+                });
                 
                 return (
                   <div 

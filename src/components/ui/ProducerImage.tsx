@@ -164,6 +164,17 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
     return imageSlugMap[producerSlug][size];
   }
 
+  // Handle numbered variations (producer-id-2, producer-id-3, etc.)
+  const baseProducerMatch = producerSlug.match(/^(.+)-(\d+)$/);
+  if (baseProducerMatch) {
+    const [, baseProducer, imageNum] = baseProducerMatch;
+    if (imageSlugMap[baseProducer] && imageSlugMap[baseProducer][size]) {
+      const baseMapping = imageSlugMap[baseProducer][size];
+      // Replace the number at the end with the requested number
+      return baseMapping.replace(/\d+$/, imageNum);
+    }
+  }
+
   // Default fallback: add -1 suffix
   return `${producerSlug}-1`;
 };
@@ -180,13 +191,12 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   
   // DEBUG: Log every image path attempt
   console.log('[ProducerImage Debug]', {
-    producerSlug,
-    actualSlug,
-    size,
+    originalSlug: producerSlug,
+    mappedSlug: actualSlug,
+    requestedSize: size,
     webpPath: `${basePath}/webp/${size}/${actualSlug}.webp`,
     jpgPath: `${basePath}/jpg/${size}/${actualSlug}.jpg`,
-    currentURL: window.location.href,
-    baseURI: document.baseURI
+    currentURL: window.location.href
   });
   
   const sizeClasses = {
