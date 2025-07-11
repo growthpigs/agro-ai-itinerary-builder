@@ -22,14 +22,14 @@ const categories: Category[] = [
     id: 'vegetables',
     name: 'Fresh Vegetables',
     description: 'Seasonal produce from local farms',
-    image: 'les-jardins-ecologistes-gregoire-1',
+    image: 'ferme-butte-bine-2',
     keywords: ['vegetables', 'produce', 'greens', 'organic']
   },
   {
     id: 'fruits',
     name: 'Fruits & Berries',
     description: 'Pick-your-own and farm-fresh fruits',
-    image: 'avonmore-berry-farm-1',
+    image: 'avonmore-berry-farm-2',
     keywords: ['fruits', 'berries', 'apples', 'strawberries']
   },
   {
@@ -64,7 +64,7 @@ const categories: Category[] = [
     id: 'artisan',
     name: 'Artisan Crafts',
     description: 'Handmade goods and crafts',
-    image: 'cedar-barn-homestead-1',
+    image: 'garden-path-homemade-soap-2',
     keywords: ['crafts', 'artisan', 'handmade']
   },
   {
