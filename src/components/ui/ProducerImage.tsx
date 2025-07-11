@@ -292,7 +292,8 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
         loading={loading}
         className={cn(
           'object-cover',
-          sizeClasses[size],
+          // Use parent className for sizing if provided, otherwise use default size classes
+          className || sizeClasses[size],
           'max-w-full h-auto'
         )}
         onError={(e) => {
@@ -309,7 +310,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   }
 
   return (
-    <picture className={cn('block overflow-hidden', className)}>
+    <picture className="block overflow-hidden">
       <source
         srcSet={`${basePath}/webp/${size}/${actualSlug}.webp`}
         type="image/webp"
@@ -324,7 +325,8 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
         loading={loading}
         className={cn(
           'object-cover',
-          sizeClasses[size],
+          // Use parent className for sizing if provided, otherwise use default size classes
+          className || sizeClasses[size],
           'max-w-full h-auto'
         )}
         onError={(e) => {
