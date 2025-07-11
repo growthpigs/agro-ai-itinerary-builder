@@ -66,6 +66,14 @@ function scoreProducer(
     categoryMatches += 1;
   }
   
+  // Special case: if cafes-eateries is selected and producer has restaurant/catering in categories
+  const cafesSelected = selectedCategoryIds.includes('cafes-eateries');
+  if (cafesSelected && producer.categories?.some(cat => 
+    ['restaurant', 'catering', 'cafe', 'bistro', 'eatery'].includes(cat)
+  )) {
+    categoryMatches += 1;
+  }
+  
   score += categoryMatches * 100; // Each matching category = 100 points
   
   // Bonus for multiple category matches (diversity)
