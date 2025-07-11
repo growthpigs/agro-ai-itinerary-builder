@@ -19,67 +19,46 @@ interface Category {
 
 const categories: Category[] = [
   {
-    id: 'vegetables',
-    name: 'Fresh Vegetables',
-    description: 'Seasonal produce from local farms',
+    id: 'local-food',
+    name: 'Local Food',
+    description: 'Fresh produce, meats, and farm products',
+    image: 'avonmore-berry-farm-4',
+    keywords: ['local', 'food', 'produce', 'farm', 'fresh']
+  },
+  {
+    id: 'wine-beer-spirits',
+    name: 'Wine, Beer & Spirits',
+    description: 'Wineries, breweries, and distilleries',
+    image: 'vankleek-hill-vineyard-3',
+    keywords: ['wine', 'beer', 'spirits', 'brewery', 'winery', 'vineyard']
+  },
+  {
+    id: 'scenic-location',
+    name: 'Scenic Location',
+    description: 'Beautiful farms and countryside views',
     image: 'ferme-butte-bine-2',
-    keywords: ['vegetables', 'produce', 'greens', 'organic']
+    keywords: ['scenic', 'views', 'countryside', 'beautiful', 'landscape']
   },
   {
-    id: 'fruits',
-    name: 'Fruits & Berries',
-    description: 'Pick-your-own and farm-fresh fruits',
-    image: 'avonmore-berry-farm-2',
-    keywords: ['fruits', 'berries', 'apples', 'strawberries']
+    id: 'on-site-activities',
+    name: 'On-site Activities',
+    description: 'Tours, workshops, and farm experiences',
+    image: 'euphie-dici-4',
+    keywords: ['activities', 'tours', 'workshops', 'experiences', 'events']
   },
   {
-    id: 'dairy',
-    name: 'Dairy Products',
-    description: 'Fresh milk, cheese, and yogurt',
-    image: 'kirkview-farms-1',
-    keywords: ['dairy', 'milk', 'cheese', 'yogurt']
+    id: 'artisan-gifts',
+    name: 'Artisan Gifts',
+    description: 'Handmade crafts and unique gifts',
+    image: 'garden-path-homemade-soap-3',
+    keywords: ['gifts', 'crafts', 'artisan', 'handmade', 'unique']
   },
   {
-    id: 'meat',
-    name: 'Meat & Poultry',
-    description: 'Locally raised beef, pork, and chicken',
-    image: 'l-orignal-packing-1',
-    keywords: ['meat', 'beef', 'pork', 'chicken', 'poultry']
-  },
-  {
-    id: 'maple',
-    name: 'Maple Products',
-    description: 'Pure maple syrup and treats',
-    image: 'springfield-farm-1',
-    keywords: ['maple', 'syrup', 'sugar bush']
-  },
-  {
-    id: 'honey',
+    id: 'honey-beeswax',
     name: 'Honey & Beeswax',
     description: 'Raw honey and bee products',
-    image: 'gibbs-honey-1',
-    keywords: ['honey', 'beeswax', 'apiary']
-  },
-  {
-    id: 'artisan',
-    name: 'Artisan Crafts',
-    description: 'Handmade goods and crafts',
-    image: 'garden-path-homemade-soap-2',
-    keywords: ['crafts', 'artisan', 'handmade']
-  },
-  {
-    id: 'beverages',
-    name: 'Beverages',
-    description: 'Wine, beer, and cider',
-    image: 'vankleek-hill-vineyard-1',
-    keywords: ['wine', 'beer', 'cider', 'brewery', 'winery']
-  },
-  {
-    id: 'bakery',
-    name: 'Baked Goods',
-    description: 'Fresh bread and pastries',
-    image: 'simply-baked-catering-1',
-    keywords: ['bakery', 'bread', 'pastries', 'baked goods']
+    image: 'smirlholm-farms-2',
+    keywords: ['honey', 'beeswax', 'bees', 'apiary', 'hive']
   }
 ];
 

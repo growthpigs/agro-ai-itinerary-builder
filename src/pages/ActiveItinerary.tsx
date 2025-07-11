@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, ChevronLeft, Map, List, Check } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronLeft, Map, List, Check, ExternalLink } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { ProgressStats } from '@/components/ui/ProgressCard';
 import { ItineraryMap } from '@/components/ItineraryMap';
+import { CollapsiblePanel } from '@/components/CollapsiblePanel';
 
 export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
@@ -16,6 +17,8 @@ export const ActiveItinerary: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [visitedStops, setVisitedStops] = useState<Set<number>>(new Set());
+  const [isPanelExpanded, setIsPanelExpanded] = useState(true);
+  const [isNavigating, setIsNavigating] = useState(false);
   
   const userLocation = latitude && longitude 
     ? { lat: latitude, lng: longitude }
@@ -34,6 +37,13 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const navigateToStop = () => {
+    // Start in-app navigation mode
+    setIsNavigating(true);
+    setIsPanelExpanded(false); // Collapse panel to show more map
+    setViewMode('map'); // Switch to map view if not already
+  };
+
+  const openInGoogleMaps = () => {
     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentStop.location.lat},${currentStop.location.lng}`;
     window.open(googleMapsUrl, '_blank');
   };
@@ -129,8 +139,8 @@ export const ActiveItinerary: React.FC = () => {
         <ProducerImage 
           producerSlug={`${currentStop.id}-1`}
           alt={currentStop.name}
-          size="medium"
-          className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
+          size="thumb"
+          className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
         />
         <div className="flex-1">
           <div className="flex items-start justify-between">
@@ -236,20 +246,31 @@ export const ActiveItinerary: React.FC = () => {
               <Link to="/itinerary">
                 <Button variant="ghost" size="sm" className="gap-1">
                   <ChevronLeft className="h-4 w-4" />
-                  Back
+                  {isNavigating ? 'Exit' : 'Back'}
                 </Button>
               </Link>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  Stop {currentStopIndex + 1} of {totalStops}
+                  {isNavigating ? 'Navigating' : `Stop ${currentStopIndex + 1} of ${totalStops}`}
                 </h1>
                 <p className="text-sm text-gray-600">
                   {visitedStops.size} visited
                 </p>
               </div>
             </div>
-            {/* Only show toggle on desktop */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              {isNavigating && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsNavigating(false)}
+                >
+                  End Navigation
+                </Button>
+              )}
+              {/* Only show toggle on desktop when not navigating */}
+              {!isNavigating && (
+                <div className="hidden md:flex items-center gap-2">
               <Button
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
@@ -268,6 +289,8 @@ export const ActiveItinerary: React.FC = () => {
                 <Map className="h-4 w-4" />
                 Map
               </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -275,23 +298,160 @@ export const ActiveItinerary: React.FC = () => {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Mobile: Always show list with inline map */}
+        {/* Mobile: Full-screen map with collapsible panel */}
         <div className="md:hidden">
-          <ProgressSection />
-          <CurrentStopDetails />
-          
-          {/* Map shown inline on mobile */}
-          <div className="mb-6">
+          <div className="fixed inset-0 top-[73px] bottom-0">
+            {/* Map - Full screen */}
             <ItineraryMap
               producers={selectedProducers}
               currentProducerIndex={currentStopIndex}
-              height="300px"
-              className="shadow-sm border border-gray-200"
+              className="h-full"
+              height="100%"
             />
+
+            {/* Navigation overlay when in navigation mode */}
+            {isNavigating && (
+              <div className="absolute top-4 left-4 right-4 z-10">
+                <div className="bg-white rounded-lg shadow-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Navigation className="h-5 w-5 text-orange-600" />
+                      <span className="font-medium">Navigating to:</span>
+                    </div>
+                    <span className="text-sm text-gray-600">{distance.toFixed(1)}km</span>
+                  </div>
+                  <h3 className="font-semibold text-lg">{currentStop.name}</h3>
+                  <p className="text-sm text-gray-600">{currentStop.location.address}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Collapsible bottom panel */}
+            <div className="absolute bottom-0 left-0 right-0 z-20">
+              <CollapsiblePanel
+                isExpanded={isPanelExpanded}
+                onToggle={() => setIsPanelExpanded(!isPanelExpanded)}
+                title={currentStop.name}
+                subtitle={`Stop ${currentStopIndex + 1} • ${distance.toFixed(1)}km away`}
+              >
+                {!allStopsVisited ? (
+                  <>
+                    <ProgressStats
+                      currentStop={currentStopIndex + 1}
+                      totalStops={totalStops}
+                      visitedStops={visitedStops.size}
+                      distance={totalDistance}
+                      estimatedTime={estimatedTime}
+                      className="mb-4"
+                    />
+
+                    <div className="space-y-4">
+                      <div className="flex gap-3">
+                        <ProducerImage 
+                          producerSlug={`${currentStop.id}-1`}
+                          alt={currentStop.name}
+                          size="thumb"
+                          className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-600">{currentStop.location.address}</p>
+                          <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              ~45 min visit
+                            </span>
+                            {visitedStops.has(currentStopIndex) && (
+                              <span className="flex items-center gap-1 text-green-600">
+                                <Check className="h-3 w-3" />
+                                Visited
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="space-y-2">
+                        {!isNavigating ? (
+                          <>
+                            <Button
+                              onClick={navigateToStop}
+                              className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
+                            >
+                              <Navigation className="h-5 w-5" />
+                              Start Navigation
+                            </Button>
+                            <Button
+                              onClick={openInGoogleMaps}
+                              variant="outline"
+                              className="w-full gap-2"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                              Open in Google Maps
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            onClick={markAsVisited}
+                            variant={visitedStops.has(currentStopIndex) ? "outline" : "default"}
+                            className="w-full gap-2"
+                            disabled={!!visitedStops.has(currentStopIndex)}
+                          >
+                            <Check className="h-5 w-5" />
+                            {visitedStops.has(currentStopIndex) ? 'Visited' : 'Mark as Visited'}
+                          </Button>
+                        )}
+                        
+                        <Link to={`/producer/${currentStop.id}`} className="block">
+                          <Button variant="outline" className="w-full">
+                            View Details
+                          </Button>
+                        </Link>
+                      </div>
+
+                      {/* Navigation controls */}
+                      <div className="flex items-center justify-between pt-2">
+                        <Button
+                          onClick={goToPreviousStop}
+                          disabled={currentStopIndex === 0}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Previous
+                        </Button>
+                        <span className="text-sm text-gray-600">
+                          {currentStopIndex + 1} / {totalStops}
+                        </span>
+                        <Button
+                          onClick={goToNextStop}
+                          disabled={currentStopIndex === totalStops - 1}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-3">
+                      <Check className="h-6 w-6 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Journey Complete!</h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      All {selectedProducers.length} stops visited
+                    </p>
+                    <Link to="/itinerary">
+                      <Button size="sm" className="w-full">
+                        Plan New Journey
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </CollapsiblePanel>
+            </div>
           </div>
-          
-          <ActionButtons />
-          <NavigationControls />
         </div>
 
         {/* Desktop: Toggle between list and map view */}
@@ -318,8 +478,8 @@ export const ActiveItinerary: React.FC = () => {
                   <ProducerImage 
                     producerSlug={`${currentStop.id}-1`}
                     alt={currentStop.name}
-                    size="medium"
-                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                    size="thumb"
+                    className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
                   />
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg">{currentStop.name}</h3>
@@ -343,7 +503,7 @@ export const ActiveItinerary: React.FC = () => {
                     className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                   >
                     <Navigation className="h-5 w-5" />
-                    Get Directions
+                    Start Navigation
                   </Button>
                   {!visitedStops.has(currentStopIndex) && (
                     <Button

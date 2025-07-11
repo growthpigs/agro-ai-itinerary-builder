@@ -241,8 +241,8 @@ export const Itinerary: React.FC = () => {
                     <ProducerImage 
                       producerSlug={`${producer.id}-1`}
                       alt={producer.name}
-                      size="medium"
-                      className="w-20 h-20 object-cover rounded-lg"
+                      size="thumb"
+                      className="w-16 h-16 object-cover rounded-lg"
                     />
                   </div>
                   <div className="flex-1">

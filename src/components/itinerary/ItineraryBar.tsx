@@ -1,12 +1,14 @@
-import React from 'react';
-import { X, MapPin, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, MapPin, ArrowRight, ChevronUp, ChevronDown } from 'lucide-react';
 import { useItinerary } from '@/hooks/useItinerary';
 import { Button } from '@/components/ui/button';
 import { SafeLink } from '@/components/ui/SafeLink';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { cn } from '@/lib/utils';
 
 export const ItineraryBar: React.FC = () => {
   const { selectedProducers, removeProducer, maxProducers } = useItinerary();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   if (selectedProducers.length === 0) {
     return null;
@@ -16,18 +18,33 @@ export const ItineraryBar: React.FC = () => {
     <div className="fixed bottom-0 left-0 right-0 z-40 animate-in slide-in-from-bottom-5">
       <div className="bg-background border-t shadow-lg">
         <div className="container mx-auto px-4">
-          <div className="py-4">
+          <div className={cn(
+            "transition-all duration-300",
+            isExpanded ? "py-4" : "py-2"
+          )}>
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="font-semibold text-sm">
-                  Your Itinerary ({selectedProducers.length}/{maxProducers})
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {maxProducers - selectedProducers.length > 0 
-                    ? `Add ${maxProducers - selectedProducers.length} more stops`
-                    : 'Ready to create your tour!'}
-                </p>
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-left hover:opacity-70 transition-opacity"
+                >
+                  <h3 className="font-semibold text-sm flex items-center gap-2">
+                    Your Itinerary ({selectedProducers.length}/{maxProducers})
+                    {isExpanded ? (
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </h3>
+                  {isExpanded && (
+                    <p className="text-xs text-muted-foreground">
+                      {maxProducers - selectedProducers.length > 0 
+                        ? `Add ${maxProducers - selectedProducers.length} more stops`
+                        : 'Ready to create your tour!'}
+                    </p>
+                  )}
+                </button>
               </div>
               <Button asChild size="sm" className="gap-2">
                 <SafeLink 
@@ -43,7 +60,8 @@ export const ItineraryBar: React.FC = () => {
             </div>
 
             {/* Selected Producers */}
-            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
+            {isExpanded && (
+              <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
               {selectedProducers.map((producer, index) => (
                 <div
                   key={producer.id}
@@ -51,12 +69,12 @@ export const ItineraryBar: React.FC = () => {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className="relative overflow-hidden rounded-lg border bg-card w-40">
-                    <div className="aspect-square relative">
+                    <div className="aspect-square relative rounded-lg overflow-hidden">
                       <ProducerImage
                         producerSlug={`${producer.id}-1`}
                         alt={producer.name}
-                        size="full"
-                        className="w-full h-full object-cover"
+                        size="thumb"
+                        className="w-full h-full object-cover rounded-lg"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                       
@@ -105,7 +123,8 @@ export const ItineraryBar: React.FC = () => {
                   </div>
                 </SafeLink>
               )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
