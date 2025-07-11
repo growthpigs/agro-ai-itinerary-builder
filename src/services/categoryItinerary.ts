@@ -156,7 +156,13 @@ export function buildCategoryItinerary({
     const honeySelected = selectedCategoryIds.includes('honey-beeswax');
     const isHoneyProducer = honeySelected && producer.categories?.includes('honey');
     
-    return hasMatchingTag || isHoneyProducer;
+    // Special case: if cafes-eateries is selected, check for restaurant/catering categories
+    const cafesSelected = selectedCategoryIds.includes('cafes-eateries');
+    const isCafeEatery = cafesSelected && producer.categories?.some(cat => 
+      ['restaurant', 'catering', 'cafe', 'bistro', 'eatery'].includes(cat)
+    );
+    
+    return hasMatchingTag || isHoneyProducer || isCafeEatery;
   });
   
   // Filter by distance if user location is available
@@ -338,7 +344,13 @@ export function validateCategorySelection(
     const honeySelected = selectedCategoryIds.includes('honey-beeswax');
     const isHoneyProducer = honeySelected && producer.categories?.includes('honey');
     
-    return hasMatchingTag || isHoneyProducer;
+    // Special case: if cafes-eateries is selected, check for restaurant/catering categories
+    const cafesSelected = selectedCategoryIds.includes('cafes-eateries');
+    const isCafeEatery = cafesSelected && producer.categories?.some(cat => 
+      ['restaurant', 'catering', 'cafe', 'bistro', 'eatery'].includes(cat)
+    );
+    
+    return hasMatchingTag || isHoneyProducer || isCafeEatery;
   });
   
   if (matchingProducers.length < minProducers) {
