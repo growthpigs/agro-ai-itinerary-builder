@@ -232,7 +232,13 @@ export function buildCategoryItinerary({
       const isHoneyCategory = categoryId === 'honey-beeswax';
       const isHoneyProducer = isHoneyCategory && sp.producer.categories?.includes('honey');
       
-      return (hasTag || isHoneyProducer) && !selectedProducers.includes(sp.producer);
+      // Special case for cafes
+      const isCafeCategory = categoryId === 'cafes-eateries';
+      const isCafeProducer = isCafeCategory && sp.producer.categories?.some(cat => 
+        ['restaurant', 'catering', 'cafe', 'bistro', 'eatery'].includes(cat)
+      );
+      
+      return (hasTag || isHoneyProducer || isCafeProducer) && !selectedProducers.includes(sp.producer);
     });
     
     if (bestForCategory) {
@@ -286,7 +292,8 @@ export function buildCategoryItinerary({
       'scenic-location': 'Scenic Location',
       'on-site-activities': 'On-site Activities',
       'artisan-gifts': 'Artisan Gifts',
-      'honey-beeswax': 'honey'
+      'honey-beeswax': 'honey',
+      'cafes-eateries': 'Caf\u00e9s & Eateries'
     };
     return categoryMap[id] || id;
   }).join(', ');
