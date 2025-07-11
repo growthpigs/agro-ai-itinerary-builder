@@ -34,8 +34,7 @@ function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: numbe
  */
 function scoreProducer(
   producer: Producer, 
-  selectedCategoryIds: string[], 
-  userLocation?: { lat: number; lng: number }
+  selectedCategoryIds: string[]
 ): number {
   let score = 0;
   
@@ -91,18 +90,8 @@ function scoreProducer(
     score += 15;
   }
   
-  // Distance penalty (if user location available)
-  if (userLocation) {
-    const distance = calculateDistance(
-      userLocation.lat, 
-      userLocation.lng, 
-      producer.location.lat, 
-      producer.location.lng
-    );
-    // Penalty increases with distance (up to 50km)
-    const distancePenalty = Math.min(distance * 2, 100);
-    score -= distancePenalty;
-  }
+  // Note: We no longer penalize based on distance from user
+  // since users might be planning from anywhere in the world
   
   // Seasonal availability bonus (rough estimate)
   if (producer.seasonal && producer.seasonal.toLowerCase().includes('year-round')) {
@@ -165,33 +154,15 @@ export function buildCategoryItinerary({
     return hasMatchingTag || isHoneyProducer || isCafeEatery;
   });
   
-  // Filter by distance if user location is available
-  if (userLocation) {
-    matchingProducers = matchingProducers.filter(producer => {
-      const distance = calculateDistance(
-        userLocation.lat,
-        userLocation.lng,
-        producer.location.lat,
-        producer.location.lng
-      );
-      return distance <= maxDistanceKm;
-    });
-    
-    console.log(`[CategoryItinerary] After distance filter (max ${maxDistanceKm}km):`, matchingProducers.length);
-  }
+  // Note: We don't filter by distance from user location anymore
+  // Users might be planning trips from anywhere in the world!
   
   console.log('[CategoryItinerary] Matching producers:', matchingProducers.length);
   
   if (matchingProducers.length === 0) {
-    let noResultsReason = 'No producers found matching the selected categories';
-    if (userLocation) {
-      noResultsReason += ` within ${maxDistanceKm}km of your location. Try selecting different categories or increasing your travel distance`;
-    }
-    noResultsReason += '.';
-    
     return {
       selectedProducers: [],
-      reasoning: noResultsReason,
+      reasoning: 'No producers found matching the selected categories. Try selecting different categories or combinations.',
       categoryBreakdown: {}
     };
   }
@@ -199,7 +170,7 @@ export function buildCategoryItinerary({
   // Score and sort producers
   const scoredProducers = matchingProducers.map(producer => ({
     producer,
-    score: scoreProducer(producer, selectedCategoryIds, userLocation)
+    score: scoreProducer(producer, selectedCategoryIds)
   })).sort((a, b) => b.score - a.score);
   
   console.log('[CategoryItinerary] Top scored producers:', 
@@ -254,33 +225,40 @@ export function buildCategoryItinerary({
   }
   
   // Second pass: fill remaining slots with highest scoring producers
-  // Also ensure that consecutive stops aren't too far apart
+  // Ensure that the total route is geographically reasonable
   for (const { producer } of scoredProducers) {
     if (selectedProducers.length >= maxStops) break;
     if (!selectedProducers.includes(producer)) {
-      // Check distance from last selected producer
+      // Check if adding this producer keeps the route reasonable
+      let isReasonableAddition = true;
+      
       if (selectedProducers.length > 0) {
-        const lastProducer = selectedProducers[selectedProducers.length - 1];
-        const distance = calculateDistance(
-          lastProducer.location.lat,
-          lastProducer.location.lng,
-          producer.location.lat,
-          producer.location.lng
+        // Check distance from ALL selected producers to ensure geographic clustering
+        const distances = selectedProducers.map(selected => 
+          calculateDistance(
+            selected.location.lat,
+            selected.location.lng,
+            producer.location.lat,
+            producer.location.lng
+          )
         );
-        // Skip if too far from last stop (more than 50km between consecutive stops)
-        if (distance > 50) {
-          continue;
+        
+        // If any producer is more than maxDistanceKm away, skip
+        if (distances.some(d => d > maxDistanceKm)) {
+          isReasonableAddition = false;
         }
       }
       
-      selectedProducers.push(producer);
-      // Update category breakdown based on tags
-      selectedCategoryIds.forEach(catId => {
-        const tag = categoryToTagMap[catId];
-        if (producer.tags?.includes(tag)) {
-          categoryBreakdown[catId]++;
-        }
-      });
+      if (isReasonableAddition) {
+        selectedProducers.push(producer);
+        // Update category breakdown based on tags
+        selectedCategoryIds.forEach(catId => {
+          const tag = categoryToTagMap[catId];
+          if (producer.tags?.includes(tag)) {
+            categoryBreakdown[catId]++;
+          }
+        });
+      }
     }
   }
   
@@ -299,12 +277,7 @@ export function buildCategoryItinerary({
   }).join(', ');
   
   let reasoning = `Selected ${selectedProducers.length} producers based on your interest in ${categoryNames}. `;
-  
-  if (userLocation) {
-    reasoning += `The itinerary includes only producers within ${maxDistanceKm}km of your location and ensures reasonable distances between stops. `;
-  }
-  
-  reasoning += `The route balances category coverage with geographic proximity for an enjoyable tour experience.`;
+  reasoning += `The route is optimized to keep travel distances reasonable (stops within ${maxDistanceKm}km of each other) while ensuring good category coverage.`;
   
   console.log('[CategoryItinerary] Final selection:', {
     count: selectedProducers.length,
