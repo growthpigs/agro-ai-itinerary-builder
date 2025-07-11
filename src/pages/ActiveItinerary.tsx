@@ -37,7 +37,14 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const navigateToStop = () => {
-    // Start in-app navigation mode
+    // Check if user is very far away (>1000km) and provide different experience
+    if (distance > 1000) {
+      // For very long distances, just open Google Maps
+      openInGoogleMaps();
+      return;
+    }
+    
+    // Start in-app navigation mode for reasonable distances
     setIsNavigating(true);
     setIsPanelExpanded(false); // Collapse panel to show more map
     setViewMode('map'); // Switch to map view if not already
@@ -154,7 +161,7 @@ export const ActiveItinerary: React.FC = () => {
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <MapPin className="h-4 w-4" />
-                  {distance}km away
+                  {distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="h-4 w-4" />
@@ -194,15 +201,17 @@ export const ActiveItinerary: React.FC = () => {
         className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-lg py-6"
       >
         <Navigation className="h-5 w-5" />
-        Navigate to {currentStop.name}
+        {distance > 1000 ? `Get Directions to ${currentStop.name}` : `Navigate to ${currentStop.name}`}
       </Button>
-      <Button
-        onClick={openInGoogleMaps}
-        className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
-      >
-        <ExternalLink className="h-5 w-5" />
-        Open in Google Maps
-      </Button>
+      {distance <= 1000 && (
+        <Button
+          onClick={openInGoogleMaps}
+          className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+        >
+          <ExternalLink className="h-5 w-5" />
+          Open in Google Maps
+        </Button>
+      )}
       {!visitedStops.has(currentStopIndex) && (
         <Button
           onClick={markAsVisited}
@@ -326,7 +335,7 @@ export const ActiveItinerary: React.FC = () => {
                       <Navigation className="h-5 w-5 text-orange-600" />
                       <span className="font-medium">Navigating to:</span>
                     </div>
-                    <span className="text-sm text-gray-600">{distance.toFixed(1)}km</span>
+                    <span className="text-sm text-gray-600">{distance > 1000 ? `${(distance/1000).toFixed(0)}k km` : `${distance.toFixed(1)}km`}</span>
                   </div>
                   <h3 className="font-semibold text-lg">{currentStop.name}</h3>
                   <p className="text-sm text-gray-600">{currentStop.location.address}</p>
@@ -340,7 +349,7 @@ export const ActiveItinerary: React.FC = () => {
                 isExpanded={isPanelExpanded}
                 onToggle={() => setIsPanelExpanded(!isPanelExpanded)}
                 title={currentStop.name}
-                subtitle={`Stop ${currentStopIndex + 1} • ${distance.toFixed(1)}km away`}
+                subtitle={`Stop ${currentStopIndex + 1} • ${distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}`}
               >
                 {!allStopsVisited ? (
                   <>
@@ -387,16 +396,18 @@ export const ActiveItinerary: React.FC = () => {
                               className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                             >
                               <Navigation className="h-5 w-5" />
-                              Start Navigation
+                              {distance > 1000 ? 'Get Directions' : 'Start Navigation'}
                             </Button>
-                            <Button
-                              onClick={openInGoogleMaps}
-                              variant="outline"
-                              className="w-full gap-2"
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                              Open in Google Maps
-                            </Button>
+                            {distance <= 1000 && (
+                              <Button
+                                onClick={openInGoogleMaps}
+                                variant="outline"
+                                className="w-full gap-2"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                                Open in Google Maps
+                              </Button>
+                            )}
                           </>
                         ) : (
                           <Button
@@ -496,7 +507,7 @@ export const ActiveItinerary: React.FC = () => {
                     <div className="flex items-center gap-3 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
-                        {distance}km away
+                        {distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
@@ -512,15 +523,17 @@ export const ActiveItinerary: React.FC = () => {
                     className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                   >
                     <Navigation className="h-5 w-5" />
-                    Start Navigation
+                    {distance > 1000 ? 'Get Directions' : 'Start Navigation'}
                   </Button>
-                  <Button
-                    onClick={openInGoogleMaps}
-                    className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
-                  >
-                    <ExternalLink className="h-5 w-5" />
-                    Open in Google Maps
-                  </Button>
+                  {distance <= 1000 && (
+                    <Button
+                      onClick={openInGoogleMaps}
+                      className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+                    >
+                      <ExternalLink className="h-5 w-5" />
+                      Open in Google Maps
+                    </Button>
+                  )}
                   {!visitedStops.has(currentStopIndex) && (
                     <Button
                       onClick={markAsVisited}
