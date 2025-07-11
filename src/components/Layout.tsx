@@ -112,7 +112,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <div className="space-y-1 text-sm text-muted-foreground">
                     <p className="font-semibold text-foreground">Savour East</p>
                     <p>Discover Eastern Ontario's agricultural heritage through personalized farm tours.</p>
-                    <p className="text-xs">© 2024 Savour East. All rights reserved.</p>
+                    <p className="text-xs">© 2025 Savour East. All rights reserved.</p>
                     <p className="text-xs">A project supporting local agriculture and sustainable tourism.</p>
                   </div>
                 </div>
@@ -158,7 +158,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-            <p>© 2024 Savour East. All rights reserved.</p>
+            <p>© 2025 Savour East. All rights reserved.</p>
           </div>
         </div>
       </footer>

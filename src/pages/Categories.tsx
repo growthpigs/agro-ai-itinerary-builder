@@ -64,7 +64,7 @@ const categories: Category[] = [
     id: 'artisan',
     name: 'Artisan Crafts',
     description: 'Handmade goods and crafts',
-    image: 'garden-path-homemade-soap-1',
+    image: 'cedar-barn-homestead-1',
     keywords: ['crafts', 'artisan', 'handmade']
   },
   {

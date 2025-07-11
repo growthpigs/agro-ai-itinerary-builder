@@ -6,6 +6,7 @@ import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
 import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
+import { ProgressStats } from '@/components/ui/ProgressCard';
 
 export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
@@ -65,6 +66,23 @@ export const ActiveItinerary: React.FC = () => {
       )
     : 0;
 
+  // Calculate total route distance
+  const calculateTotalDistance = () => {
+    let total = 0;
+    for (let i = 0; i < selectedProducers.length - 1; i++) {
+      const from = selectedProducers[i].location;
+      const to = selectedProducers[i + 1].location;
+      total += calculateDistance(from.lat, from.lng, to.lat, to.lng);
+    }
+    return total;
+  };
+
+  const totalDistance = calculateTotalDistance();
+  const estimatedTime = Math.round(totalDistance / 50 * 60); // Assuming 50km/h average
+
+  // Check if all stops are visited
+  const allStopsVisited = visitedStops.size === selectedProducers.length;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -115,6 +133,44 @@ export const ActiveItinerary: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {viewMode === 'list' ? (
           <>
+            {/* Progress Statistics */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+              {allStopsVisited ? (
+                <div className="text-center py-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-3">
+                    <Check className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Journey Complete!</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    You've visited all {selectedProducers.length} stops on your itinerary
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-sm max-w-xs mx-auto">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-600">Total Distance</p>
+                      <p className="font-semibold">{totalDistance.toFixed(1)} km</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-600">Time Taken</p>
+                      <p className="font-semibold">~{estimatedTime} min</p>
+                    </div>
+                  </div>
+                  <Link to="/itinerary" className="block mt-4">
+                    <Button className="w-full">
+                      Plan New Journey
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <ProgressStats
+                  currentStop={currentStopIndex + 1}
+                  totalStops={totalStops}
+                  visitedStops={visitedStops.size}
+                  distance={totalDistance}
+                  estimatedTime={estimatedTime}
+                />
+              )}
+            </div>
+
             {/* Current Stop Details */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
               <div className="flex items-start gap-4">
