@@ -12,11 +12,13 @@ import { About } from './pages/About';
 import { ItineraryProvider } from './contexts/ItineraryContext';
 import { LocationProvider } from './contexts/LocationContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ScrollToTop } from './components/ScrollToTop';
 
 function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <ScrollToTop />
         <LocationProvider>
           <ItineraryProvider>
             <Layout>

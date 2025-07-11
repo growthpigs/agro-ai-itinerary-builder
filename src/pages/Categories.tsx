@@ -36,7 +36,7 @@ const categories: Category[] = [
     id: 'scenic-location',
     name: 'Scenic Location',
     description: 'Beautiful farms and countryside views',
-    image: 'ferme-butte-bine-2',
+    image: 'smirlholm-farms-3',
     keywords: ['scenic', 'views', 'countryside', 'beautiful', 'landscape']
   },
   {
@@ -50,7 +50,7 @@ const categories: Category[] = [
     id: 'artisan-gifts',
     name: 'Artisan Gifts',
     description: 'Handmade crafts and unique gifts',
-    image: 'garden-path-homemade-soap-3',
+    image: 'les-jardins-ecologistes-gregoire-2',
     keywords: ['gifts', 'crafts', 'artisan', 'handmade', 'unique']
   },
   {
@@ -162,6 +162,26 @@ export const Categories: React.FC = () => {
         <p className="text-base text-muted-foreground">
           Select the categories that match your interests. Our AI will find the perfect producers for your farm tour.
         </p>
+        
+        {/* Build Itinerary Button */}
+        <Button
+          onClick={handleContinue}
+          disabled={isLoading || selectedCategories.length === 0}
+          size="lg"
+          className="mt-4"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Building Your Itinerary...
+            </>
+          ) : (
+            <>
+              Build AI Itinerary
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Category Grid */}

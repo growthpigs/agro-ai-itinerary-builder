@@ -38,10 +38,25 @@ function scoreProducer(
 ): number {
   let score = 0;
   
+  // Map category IDs to tag names
+  const categoryToTagMap: Record<string, string> = {
+    'local-food': 'Local Food',
+    'wine-beer-spirits': 'Wine, Beer & Spirits',
+    'scenic-location': 'Scenic Location',
+    'on-site-activities': 'On-site Activities',
+    'artisan-gifts': 'Artisan Gifts',
+    'honey-beeswax': 'honey'
+  };
+  
+  // Get the tag names for selected categories
+  const selectedTags = selectedCategoryIds
+    .map(id => categoryToTagMap[id])
+    .filter(Boolean);
+  
   // Category matching score (primary factor)
-  const categoryMatches = producer.categories.filter(cat => 
-    selectedCategoryIds.includes(cat)
-  ).length;
+  const categoryMatches = producer.tags?.filter(tag => 
+    selectedTags.includes(tag)
+  ).length || 0;
   score += categoryMatches * 100; // Each matching category = 100 points
   
   // Bonus for multiple category matches (diversity)
@@ -97,9 +112,24 @@ export function buildCategoryItinerary({
     maxStops
   });
   
-  // Filter producers that match at least one selected category
+  // Map category IDs to tag names
+  const categoryToTagMap: Record<string, string> = {
+    'local-food': 'Local Food',
+    'wine-beer-spirits': 'Wine, Beer & Spirits',
+    'scenic-location': 'Scenic Location',
+    'on-site-activities': 'On-site Activities',
+    'artisan-gifts': 'Artisan Gifts',
+    'honey-beeswax': 'honey'
+  };
+  
+  // Get the tag names for selected categories
+  const selectedTags = selectedCategoryIds
+    .map(id => categoryToTagMap[id])
+    .filter(Boolean);
+  
+  // Filter producers that match at least one selected category tag
   const matchingProducers = producers.filter(producer =>
-    producer.categories.some(cat => selectedCategoryIds.includes(cat))
+    producer.tags?.some(tag => selectedTags.includes(tag))
   );
   
   console.log('[CategoryItinerary] Matching producers:', matchingProducers.length);
@@ -139,16 +169,19 @@ export function buildCategoryItinerary({
   for (const categoryId of selectedCategoryIds) {
     if (selectedProducers.length >= maxStops) break;
     
+    const tagName = categoryToTagMap[categoryId];
     const bestForCategory = scoredProducers.find(sp => 
-      sp.producer.categories.includes(categoryId) &&
+      sp.producer.tags?.includes(tagName) &&
       !selectedProducers.includes(sp.producer)
     );
     
     if (bestForCategory) {
       selectedProducers.push(bestForCategory.producer);
-      bestForCategory.producer.categories.forEach(cat => {
-        if (selectedCategoryIds.includes(cat)) {
-          categoryBreakdown[cat]++;
+      // Update category breakdown based on tags
+      selectedCategoryIds.forEach(catId => {
+        const tag = categoryToTagMap[catId];
+        if (bestForCategory.producer.tags?.includes(tag)) {
+          categoryBreakdown[catId]++;
         }
       });
     }
@@ -159,9 +192,11 @@ export function buildCategoryItinerary({
     if (selectedProducers.length >= maxStops) break;
     if (!selectedProducers.includes(producer)) {
       selectedProducers.push(producer);
-      producer.categories.forEach(cat => {
-        if (selectedCategoryIds.includes(cat)) {
-          categoryBreakdown[cat]++;
+      // Update category breakdown based on tags
+      selectedCategoryIds.forEach(catId => {
+        const tag = categoryToTagMap[catId];
+        if (producer.tags?.includes(tag)) {
+          categoryBreakdown[catId]++;
         }
       });
     }
@@ -170,15 +205,12 @@ export function buildCategoryItinerary({
   // Generate reasoning
   const categoryNames = selectedCategoryIds.map(id => {
     const categoryMap: Record<string, string> = {
-      'vegetables': 'Fresh Vegetables',
-      'fruits': 'Fruits & Berries', 
-      'dairy': 'Dairy Products',
-      'meat': 'Meat & Poultry',
-      'maple': 'Maple Products',
-      'honey': 'Honey & Beeswax',
-      'artisan': 'Artisan Crafts',
-      'beverages': 'Beverages',
-      'bakery': 'Baked Goods'
+      'local-food': 'Local Food',
+      'wine-beer-spirits': 'Wine, Beer & Spirits',
+      'scenic-location': 'Scenic Location',
+      'on-site-activities': 'On-site Activities',
+      'artisan-gifts': 'Artisan Gifts',
+      'honey-beeswax': 'honey'
     };
     return categoryMap[id] || id;
   }).join(', ');
@@ -207,8 +239,23 @@ export function validateCategorySelection(
   producers: Producer[],
   minProducers: number = 3
 ): { isValid: boolean; message: string } {
+  // Map category IDs to tag names
+  const categoryToTagMap: Record<string, string> = {
+    'local-food': 'Local Food',
+    'wine-beer-spirits': 'Wine, Beer & Spirits',
+    'scenic-location': 'Scenic Location',
+    'on-site-activities': 'On-site Activities',
+    'artisan-gifts': 'Artisan Gifts',
+    'honey-beeswax': 'honey'
+  };
+  
+  // Get the tag names for selected categories
+  const selectedTags = selectedCategoryIds
+    .map(id => categoryToTagMap[id])
+    .filter(Boolean);
+  
   const matchingProducers = producers.filter(producer =>
-    producer.categories.some(cat => selectedCategoryIds.includes(cat))
+    producer.tags?.some(tag => selectedTags.includes(tag))
   );
   
   if (matchingProducers.length < minProducers) {

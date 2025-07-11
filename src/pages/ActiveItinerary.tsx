@@ -196,6 +196,13 @@ export const ActiveItinerary: React.FC = () => {
         <Navigation className="h-5 w-5" />
         Navigate to {currentStop.name}
       </Button>
+      <Button
+        onClick={openInGoogleMaps}
+        className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+      >
+        <ExternalLink className="h-5 w-5" />
+        Open in Google Maps
+      </Button>
       {!visitedStops.has(currentStopIndex) && (
         <Button
           onClick={markAsVisited}
@@ -504,6 +511,13 @@ export const ActiveItinerary: React.FC = () => {
                   >
                     <Navigation className="h-5 w-5" />
                     Start Navigation
+                  </Button>
+                  <Button
+                    onClick={openInGoogleMaps}
+                    className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+                  >
+                    <ExternalLink className="h-5 w-5" />
+                    Open in Google Maps
                   </Button>
                   {!visitedStops.has(currentStopIndex) && (
                     <Button
