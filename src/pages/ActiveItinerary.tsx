@@ -17,7 +17,7 @@ export const ActiveItinerary: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [visitedStops, setVisitedStops] = useState<Set<number>>(new Set());
-  const [isPanelExpanded, setIsPanelExpanded] = useState(true);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false); // Start collapsed
   const [isNavigating, setIsNavigating] = useState(false);
   
   const userLocation = latitude && longitude 

@@ -46,7 +46,7 @@ export const ItineraryBar: React.FC = () => {
                   )}
                 </button>
               </div>
-              <Button asChild size="sm" className="gap-2">
+              <Button asChild size="sm" className="gap-2" onClick={() => setIsExpanded(false)}>
                 <SafeLink 
                   href="/itinerary"
                   type="internal"

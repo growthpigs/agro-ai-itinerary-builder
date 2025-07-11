@@ -5,6 +5,7 @@ interface CategoryItineraryParams {
   producers: Producer[];
   userLocation?: { lat: number; lng: number };
   maxStops?: number;
+  maxDistanceKm?: number;
 }
 
 interface CategoryItineraryResult {
@@ -109,7 +110,8 @@ export function buildCategoryItinerary({
   selectedCategoryIds,
   producers,
   userLocation,
-  maxStops = 5
+  maxStops = 5,
+  maxDistanceKm = 100
 }: CategoryItineraryParams): CategoryItineraryResult {
   
   console.log('[CategoryItinerary] Building itinerary:', {
@@ -136,7 +138,7 @@ export function buildCategoryItinerary({
   
   // Filter producers that match at least one selected category tag
   // Special handling for honey category since it's not in tags but in categories
-  const matchingProducers = producers.filter(producer => {
+  let matchingProducers = producers.filter(producer => {
     // Check if producer has matching tags
     const hasMatchingTag = producer.tags?.some(tag => selectedTags.includes(tag));
     
@@ -147,12 +149,33 @@ export function buildCategoryItinerary({
     return hasMatchingTag || isHoneyProducer;
   });
   
+  // Filter by distance if user location is available
+  if (userLocation) {
+    matchingProducers = matchingProducers.filter(producer => {
+      const distance = calculateDistance(
+        userLocation.lat,
+        userLocation.lng,
+        producer.location.lat,
+        producer.location.lng
+      );
+      return distance <= maxDistanceKm;
+    });
+    
+    console.log(`[CategoryItinerary] After distance filter (max ${maxDistanceKm}km):`, matchingProducers.length);
+  }
+  
   console.log('[CategoryItinerary] Matching producers:', matchingProducers.length);
   
   if (matchingProducers.length === 0) {
+    let noResultsReason = 'No producers found matching the selected categories';
+    if (userLocation) {
+      noResultsReason += ` within ${maxDistanceKm}km of your location. Try selecting different categories or increasing your travel distance`;
+    }
+    noResultsReason += '.';
+    
     return {
       selectedProducers: [],
-      reasoning: 'No producers found matching the selected categories.',
+      reasoning: noResultsReason,
       categoryBreakdown: {}
     };
   }
@@ -209,9 +232,25 @@ export function buildCategoryItinerary({
   }
   
   // Second pass: fill remaining slots with highest scoring producers
+  // Also ensure that consecutive stops aren't too far apart
   for (const { producer } of scoredProducers) {
     if (selectedProducers.length >= maxStops) break;
     if (!selectedProducers.includes(producer)) {
+      // Check distance from last selected producer
+      if (selectedProducers.length > 0) {
+        const lastProducer = selectedProducers[selectedProducers.length - 1];
+        const distance = calculateDistance(
+          lastProducer.location.lat,
+          lastProducer.location.lng,
+          producer.location.lat,
+          producer.location.lng
+        );
+        // Skip if too far from last stop (more than 50km between consecutive stops)
+        if (distance > 50) {
+          continue;
+        }
+      }
+      
       selectedProducers.push(producer);
       // Update category breakdown based on tags
       selectedCategoryIds.forEach(catId => {
@@ -236,8 +275,13 @@ export function buildCategoryItinerary({
     return categoryMap[id] || id;
   }).join(', ');
   
-  const reasoning = `Selected ${selectedProducers.length} producers based on your interest in ${categoryNames}. ` +
-    `The itinerary balances category coverage, producer quality, and geographic proximity${userLocation ? ' to your location' : ''}.`;
+  let reasoning = `Selected ${selectedProducers.length} producers based on your interest in ${categoryNames}. `;
+  
+  if (userLocation) {
+    reasoning += `The itinerary includes only producers within ${maxDistanceKm}km of your location and ensures reasonable distances between stops. `;
+  }
+  
+  reasoning += `The route balances category coverage with geographic proximity for an enjoyable tour experience.`;
   
   console.log('[CategoryItinerary] Final selection:', {
     count: selectedProducers.length,
