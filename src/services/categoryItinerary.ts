@@ -46,7 +46,8 @@ function scoreProducer(
     'scenic-location': 'Scenic Location',
     'on-site-activities': 'On-site Activities',
     'artisan-gifts': 'Artisan Gifts',
-    'honey-beeswax': 'honey'
+    'honey-beeswax': 'honey',
+    'cafes-eateries': 'Cafés & Eateries'
   };
   
   // Get the tag names for selected categories
@@ -128,7 +129,8 @@ export function buildCategoryItinerary({
     'scenic-location': 'Scenic Location',
     'on-site-activities': 'On-site Activities',
     'artisan-gifts': 'Artisan Gifts',
-    'honey-beeswax': 'honey'
+    'honey-beeswax': 'honey',
+    'cafes-eateries': 'Cafés & Eateries'
   };
   
   // Get the tag names for selected categories
@@ -311,7 +313,8 @@ export function validateCategorySelection(
     'scenic-location': 'Scenic Location',
     'on-site-activities': 'On-site Activities',
     'artisan-gifts': 'Artisan Gifts',
-    'honey-beeswax': 'honey'
+    'honey-beeswax': 'honey',
+    'cafes-eateries': 'Cafés & Eateries'
   };
   
   // Get the tag names for selected categories

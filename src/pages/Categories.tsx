@@ -43,7 +43,7 @@ const categories: Category[] = [
     id: 'on-site-activities',
     name: 'On-site Activities',
     description: 'Tours, workshops, and farm experiences',
-    image: 'euphie-dici-4',
+    image: 'cedar-barn-homestead-3',
     keywords: ['activities', 'tours', 'workshops', 'experiences', 'events']
   },
   {
@@ -59,6 +59,13 @@ const categories: Category[] = [
     description: 'Raw honey and bee products',
     image: 'smirlholm-farms-2',
     keywords: ['honey', 'beeswax', 'bees', 'apiary', 'hive']
+  },
+  {
+    id: 'cafes-eateries',
+    name: 'Cafés & Eateries',
+    description: 'On-site restaurants, cafés, and food services',
+    image: 'euphie-dici-4',
+    keywords: ['cafe', 'restaurant', 'eatery', 'dining', 'food', 'bistro']
   }
 ];
 
