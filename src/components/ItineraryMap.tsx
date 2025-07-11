@@ -24,6 +24,7 @@ interface ItineraryMapProps {
   currentProducerIndex?: number;
   className?: string;
   height?: string;
+  focusOnCurrent?: boolean;
 }
 
 // Custom numbered marker
@@ -56,17 +57,35 @@ const createNumberedIcon = (number: number, isActive: boolean = false) => {
 };
 
 // Component to handle map initialization and bounds
-function MapController({ producers }: { producers: Producer[] }) {
+function MapController({ 
+  producers, 
+  currentProducerIndex, 
+  focusOnCurrent 
+}: { 
+  producers: Producer[];
+  currentProducerIndex: number;
+  focusOnCurrent: boolean;
+}) {
   const map = useMap();
 
   useEffect(() => {
     if (producers.length > 0) {
-      const bounds = L.latLngBounds(
-        producers.map(p => [p.location.lat, p.location.lng])
-      );
-      map.fitBounds(bounds, { padding: [50, 50] });
+      if (focusOnCurrent && currentProducerIndex >= 0 && currentProducerIndex < producers.length) {
+        // Focus on current producer when in navigation mode
+        const currentProducer = producers[currentProducerIndex];
+        map.setView([currentProducer.location.lat, currentProducer.location.lng], 15, {
+          animate: true,
+          duration: 1
+        });
+      } else {
+        // Show all producers
+        const bounds = L.latLngBounds(
+          producers.map(p => [p.location.lat, p.location.lng])
+        );
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
     }
-  }, [producers, map]);
+  }, [producers, currentProducerIndex, focusOnCurrent, map]);
 
   return null;
 }
@@ -76,6 +95,7 @@ export const ItineraryMap: React.FC<ItineraryMapProps> = ({
   currentProducerIndex = 0,
   className = '',
   height = '400px',
+  focusOnCurrent = false,
 }) => {
   // Get map center
   const getMapCenter = (): [number, number] => {
@@ -105,7 +125,11 @@ export const ItineraryMap: React.FC<ItineraryMapProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        <MapController producers={producers} />
+        <MapController 
+          producers={producers} 
+          currentProducerIndex={currentProducerIndex}
+          focusOnCurrent={focusOnCurrent}
+        />
         
         {/* Route polyline */}
         {routePositions.length > 1 && (

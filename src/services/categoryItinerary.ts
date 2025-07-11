@@ -54,9 +54,16 @@ function scoreProducer(
     .filter(Boolean);
   
   // Category matching score (primary factor)
-  const categoryMatches = producer.tags?.filter(tag => 
+  let categoryMatches = producer.tags?.filter(tag => 
     selectedTags.includes(tag)
   ).length || 0;
+  
+  // Special case: if honey-beeswax is selected and producer has honey in categories
+  const honeySelected = selectedCategoryIds.includes('honey-beeswax');
+  if (honeySelected && producer.categories?.includes('honey')) {
+    categoryMatches += 1;
+  }
+  
   score += categoryMatches * 100; // Each matching category = 100 points
   
   // Bonus for multiple category matches (diversity)
@@ -128,9 +135,17 @@ export function buildCategoryItinerary({
     .filter(Boolean);
   
   // Filter producers that match at least one selected category tag
-  const matchingProducers = producers.filter(producer =>
-    producer.tags?.some(tag => selectedTags.includes(tag))
-  );
+  // Special handling for honey category since it's not in tags but in categories
+  const matchingProducers = producers.filter(producer => {
+    // Check if producer has matching tags
+    const hasMatchingTag = producer.tags?.some(tag => selectedTags.includes(tag));
+    
+    // Special case: if honey-beeswax is selected, also check categories field
+    const honeySelected = selectedCategoryIds.includes('honey-beeswax');
+    const isHoneyProducer = honeySelected && producer.categories?.includes('honey');
+    
+    return hasMatchingTag || isHoneyProducer;
+  });
   
   console.log('[CategoryItinerary] Matching producers:', matchingProducers.length);
   
@@ -170,10 +185,16 @@ export function buildCategoryItinerary({
     if (selectedProducers.length >= maxStops) break;
     
     const tagName = categoryToTagMap[categoryId];
-    const bestForCategory = scoredProducers.find(sp => 
-      sp.producer.tags?.includes(tagName) &&
-      !selectedProducers.includes(sp.producer)
-    );
+    const bestForCategory = scoredProducers.find(sp => {
+      // Check tags
+      const hasTag = sp.producer.tags?.includes(tagName);
+      
+      // Special case for honey
+      const isHoneyCategory = categoryId === 'honey-beeswax';
+      const isHoneyProducer = isHoneyCategory && sp.producer.categories?.includes('honey');
+      
+      return (hasTag || isHoneyProducer) && !selectedProducers.includes(sp.producer);
+    });
     
     if (bestForCategory) {
       selectedProducers.push(bestForCategory.producer);
@@ -254,9 +275,16 @@ export function validateCategorySelection(
     .map(id => categoryToTagMap[id])
     .filter(Boolean);
   
-  const matchingProducers = producers.filter(producer =>
-    producer.tags?.some(tag => selectedTags.includes(tag))
-  );
+  const matchingProducers = producers.filter(producer => {
+    // Check if producer has matching tags
+    const hasMatchingTag = producer.tags?.some(tag => selectedTags.includes(tag));
+    
+    // Special case: if honey-beeswax is selected, also check categories field
+    const honeySelected = selectedCategoryIds.includes('honey-beeswax');
+    const isHoneyProducer = honeySelected && producer.categories?.includes('honey');
+    
+    return hasMatchingTag || isHoneyProducer;
+  });
   
   if (matchingProducers.length < minProducers) {
     return {

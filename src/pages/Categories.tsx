@@ -36,7 +36,7 @@ const categories: Category[] = [
     id: 'scenic-location',
     name: 'Scenic Location',
     description: 'Beautiful farms and countryside views',
-    image: 'smirlholm-farms-3',
+    image: 'brighter-with-blooms-1',
     keywords: ['scenic', 'views', 'countryside', 'beautiful', 'landscape']
   },
   {

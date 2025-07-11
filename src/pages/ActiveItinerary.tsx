@@ -314,6 +314,7 @@ export const ActiveItinerary: React.FC = () => {
               currentProducerIndex={currentStopIndex}
               className="h-full"
               height="100%"
+              focusOnCurrent={isNavigating}
             />
 
             {/* Navigation overlay when in navigation mode */}
@@ -477,6 +478,7 @@ export const ActiveItinerary: React.FC = () => {
                 currentProducerIndex={currentStopIndex}
                 height="500px"
                 className="shadow-sm border border-gray-200"
+                focusOnCurrent={isNavigating}
               />
               
               {/* Compact info in map view */}
