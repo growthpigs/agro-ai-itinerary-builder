@@ -80,6 +80,11 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       medium: 'brighter-with-blooms-1',
       thumb: 'brighter-with-blooms-1'
     },
+    'brighter-with-blooms-1': {
+      full: 'brighter-with-blooms-1',
+      medium: 'brighter-with-blooms-1',
+      thumb: 'brighter-with-blooms-1'
+    },
     'broken-stick': {
       full: 'broken-stick-1',
       medium: 'broken-stick-1',
@@ -90,10 +95,20 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       medium: 'cedar-barn-homestead-1',
       thumb: 'cedar-barn-homestead-1'
     },
+    'cedar-barn-homestead-3': {
+      full: 'cedar-barn-homestead-3',
+      medium: 'cedar-barn-homestead-3',
+      thumb: 'cedar-barn-homestead-3'
+    },
     'euphie-dici': {
       full: 'euphie-dici-1',
       medium: 'euphie-dici-1',
       thumb: 'euphie-dici-1'
+    },
+    'euphie-dici-4': {
+      full: 'euphie-dici-4',
+      medium: 'euphie-dici-4',
+      thumb: 'euphie-dici-4'
     },
     'gibbs-honey': {
       full: 'gibbs-honey-1',
@@ -150,6 +165,11 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       medium: 'smirlholm-farms-1',
       thumb: 'smirlholm-farms-1'
     },
+    'smirlholm-farms-2': {
+      full: 'smirlholm-farms-2',
+      medium: 'smirlholm-farms-2',
+      thumb: 'smirlholm-farms-2'
+    },
     'springfield-farm': {
       full: 'springfield-farm-1',
       medium: 'springfield-farm-1',
@@ -159,6 +179,21 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       full: 'vankleek-hill-vineyard-1',
       medium: 'vankleek-hill-vineyard-1',
       thumb: 'vankleek-hill-vineyard-1'
+    },
+    'vankleek-hill-vineyard-3': {
+      full: 'vankleek-hill-vineyard-3',
+      medium: 'vankleek-hill-vineyard-3',
+      thumb: 'vankleek-hill-vineyard-3'
+    },
+    'avonmore-berry-farm-4': {
+      full: 'avonmore-berry-farm-4',
+      medium: 'avonmore-berry-farm-4',
+      thumb: 'avonmore-berry-farm-4'
+    },
+    'les-jardins-ecologistes-gregoire-2': {
+      full: 'les-jardins-ecologistes-gregoire-2',
+      medium: 'les-jardins-ecologistes-gregoire-2',
+      thumb: 'les-jardins-ecologistes-gregoire-2'
     }
   };
 
