@@ -175,7 +175,7 @@ export const ItineraryBuilder: React.FC = () => {
         
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">Plan Your Farm Tour</h1>
+            <h1 className="text-3xl font-bold text-gray-800">Plan Your Producer Tour</h1>
             <WeatherWidget />
           </div>
           <p className="text-lg text-gray-800 max-w-2xl">

@@ -229,7 +229,7 @@ export const Home: React.FC = () => {
           <div className="mx-auto max-w-3xl">
             <Card className="border-0 bg-background shadow-lg">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Ready to Plan Your Farm Tour?</CardTitle>
+                <CardTitle className="text-2xl">Ready to Plan Your Producer Tour?</CardTitle>
                 <CardDescription className="mt-2 text-base">
                   Choose how you want to start exploring Eastern Ontario's agricultural producers
                 </CardDescription>
