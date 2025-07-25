@@ -23,12 +23,12 @@ function App() {
           <ItineraryProvider>
             <Layout>
               <Routes>
-                <Route path="/" element={
+                <Route path="/" element={<Home />} />
+                <Route path="/itinerary-builder" element={
                   <Suspense fallback={<div>Loading ItineraryBuilder...</div>}>
                     <ItineraryBuilder />
                   </Suspense>
                 } />
-                <Route path="/home" element={<Home />} />
                 <Route path="/producers" element={<Producers />} />
                 <Route path="/producer/:id" element={<ProducerDetail />} />
                 <Route path="/categories" element={<Categories />} />

@@ -20,11 +20,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   console.log('Layout rendering, current path:', location.pathname);
 
   const navItems = [
-    { path: '/', icon: Route, label: 'Make Itinerary' },
+    { path: '/itinerary-builder', icon: Route, label: 'Make Itinerary' },
     { path: '/producers', icon: MapPin, label: 'Producers' },
     { path: '/categories', icon: Grid3X3, label: 'Categories' },
     { path: '/itinerary', icon: Route, label: 'Itinerary' },
-    { path: '/home', icon: Home, label: 'How it Works' },
+    { path: '/', icon: Home, label: 'Home' },
     { path: '/about', icon: Info, label: 'About' },
   ];
 
