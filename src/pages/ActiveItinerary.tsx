@@ -37,17 +37,8 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const navigateToStop = () => {
-    // Check if user is very far away (>1000km) and provide different experience
-    if (distance > 1000) {
-      // For very long distances, just open Google Maps
-      openInGoogleMaps();
-      return;
-    }
-    
-    // Start in-app navigation mode for reasonable distances
-    setIsNavigating(true);
-    setIsPanelExpanded(false); // Collapse panel to show more map
-    setViewMode('map'); // Switch to map view if not already
+    // Always open Google Maps with specific coordinates for accurate navigation
+    openInGoogleMaps();
   };
 
   const openInGoogleMaps = () => {
@@ -201,7 +192,7 @@ export const ActiveItinerary: React.FC = () => {
         className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-lg py-6"
       >
         <Navigation className="h-5 w-5" />
-        {distance > 1000 ? `Get Directions to ${currentStop.name}` : `Navigate to ${currentStop.name}`}
+        Get Directions to {currentStop.name}
       </Button>
       {distance <= 1000 && (
         <Button
@@ -396,7 +387,7 @@ export const ActiveItinerary: React.FC = () => {
                               className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                             >
                               <Navigation className="h-5 w-5" />
-                              {distance > 1000 ? 'Get Directions' : 'Start Navigation'}
+                              Get Directions
                             </Button>
                             {distance <= 1000 && (
                               <Button
@@ -523,7 +514,7 @@ export const ActiveItinerary: React.FC = () => {
                     className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                   >
                     <Navigation className="h-5 w-5" />
-                    {distance > 1000 ? 'Get Directions' : 'Start Navigation'}
+                    Get Directions
                   </Button>
                   {distance <= 1000 && (
                     <Button
