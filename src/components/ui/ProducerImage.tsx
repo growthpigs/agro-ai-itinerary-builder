@@ -256,7 +256,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   className,
   loading = 'lazy'
 }) => {
-  const basePath = '/images/producers';
+  const basePath = '/src/assets/images/producers';
   const actualSlug = getActualImageSlug(producerSlug, size);
   
   // DEBUG: Log every image path attempt with detailed mapping info
