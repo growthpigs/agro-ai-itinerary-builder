@@ -12,7 +12,7 @@ export const Home: React.FC = () => {
         <div className="container mx-auto px-4 py-16 sm:py-24">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-              Plan Your Eastern Ontario Farm Tour in 3 Simple Steps
+              Plan Your Eastern Ontario Producer Tour in 3 Simple Steps
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
               Connect with 26 local agricultural producers. Create a personalized GPS-enabled 
