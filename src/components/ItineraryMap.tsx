@@ -162,7 +162,7 @@ export const ItineraryMap: React.FC<ItineraryMapProps> = ({
                       variant="outline"
                       className="gap-1"
                       onClick={() => {
-                        const url = `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}`;
+                        const url = `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}&travelmode=driving&dir_action=navigate`;
                         window.open(url, '_blank');
                       }}
                     >

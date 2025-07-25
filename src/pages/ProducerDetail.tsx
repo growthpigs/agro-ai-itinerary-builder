@@ -232,7 +232,7 @@ export const ProducerDetail: React.FC = () => {
                 <p className="font-medium text-gray-900">Location</p>
                 <p className="text-gray-600">{producer.location.address}</p>
                 <SafeLink
-                  href={producer.location?.lat && producer.location?.lng ? `https://maps.google.com/?q=${producer.location.lat},${producer.location.lng}` : null}
+                  href={producer.location?.lat && producer.location?.lng ? `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}&travelmode=driving&dir_action=navigate` : null}
                   type="external"
                   className="text-primary-600 hover:text-primary-700 text-sm"
                   producerName={producer.name}
