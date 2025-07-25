@@ -191,9 +191,9 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       thumb: 'avonmore-berry-farm-4'
     },
     'les-jardins-ecologistes-gregoire-2': {
-      full: 'les-jardins-ecologistes-gregoire-2',
-      medium: 'les-jardins-ecologistes-gregoire-2',
-      thumb: 'les-jardins-ecologistes-gregoire-2'
+      full: 'Les Jardins Écologistes Grégoire2',
+      medium: 'Les Jardins Écologistes Grégoire2',
+      thumb: 'Les Jardins Écologistes Grégoire2'
     }
   };
 
