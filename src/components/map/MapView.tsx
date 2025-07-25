@@ -169,7 +169,7 @@ export const MapView: React.FC<MapViewProps> = ({
                     </SafeLink>
                   )}
                   <SafeLink
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}&travelmode=driving&dir_action=navigate`}
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(producer.location.address)}&destination_place_id=&center=${producer.location.lat},${producer.location.lng}&travelmode=driving`}
                     type="external"
                     className="text-sm text-blue-600 hover:underline"
                     producerName={producer.name}

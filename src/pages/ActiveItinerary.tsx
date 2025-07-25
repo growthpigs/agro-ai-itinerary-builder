@@ -42,7 +42,8 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const openInGoogleMaps = () => {
-    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentStop.location.lat},${currentStop.location.lng}&travelmode=driving&dir_action=navigate`;
+    const encodedAddress = encodeURIComponent(currentStop.location.address);
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&destination_place_id=&center=${currentStop.location.lat},${currentStop.location.lng}&travelmode=driving`;
     window.open(googleMapsUrl, '_blank');
   };
 

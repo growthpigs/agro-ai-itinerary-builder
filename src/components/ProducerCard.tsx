@@ -31,7 +31,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
 
   // Create maps URL from coordinates
   const mapsUrl = producer.location?.lat && producer.location?.lng 
-    ? `https://www.google.com/maps/dir/?api=1&destination=${producer.location.lat},${producer.location.lng}&travelmode=driving&dir_action=navigate`
+    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(producer.location.address)}&destination_place_id=&center=${producer.location.lat},${producer.location.lng}&travelmode=driving`
     : null;
 
   const handleCardClick = (e: React.MouseEvent) => {
