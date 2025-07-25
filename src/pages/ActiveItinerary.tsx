@@ -42,8 +42,6 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const openInGoogleMaps = () => {
-    // Use address as destination name for better mobile integration
-    const encodedAddress = encodeURIComponent(currentStop.location.address);
     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentStop.location.lat},${currentStop.location.lng}&travelmode=driving&dir_action=navigate`;
     window.open(googleMapsUrl, '_blank');
   };
