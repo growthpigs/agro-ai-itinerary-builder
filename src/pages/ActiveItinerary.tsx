@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, ChevronLeft, Map, List, Check, ExternalLink } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronLeft, ChevronRight, Map, List, Check, ExternalLink } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { ProgressStats } from '@/components/ui/ProgressCard';
 import { ItineraryMap } from '@/components/ItineraryMap';
-import { CollapsiblePanel } from '@/components/CollapsiblePanel';
 
 export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
@@ -17,7 +16,6 @@ export const ActiveItinerary: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [visitedStops, setVisitedStops] = useState<Set<number>>(new Set());
-  const [isPanelExpanded, setIsPanelExpanded] = useState(false); // Start collapsed
   const [isNavigating, setIsNavigating] = useState(false);
   
   const userLocation = latitude && longitude 
@@ -335,132 +333,64 @@ export const ActiveItinerary: React.FC = () => {
               </div>
             )}
 
-            {/* Collapsible bottom panel */}
-            <div className="absolute bottom-0 left-0 right-0 z-20">
-              <CollapsiblePanel
-                isExpanded={isPanelExpanded}
-                onToggle={() => setIsPanelExpanded(!isPanelExpanded)}
-                title={currentStop.name}
-                subtitle={`Stop ${currentStopIndex + 1} • ${distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}`}
-              >
+            {/* Fixed bottom navigation bar - much thinner */}
+            <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
+              <div className="px-3 py-2">
+                {/* Minimal navigation info */}
                 {!allStopsVisited ? (
-                  <>
-                    <ProgressStats
-                      currentStop={currentStopIndex + 1}
-                      totalStops={totalStops}
-                      visitedStops={visitedStops.size}
-                      distance={totalDistance}
-                      estimatedTime={estimatedTime}
-                      className="mb-4"
-                    />
+                  <div className="flex items-center justify-between gap-3">
+                  {/* Left: Previous button */}
+                  <Button
+                    onClick={goToPreviousStop}
+                    disabled={currentStopIndex === 0}
+                    variant="ghost"
+                    size="sm"
+                    className="p-2"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </Button>
 
-                    <div className="space-y-4">
-                      <div className="flex gap-3">
-                        <ProducerImage 
-                          producerSlug={`${currentStop.id}-1`}
-                          alt={currentStop.name}
-                          size="thumb"
-                          className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
-                        />
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-600">{currentStop.location.address}</p>
-                          <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              ~45 min visit
-                            </span>
-                            {visitedStops.has(currentStopIndex) && (
-                              <span className="flex items-center gap-1 text-green-600">
-                                <Check className="h-3 w-3" />
-                                Visited
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="space-y-2">
-                        {!isNavigating ? (
-                          <>
-                            <Button
-                              onClick={navigateToStop}
-                              className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
-                            >
-                              <Navigation className="h-5 w-5" />
-                              Get Directions
-                            </Button>
-                            {distance <= 1000 && (
-                              <Button
-                                onClick={openInGoogleMaps}
-                                variant="outline"
-                                className="w-full gap-2"
-                              >
-                                <ExternalLink className="h-4 w-4" />
-                                Open in Google Maps
-                              </Button>
-                            )}
-                          </>
-                        ) : (
-                          <Button
-                            onClick={markAsVisited}
-                            variant={visitedStops.has(currentStopIndex) ? "outline" : "default"}
-                            className="w-full gap-2"
-                            disabled={!!visitedStops.has(currentStopIndex)}
-                          >
-                            <Check className="h-5 w-5" />
-                            {visitedStops.has(currentStopIndex) ? 'Visited' : 'Mark as Visited'}
-                          </Button>
-                        )}
-                        
-                        <Link to={`/producer/${currentStop.id}`} className="block">
-                          <Button variant="outline" className="w-full">
-                            View Details
-                          </Button>
-                        </Link>
-                      </div>
-
-                      {/* Navigation controls */}
-                      <div className="flex items-center justify-between pt-2">
-                        <Button
-                          onClick={goToPreviousStop}
-                          disabled={currentStopIndex === 0}
-                          variant="outline"
-                          size="sm"
-                        >
-                          Previous
-                        </Button>
-                        <span className="text-sm text-gray-600">
-                          {currentStopIndex + 1} / {totalStops}
-                        </span>
-                        <Button
-                          onClick={goToNextStop}
-                          disabled={currentStopIndex === totalStops - 1}
-                          variant="outline"
-                          size="sm"
-                        >
-                          Next
-                        </Button>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center py-4">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-3">
-                      <Check className="h-6 w-6 text-green-600" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Journey Complete!</h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      All {selectedProducers.length} stops visited
+                  {/* Center: Current stop info */}
+                  <div className="flex-1 text-center">
+                    <h3 className="font-semibold text-sm truncate">{currentStop.name}</h3>
+                    <p className="text-xs text-gray-600">
+                      Stop {currentStopIndex + 1} of {totalStops} • {distance > 1000 ? `${(distance/1000).toFixed(0)}k km` : `${distance.toFixed(1)}km`}
                     </p>
-                    <Link to="/itinerary">
-                      <Button size="sm" className="w-full">
-                        Plan New Journey
-                      </Button>
-                    </Link>
                   </div>
-                )}
-              </CollapsiblePanel>
+
+                  {/* Right: Navigate button and Next */}
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={navigateToStop}
+                      size="sm"
+                      className="bg-orange-600 hover:bg-orange-700 px-3"
+                    >
+                      <Navigation className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={goToNextStop}
+                      disabled={currentStopIndex === totalStops - 1}
+                      variant="ghost"
+                      size="sm"
+                      className="p-2"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3 py-1">
+                  <Check className="h-5 w-5 text-green-600" />
+                  <span className="font-semibold text-sm">Journey Complete!</span>
+                  <Link to="/itinerary">
+                    <Button size="sm" variant="outline">
+                      New Tour
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              </div>
+            </div>
             </div>
           </div>
         </div>
