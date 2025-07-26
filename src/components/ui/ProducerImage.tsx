@@ -16,9 +16,9 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
   // Map producer IDs to actual image file names based on size
   const imageSlugMap: Record<string, Record<string, string>> = {
     'cafe-joyeux': {
-      full: 'Café Joyeux 1',
+      full: 'Cafe Joyeux 1',
       medium: 'cafe-joyeux-1', 
-      thumb: 'Café Joyeux 1'
+      thumb: 'Cafe Joyeux 1'
     },
     'ferme-butte-bine': {
       full: 'ferme-butte-et-bine-1',
@@ -36,19 +36,19 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       thumb: 'garden-path-homemade-soap-1'
     },
     'les-jardins-ecologistes': {
-      full: 'Les Jardins Écologistes Grégoire1',
-      medium: 'Les Jardins Écologistes Grégoire1',
-      thumb: 'Les Jardins Écologistes Grégoire1'
+      full: 'Les Jardins Ecologistes Gregoire1',
+      medium: 'Les Jardins Ecologistes Gregoire1',
+      thumb: 'Les Jardins Ecologistes Gregoire1'
     },
     'les-jardins-ecologistes-gregoire': {
-      full: 'Les Jardins Écologistes Grégoire1',
-      medium: 'Les Jardins Écologistes Grégoire1',
-      thumb: 'Les Jardins Écologistes Grégoire1'
+      full: 'Les Jardins Ecologistes Gregoire1',
+      medium: 'Les Jardins Ecologistes Gregoire1',
+      thumb: 'Les Jardins Ecologistes Gregoire1'
     },
     'les-jardins-ecologistes-gregoire-1': {
-      full: 'Les Jardins Écologistes Grégoire1',
-      medium: 'Les Jardins Écologistes Grégoire1',
-      thumb: 'Les Jardins Écologistes Grégoire1'
+      full: 'Les Jardins Ecologistes Gregoire1',
+      medium: 'Les Jardins Ecologistes Gregoire1',
+      thumb: 'Les Jardins Ecologistes Gregoire1'
     },
     'l-orignal-packing-1': {
       full: 'lorignal-packing-1',
@@ -191,9 +191,9 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
       thumb: 'avonmore-berry-farm-4'
     },
     'les-jardins-ecologistes-gregoire-2': {
-      full: 'Les Jardins Écologistes Grégoire2',
-      medium: 'Les Jardins Écologistes Grégoire2',
-      thumb: 'Les Jardins Écologistes Grégoire2'
+      full: 'Les Jardins Ecologistes Gregoire2',
+      medium: 'Les Jardins Ecologistes Gregoire2',
+      thumb: 'Les Jardins Ecologistes Gregoire2'
     }
   };
 
@@ -225,7 +225,7 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
     
     // Special handling for cafe-joyeux numbered images
     if (baseProducer === 'cafe-joyeux') {
-      const result = size === 'thumb' ? `Café Joyeux ${imageNum}` : `cafe-joyeux-${imageNum}`;
+      const result = size === 'thumb' ? `Cafe Joyeux ${imageNum}` : `cafe-joyeux-${imageNum}`;
       debugTrace.push(`Using cafe-joyeux special handling: "${result}"`);
       console.log('[getActualImageSlug] Cafe-joyeux special handling:', { producerSlug, size, baseProducer, imageNum, result, trace: debugTrace });
       return result;
@@ -233,7 +233,7 @@ const getActualImageSlug = (producerSlug: string, size: string): string => {
     
     // Special handling for les-jardins-ecologistes numbered images
     if (baseProducer === 'les-jardins-ecologistes-gregoire') {
-      const result = `Les Jardins Écologistes Grégoire${imageNum}`;
+      const result = `Les Jardins Ecologistes Gregoire${imageNum}`;
       debugTrace.push(`Using les-jardins special handling: "${result}"`);
       console.log('[getActualImageSlug] Les-jardins special handling:', { producerSlug, size, baseProducer, imageNum, result, trace: debugTrace });
       return result;
