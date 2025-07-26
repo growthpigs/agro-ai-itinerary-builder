@@ -256,17 +256,22 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   className,
   loading = 'lazy'
 }) => {
-  const basePath = '/src/assets/images/producers';
+  const basePath = '/images/producers';
   const actualSlug = getActualImageSlug(producerSlug, size);
   
   // DEBUG: Log every image path attempt with detailed mapping info
+  const jpgPath = `${basePath}/jpg/${size}/${actualSlug}.jpg`;
+  const webpPath = `${basePath}/webp/${size}/${actualSlug}.webp`;
+  
   console.log('[ProducerImage Debug - DETAILED]', {
     originalSlug: producerSlug,
     mappedSlug: actualSlug,
     requestedSize: size,
-    webpPath: `${basePath}/webp/${size}/${actualSlug}.webp`,
-    jpgPath: `${basePath}/jpg/${size}/${actualSlug}.jpg`,
-    currentURL: window.location.href
+    webpPath: webpPath,
+    jpgPath: jpgPath,
+    encodedJpgPath: encodeURI(jpgPath),
+    currentURL: window.location.href,
+    isProduction: window.location.hostname !== 'localhost'
   });
   
   const sizeClasses = {
@@ -282,12 +287,12 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
     console.log('[ProducerImage] TEMP DEBUG - Testing direct JPG for problem producers:', {
       producerSlug,
       actualSlug,
-      directJpgPath: `${basePath}/jpg/${size}/${actualSlug}.jpg`
+      directJpgPath: jpgPath
     });
     
     return (
       <img
-        src={`${basePath}/jpg/${size}/${actualSlug}.jpg`}
+        src={jpgPath}
         alt={alt}
         loading={loading}
         className={cn(
@@ -312,15 +317,15 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   return (
     <picture className="block overflow-hidden">
       <source
-        srcSet={`${basePath}/webp/${size}/${actualSlug}.webp`}
+        srcSet={webpPath}
         type="image/webp"
       />
       <source
-        srcSet={`${basePath}/jpg/${size}/${actualSlug}.jpg`}
+        srcSet={jpgPath}
         type="image/jpeg"
       />
       <img
-        src={`${basePath}/jpg/${size}/${actualSlug}.jpg`}
+        src={jpgPath}
         alt={alt}
         loading={loading}
         className={cn(
@@ -330,16 +335,20 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
           'max-w-full h-auto'
         )}
         onError={(e) => {
-          console.error('[ProducerImage Error - DETAILED]', {
-            failedSrc: e.currentTarget.src,
+          const failedUrl = e.currentTarget.src;
+          const decodedUrl = decodeURI(failedUrl);
+          
+          console.error('[ProducerImage Error - CRITICAL]', {
+            failedSrc: failedUrl,
+            decodedSrc: decodedUrl,
             producerSlug,
             actualSlug,
             size,
-            webpAttempted: `${basePath}/webp/${size}/${actualSlug}.webp`,
-            jpgAttempted: `${basePath}/jpg/${size}/${actualSlug}.jpg`,
+            expectedPath: jpgPath,
+            urlEncodingMismatch: failedUrl !== jpgPath,
+            specialChars: /[àâäèéêëîïôùûüÿçœæ]/i.test(actualSlug),
             error: 'Image failed to load',
-            currentTarget: e.currentTarget,
-            imageElement: e.currentTarget.outerHTML
+            suggestion: 'Check if file exists with exact name in public/images/producers/jpg/' + size + '/'
           });
           
           // Check if this is already the placeholder to avoid infinite loops
