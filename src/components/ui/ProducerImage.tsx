@@ -281,7 +281,7 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   };
 
   // TEMPORARY DEBUG: Test direct JPG loading for problem producers
-  const isDebugging = producerSlug.includes('cafe-joyeux') || producerSlug.includes('bercier-catering');
+  const isDebugging = producerSlug.includes('cafe-joyeux') || producerSlug.includes('bercier-catering') || producerSlug.includes('les-jardins-ecologistes-gregoire');
   
   if (isDebugging) {
     console.log('[ProducerImage] TEMP DEBUG - Testing direct JPG for problem producers:', {
@@ -351,8 +351,12 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
             suggestion: 'Check if file exists with exact name in public/images/producers/jpg/' + size + '/'
           });
           
-          // Check if this is already the placeholder to avoid infinite loops
-          if (!e.currentTarget.src.includes('placeholder.svg')) {
+          // Try URL encoding the special characters as a fallback
+          if (/[àâäèéêëîïôùûüÿçœæ]/i.test(actualSlug) && !e.currentTarget.src.includes('%')) {
+            const encodedPath = encodeURI(jpgPath);
+            console.log('[ProducerImage] Trying encoded path:', encodedPath);
+            e.currentTarget.src = encodedPath;
+          } else if (!e.currentTarget.src.includes('placeholder.svg')) {
             console.log('[ProducerImage] Switching to placeholder due to error');
             e.currentTarget.src = '/images/placeholder.svg';
           }
