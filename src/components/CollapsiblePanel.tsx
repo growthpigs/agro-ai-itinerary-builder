@@ -49,7 +49,7 @@ export const CollapsiblePanel: React.FC<CollapsiblePanelProps> = ({
       {/* Collapsible content */}
       <div className={cn(
         "overflow-hidden transition-all duration-300",
-        isExpanded ? "max-h-[60vh] overflow-y-auto" : "max-h-0"
+        isExpanded ? "max-h-[30vh] overflow-y-auto" : "max-h-0"
       )}>
         <div className="px-4 pb-4">
           {children}

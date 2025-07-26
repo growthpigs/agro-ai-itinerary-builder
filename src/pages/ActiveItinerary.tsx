@@ -479,7 +479,7 @@ export const ActiveItinerary: React.FC = () => {
               <ItineraryMap
                 producers={selectedProducers}
                 currentProducerIndex={currentStopIndex}
-                height="500px"
+                height="600px"
                 className="shadow-sm border border-gray-200"
                 focusOnCurrent={isNavigating}
               />
