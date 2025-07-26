@@ -18,7 +18,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Version indicator for debugging deployments
-  const VERSION = 'v2.2-thin-nav-fix';
+  const VERSION = 'v2.2.0-thin-nav';
   console.log('Layout rendering, current path:', location.pathname, 'VERSION:', VERSION);
 
   const navItems = [

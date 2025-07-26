@@ -260,7 +260,7 @@ export const ActiveItinerary: React.FC = () => {
                   {isNavigating ? 'Navigating' : `Stop ${currentStopIndex + 1} of ${totalStops}`}
                 </h1>
                 <p className="text-sm text-gray-600">
-                  {visitedStops.size} visited • v2.2
+                  {visitedStops.size} visited • v2.2.0
                 </p>
               </div>
             </div>
