@@ -17,7 +17,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  console.log('Layout rendering, current path:', location.pathname);
+  // Version indicator for debugging deployments
+  const VERSION = 'v2.2-thin-nav-fix';
+  console.log('Layout rendering, current path:', location.pathname, 'VERSION:', VERSION);
 
   const navItems = [
     { path: '/', icon: Route, label: 'Make Itinerary' },
@@ -114,6 +116,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <p>Discover Eastern Ontario's agricultural heritage through personalized farm tours.</p>
                     <p className="text-xs">© 2025 Savour East. All rights reserved.</p>
                     <p className="text-xs">A project supporting local agriculture and sustainable tourism.</p>
+                    <p className="text-xs text-orange-600">Version: {VERSION}</p>
                   </div>
                 </div>
               </SheetContent>

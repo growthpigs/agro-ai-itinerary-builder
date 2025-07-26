@@ -263,16 +263,22 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   const jpgPath = `${basePath}/jpg/${size}/${actualSlug}.jpg`;
   const webpPath = `${basePath}/webp/${size}/${actualSlug}.webp`;
   
-  console.log('[ProducerImage Debug - DETAILED]', {
-    originalSlug: producerSlug,
-    mappedSlug: actualSlug,
-    requestedSize: size,
-    webpPath: webpPath,
-    jpgPath: jpgPath,
-    encodedJpgPath: encodeURI(jpgPath),
-    currentURL: window.location.href,
-    isProduction: window.location.hostname !== 'localhost'
-  });
+  // Enhanced debugging for production issues
+  if (producerSlug.includes('les-jardins') || window.location.hostname !== 'localhost') {
+    console.log('[ProducerImage Debug - CRITICAL]', {
+      timestamp: new Date().toISOString(),
+      originalSlug: producerSlug,
+      mappedSlug: actualSlug,
+      requestedSize: size,
+      webpPath: webpPath,
+      jpgPath: jpgPath,
+      encodedJpgPath: encodeURI(jpgPath),
+      currentURL: window.location.href,
+      hostname: window.location.hostname,
+      isProduction: window.location.hostname !== 'localhost',
+      userAgent: navigator.userAgent
+    });
+  }
   
   const sizeClasses = {
     full: 'w-[800px] h-[800px]',
