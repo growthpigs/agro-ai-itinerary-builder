@@ -393,7 +393,7 @@ export const ActiveItinerary: React.FC = () => {
             </div>
             </div>
           </div>
-        </div>
+
 
         {/* Desktop: Toggle between list and map view */}
         <div className="hidden md:block">

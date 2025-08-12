@@ -9,6 +9,21 @@ import { checkIfOpen } from '@/utils/hours';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { SafeLink } from '@/components/ui/SafeLink';
 
+// Helper function to determine if gallery should be hidden for placeholder-only producers
+const shouldHideGallery = (producerId: string): boolean => {
+  const placeholderOnlyProducers = new Set([
+    'beaus-brewery',
+    'akwesasne-tent',
+    'fernwood-estates',
+    'flora-kitchenette',
+    'fromagerie-st-albert',
+    'muddytoes-organics',
+    'vignoble-clos-du-vully'
+  ]);
+  
+  return placeholderOnlyProducers.has(producerId);
+};
+
 interface ProducerCardProps {
   producer: Producer;
   distance?: number;
@@ -258,7 +273,7 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({
         </div>
 
         {/* Image Gallery (anchored above button) */}
-        {producer.images && producer.images.length > 0 && (
+        {producer.images && producer.images.length > 0 && !shouldHideGallery(producer.id) && (
           <div className="px-6 pb-4">
             <div className="grid grid-cols-4 gap-2">
               {[1, 2, 3, 4].map((num, index) => {

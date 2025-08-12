@@ -256,6 +256,42 @@ export const ProducerImage: React.FC<ProducerImageProps> = ({
   className,
   loading = 'lazy'
 }) => {
+  // List of producers that should only show placeholder images
+  const placeholderOnlyProducers = new Set([
+    'beaus-brewery',
+    'akwesasne-tent',
+    'fernwood-estates',
+    'flora-kitchenette',
+    'fromagerie-st-albert',
+    'muddytoes-organics',
+    'vignoble-clos-du-vully'
+  ]);
+  
+  // Extract base producer ID (without number suffix)
+  const baseProducerId = producerSlug.replace(/-\d+$/, '');
+  
+  // Check if this producer should only show placeholder
+  if (placeholderOnlyProducers.has(baseProducerId)) {
+    const sizeClasses = {
+      full: 'w-[800px] h-[800px]',
+      medium: 'w-[400px] h-[400px]',
+      thumb: 'w-[200px] h-[200px]'
+    };
+    
+    return (
+      <img
+        src="/images/placeholder.svg"
+        alt={alt}
+        loading={loading}
+        className={cn(
+          'object-cover',
+          className || sizeClasses[size],
+          'max-w-full h-auto'
+        )}
+      />
+    );
+  }
+  
   const basePath = '/images/producers';
   const actualSlug = getActualImageSlug(producerSlug, size);
   

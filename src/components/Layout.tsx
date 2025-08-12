@@ -38,9 +38,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Modern Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-[67px] items-center justify-between">
-          <SafeLink 
-            href="/" 
-            type="internal"
+          <SafeLink
+            href="https://savourthefield.ca"
+            type="external"
             className="flex items-center space-x-2"
             producerName="Layout"
             linkLabel="logo-desktop"
@@ -73,6 +73,25 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {item.label}
               </SafeLink>
             ))}
+            {/* External Links */}
+            <SafeLink
+              href="https://savourthefield.ca"
+              type="external"
+              className="transition-colors text-foreground/60 hover:text-foreground/80"
+              producerName="Layout"
+              linkLabel="nav-stf"
+            >
+              Savour the Field
+            </SafeLink>
+            <SafeLink
+              href="https://network.savoureaston.ca"
+              type="external"
+              className="transition-colors text-foreground/60 hover:text-foreground/80"
+              producerName="Layout"
+              linkLabel="nav-eoan"
+            >
+              EOAN Network
+            </SafeLink>
           </nav>
           
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -107,8 +126,29 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       </SafeLink>
                     );
                   })}
+                {/* External Links (Mobile) */}
+                  <SafeLink
+                    href="https://savourthefield.ca"
+                    type="external"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground py-2 px-2 -mx-2 rounded-md hover:bg-muted/50"
+                    producerName="Layout"
+                    linkLabel="mobile-nav-stf"
+                  >
+                    <span className="leading-tight">Savour the Field</span>
+                  </SafeLink>
+                  <SafeLink
+                    href="https://network.savoureaston.ca"
+                    type="external"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground py-2 px-2 -mx-2 rounded-md hover:bg-muted/50"
+                    producerName="Layout"
+                    linkLabel="mobile-nav-eoan"
+                  >
+                    <span className="leading-tight">EOAN Network</span>
+                  </SafeLink>
                 </nav>
-                
+
                 {/* Footer info in mobile menu */}
                 <div className="mt-8 pt-4 border-t">
                   <div className="space-y-1 text-sm text-muted-foreground">
@@ -156,7 +196,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h3 className="font-semibold mb-3">Contact</h3>
               <p className="text-sm text-muted-foreground">
                 Eastern Ontario, Canada<br />
-                info@savoureast.ca
+                info@agro-on.ca
               </p>
             </div>
           </div>

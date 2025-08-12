@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Producers } from './pages/Producers';
@@ -30,6 +30,8 @@ function App() {
                 } />
                 <Route path="/home" element={<Home />} />
                 <Route path="/producers" element={<Producers />} />
+                {/* Redirect old Martine's Kitchen route to Brighter with Blooms */}
+                <Route path="/producer/martines-kitchen" element={<Navigate to="/producer/brighter-with-blooms" replace />} />
                 <Route path="/producer/:id" element={<ProducerDetail />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/itinerary" element={<Itinerary />} />
