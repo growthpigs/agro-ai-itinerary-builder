@@ -19,11 +19,7 @@ export const producerDescriptions: Record<string, string> = {
   `,
   
   'bischoff-orchards': `
-    Bischoff Orchards stands as one of the oldest continuously operating orchards in the Ottawa Valley, with trees planted over a century ago still bearing fruit. The Bischoff family's dedication to preserving heritage apple varieties has made their orchard a living museum of pomology. Visitors can taste apple varieties that have nearly vanished from commercial production, each with its own unique flavor profile and historical significance.
-    
-    The orchard spans 75 acres of gently rolling hills, providing ideal growing conditions for over 30 apple varieties. From the earliest summer apples to late-season storage varieties, Bischoff Orchards offers fresh apples from August through March. Their commitment to integrated pest management and organic practices ensures that every apple meets the highest standards of quality and environmental stewardship.
-    
-    Beyond fresh apples, the farm has developed a reputation for their artisanal apple products. Their small-batch apple cider (non-alcoholic) is pressed on-site using a blend of sweet and tart apples for perfect balance. The farm store also features apple butter made from an 1890s family recipe, dried apple rings, and their famous apple cider donuts, made fresh on weekends during apple season.
+    Bischoff Orchards is the newest and most exciting addition to the Bainsville, Ontario farming scene! We are proud to offer a wide variety of apples, pears, and plums grown right here in South Glengarry Ontario. Our journey started in 2012. We wanted to connect with nature and to be closer to our food source. On our newly acquired land, we planted fruit trees, dreaming of future harvests. After hard work, patience and persistence, the fruit arrived. All of our fruit is grown organically, without harmful chemicals or pesticides. Please checkout out our website, Facebook or Instagram pages for market hours. You can purchase fruit ready for sale or pick your own (u-pick). Our goal is to provide quality fruit grown in a sustainable way. We are looking forward to seeing you at the orchard!
   `,
   
   'brauwerk-hoffman': `
