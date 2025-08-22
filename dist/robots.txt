@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://agro-ai.vercel.app/sitemap.xml
