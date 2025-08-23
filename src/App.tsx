@@ -16,6 +16,7 @@ const ItineraryBuilder = lazy(() => import('./pages/ItineraryBuilder').then(m =>
 const ActiveItinerary = lazy(() => import('./pages/ActiveItinerary').then(m => ({ default: m.ActiveItinerary })));
 const Categories = lazy(() => import('./pages/Categories').then(m => ({ default: m.Categories })));
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
+const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/active-itinerary" element={<ActiveItinerary />} />
                   <Route path="/itinerary/create" element={<Producers />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/admin" element={<Admin />} />
                 </Routes>
               </Suspense>
             </Layout>
