@@ -7,10 +7,12 @@ import { CATEGORY_LABELS, ACTIVITY_LABELS } from '@/types';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { SafeLink } from '@/components/ui/SafeLink';
 import { producerDescriptions } from '@/data/producerDescriptions';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export const ProducerDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { trackProducerViewed } = useAnalytics();
   const [producer, setProducer] = useState<Producer | null>(null);
   const [loading, setLoading] = useState(true);
   const [inItinerary, setInItinerary] = useState(false);
@@ -24,6 +26,8 @@ export const ProducerDetail: React.FC = () => {
         
         if (found) {
           setProducer(found);
+          // Track producer view
+          trackProducerViewed(found);
           // Check if producer is in itinerary (would be in real app state)
           const savedItinerary = localStorage.getItem('itinerary');
           if (savedItinerary) {

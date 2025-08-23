@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MapPin, Home, Route, Info, Menu, Grid3X3 } from 'lucide-react';
+import { MapPin, Home, Route, Info, Menu, Grid3X3, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -208,6 +208,24 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Itinerary Bar */}
       <ItineraryBar />
+
+      {/* Admin Access Button - Bottom Left */}
+      <SafeLink
+        href="/admin"
+        type="internal"
+        className="fixed bottom-4 left-4 z-50"
+        producerName="Layout"
+        linkLabel="admin-access"
+      >
+        <Button
+          size="sm"
+          variant="outline"
+          className="w-10 h-10 p-0 bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-gray-50/90 shadow-lg hover:shadow-xl transition-all duration-200"
+        >
+          <Settings className="h-4 w-4 text-gray-600" />
+          <span className="sr-only">Admin Panel</span>
+        </Button>
+      </SafeLink>
     </div>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Navigation, ChevronLeft, ChevronRight, Map, List, Check, ExternalLink } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { ProgressStats } from '@/components/ui/ProgressCard';
@@ -13,14 +14,31 @@ export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
   const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
+  const { trackItineraryStarted, trackItineraryCompleted, trackProducerVisited, trackNavigationOpened } = useAnalytics();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [visitedStops, setVisitedStops] = useState<Set<number>>(new Set());
   const [isNavigating, setIsNavigating] = useState(false);
+  const [itineraryStartTime] = useState<number>(Date.now());
   
   const userLocation = latitude && longitude 
     ? { lat: latitude, lng: longitude }
     : null;
+
+  // Track itinerary started on component mount
+  useEffect(() => {
+    if (selectedProducers.length > 0) {
+      trackItineraryStarted(selectedProducers);
+    }
+  }, [selectedProducers, trackItineraryStarted]);
+
+  // Track completion when all stops are visited
+  useEffect(() => {
+    if (visitedStops.size === selectedProducers.length && selectedProducers.length > 0) {
+      const totalTime = Date.now() - itineraryStartTime;
+      trackItineraryCompleted(selectedProducers, totalTime);
+    }
+  }, [visitedStops.size, selectedProducers, itineraryStartTime, trackItineraryCompleted]);
 
   if (selectedProducers.length === 0) {
     navigate('/itinerary');
@@ -32,6 +50,7 @@ export const ActiveItinerary: React.FC = () => {
 
   const markAsVisited = () => {
     setVisitedStops(prev => new Set([...prev, currentStopIndex]));
+    trackProducerVisited(currentStop);
   };
 
   const navigateToStop = () => {
@@ -43,6 +62,7 @@ export const ActiveItinerary: React.FC = () => {
     const encodedAddress = encodeURIComponent(currentStop.location.address);
     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&destination_place_id=&center=${currentStop.location.lat},${currentStop.location.lng}&travelmode=driving`;
     window.open(googleMapsUrl, '_blank');
+    trackNavigationOpened(currentStop);
   };
 
   const goToNextStop = () => {
