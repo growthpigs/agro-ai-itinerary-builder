@@ -2,10 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-// @ts-ignore - leaflet-routing-machine has type issues
-import 'leaflet-routing-machine';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import type { Producer } from '@/types';
+
+// Dynamically import leaflet-routing-machine to avoid build issues
+let routingMachineLoaded = false;
+const loadRoutingMachine = async () => {
+  if (!routingMachineLoaded) {
+    try {
+      await import('leaflet-routing-machine');
+      await import('leaflet-routing-machine/dist/leaflet-routing-machine.css');
+      routingMachineLoaded = true;
+    } catch (error) {
+      console.error('Failed to load leaflet-routing-machine:', error);
+    }
+  }
+};
 
 // Navigation control types
 export interface NavigationInstruction {
@@ -57,83 +68,93 @@ function NavigationControl({
 
     console.log('🗺️ NavigationControl: Starting route calculation...', { from, to: to.location });
 
-    // Set timeout for route calculation
-    const timeoutId = setTimeout(() => {
-      console.error('⏰ NavigationControl: Route calculation timeout after 15 seconds');
-      onError('Route calculation is taking too long. Please try again or use Google Maps.');
-    }, 15000);
+    const setupRouting = async () => {
+      // Ensure routing machine is loaded
+      await loadRoutingMachine();
+      
+      // Set timeout for route calculation
+      const timeoutId = setTimeout(() => {
+        console.error('⏰ NavigationControl: Route calculation timeout after 15 seconds');
+        onError('Route calculation is taking too long. Please try again or use Google Maps.');
+      }, 15000);
 
-    // Create routing control
-    const control = (L as any).Routing.control({
-      waypoints: [
-        L.latLng(from.lat, from.lng),
-        L.latLng(to.location.lat, to.location.lng)
-      ],
-      routeWhileDragging: false,
-      addWaypoints: false,
-      lineOptions: {
-        styles: [{ color: '#ea580c', weight: 6, opacity: 0.8 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 0
-      } as any,
-      router: (L as any).Routing.osrmv1({
-        serviceUrl: 'https://router.project-osrm.org/route/v1',
-        profile: 'driving',
-        timeout: 10000 // 10 second timeout
-      }),
-      showAlternatives: false,
-      fitSelectedRoutes: true,
-      // Hide default control UI (property not in typings)
-      show: false,
-      // Remove default markers
-      createMarker: () => null
-    } as any).addTo(map);
+      // Create routing control
+      const control = (L as any).Routing.control({
+        waypoints: [
+          L.latLng(from.lat, from.lng),
+          L.latLng(to.location.lat, to.location.lng)
+        ],
+        routeWhileDragging: false,
+        addWaypoints: false,
+        lineOptions: {
+          styles: [{ color: '#ea580c', weight: 6, opacity: 0.8 }],
+          extendToWaypoints: true,
+          missingRouteTolerance: 0
+        } as any,
+        router: (L as any).Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1',
+          profile: 'driving',
+          timeout: 10000 // 10 second timeout
+        }),
+        showAlternatives: false,
+        fitSelectedRoutes: true,
+        // Hide default control UI (property not in typings)
+        show: false,
+        // Remove default markers
+        createMarker: () => null
+      } as any).addTo(map);
 
-    // Listen for routing events
-    control.on('routesfound', (e: unknown) => {
-      clearTimeout(timeoutId);
-      const routes = (e as { routes: unknown[] }).routes as Array<unknown>;
-      if (routes && routes.length > 0) {
-        const route = routes[0] as unknown;
-        
-        // Parse instructions
-        const routeWithInstructions = route as { instructions?: Array<{ text: string; distance: number; time: number; type: string; direction?: string }>; summary: { totalDistance: number; totalTime: number } };
-        const instructions = (routeWithInstructions.instructions || []).map((instruction) => ({
-          text: instruction.text,
-          distance: instruction.distance,
-          time: instruction.time,
-          type: instruction.type,
-          direction: instruction.direction
-        }));
-        
-        const routeInfo = {
-          totalDistance: routeWithInstructions.summary.totalDistance,
-          totalTime: routeWithInstructions.summary.totalTime,
-          instructions
-        };
-        console.log('🚦 NavigationControl: Route calculated successfully!', routeInfo);
-        onRouteCalculated(routeInfo);
-      } else {
-        console.error('❌ NavigationControl: No routes found in response');
-        onError('No route found between these locations.');
-      }
-    });
+      // Listen for routing events
+      control.on('routesfound', (e: unknown) => {
+        clearTimeout(timeoutId);
+        const routes = (e as { routes: unknown[] }).routes as Array<unknown>;
+        if (routes && routes.length > 0) {
+          const route = routes[0] as unknown;
+          
+          // Parse instructions
+          const routeWithInstructions = route as { instructions?: Array<{ text: string; distance: number; time: number; type: string; direction?: string }>; summary: { totalDistance: number; totalTime: number } };
+          const instructions = (routeWithInstructions.instructions || []).map((instruction) => ({
+            text: instruction.text,
+            distance: instruction.distance,
+            time: instruction.time,
+            type: instruction.type,
+            direction: instruction.direction
+          }));
+          
+          const routeInfo = {
+            totalDistance: routeWithInstructions.summary.totalDistance,
+            totalTime: routeWithInstructions.summary.totalTime,
+            instructions
+          };
+          console.log('🚦 NavigationControl: Route calculated successfully!', routeInfo);
+          onRouteCalculated(routeInfo);
+        } else {
+          console.error('❌ NavigationControl: No routes found in response');
+          onError('No route found between these locations.');
+        }
+      });
 
-    control.on('routingerror', (e: unknown) => {
-      clearTimeout(timeoutId);
-      console.error('❌ NavigationControl: Routing service error:', e);
-      onError('Unable to find route. The routing service may be unavailable. Please try Google Maps instead.');
-    });
+      control.on('routingerror', (e: unknown) => {
+        clearTimeout(timeoutId);
+        console.error('❌ NavigationControl: Routing service error:', e);
+        onError('Unable to find route. The routing service may be unavailable. Please try Google Maps instead.');
+      });
 
-    routingControlRef.current = control;
+      routingControlRef.current = control;
 
-    return () => {
-      clearTimeout(timeoutId);
-      if (routingControlRef.current) {
-        map.removeControl(routingControlRef.current);
-        routingControlRef.current = null;
-      }
+      return () => {
+        clearTimeout(timeoutId);
+        if (routingControlRef.current) {
+          map.removeControl(routingControlRef.current);
+          routingControlRef.current = null;
+        }
+      };
     };
+
+    setupRouting().catch((error) => {
+      console.error('❌ NavigationControl: Failed to setup routing:', error);
+      onError('Failed to load routing functionality. Please try Google Maps instead.');
+    });
   }, [isActive, from, to, map, onRouteCalculated, onError]);
 
   return null; // This component doesn't render anything
@@ -205,37 +226,46 @@ function RoutingControl({
       return;
     }
 
-    const control = (L as any).Routing.control({
-      waypoints: [
-        L.latLng(from.lat, from.lng),
-        L.latLng(to.lat, to.lng)
-      ],
-      routeWhileDragging: false,
-      addWaypoints: false,
-      lineOptions: {
-        styles: [{ color: '#3b82f6', weight: 4, opacity: 0.7 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 0
-      } as any,
-      router: (L as any).Routing.osrmv1({
-        serviceUrl: 'https://router.project-osrm.org/route/v1',
-        profile: 'driving'
-      }),
-      showAlternatives: false,
-      fitSelectedRoutes: false,
-      show: false,
-      createMarker: () => null
-    } as any);
+    const setupRouting = async () => {
+      // Ensure routing machine is loaded
+      await loadRoutingMachine();
 
-    control.addTo(map);
-    routingControlRef.current = control;
+      const control = (L as any).Routing.control({
+        waypoints: [
+          L.latLng(from.lat, from.lng),
+          L.latLng(to.lat, to.lng)
+        ],
+        routeWhileDragging: false,
+        addWaypoints: false,
+        lineOptions: {
+          styles: [{ color: '#3b82f6', weight: 4, opacity: 0.7 }],
+          extendToWaypoints: true,
+          missingRouteTolerance: 0
+        } as any,
+        router: (L as any).Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1',
+          profile: 'driving'
+        }),
+        showAlternatives: false,
+        fitSelectedRoutes: false,
+        show: false,
+        createMarker: () => null
+      } as any);
 
-    return () => {
-      if (routingControlRef.current) {
-        map.removeControl(routingControlRef.current);
-        routingControlRef.current = null;
-      }
+      control.addTo(map);
+      routingControlRef.current = control;
+
+      return () => {
+        if (routingControlRef.current) {
+          map.removeControl(routingControlRef.current);
+          routingControlRef.current = null;
+        }
+      };
     };
+
+    setupRouting().catch((error) => {
+      console.error('❌ RoutingControl: Failed to setup routing:', error);
+    });
   }, [map, from, to, isActive]);
 
   return null;
