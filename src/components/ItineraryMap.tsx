@@ -9,7 +9,9 @@ let routingMachineLoaded = false;
 const loadRoutingMachine = async () => {
   if (!routingMachineLoaded) {
     try {
+      // @ts-ignore - dynamic imports for build compatibility
       await import('leaflet-routing-machine');
+      // @ts-ignore - dynamic imports for build compatibility
       await import('leaflet-routing-machine/dist/leaflet-routing-machine.css');
       routingMachineLoaded = true;
     } catch (error) {
