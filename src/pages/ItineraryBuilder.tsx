@@ -107,6 +107,7 @@ export const ItineraryBuilder: React.FC = () => {
   }, [clearItinerary]);
 
   const handlePredefinedTour = async (tour: PredefinedTour) => {
+    console.log('[DEBUG] handlePredefinedTour clicked:', tour.name);
     // Clear existing itinerary
     clearItinerary();
     
@@ -117,14 +118,17 @@ export const ItineraryBuilder: React.FC = () => {
     });
 
     // Navigate to the itinerary page
+    console.log('[DEBUG] Navigating to /itinerary');
     navigate('/itinerary');
   };
 
   const handleCustomItinerary = () => {
+    console.log('[DEBUG] handleCustomItinerary clicked - navigating to /producers');
     navigate('/producers');
   };
 
   const handleCategoryItinerary = () => {
+    console.log('[DEBUG] handleCategoryItinerary clicked - navigating to /categories');
     navigate('/categories');
   };
 
@@ -220,35 +224,45 @@ export const ItineraryBuilder: React.FC = () => {
           </p>
           
           <div className="grid gap-4 md:grid-cols-2 max-w-2xl">
-            <Card 
-              className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => handleCustomItinerary()}
+            <button
+              className="text-left"
+              onClick={() => {
+                console.log('[DEBUG] Browse by Producer button clicked');
+                handleCustomItinerary();
+              }}
             >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Browse by Producer
-                </CardTitle>
-                <CardDescription>
-                  Choose from all 26 producers, sorted by distance from your location
-                </CardDescription>
-              </CardHeader>
-            </Card>
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-primary" />
+                    Browse by Producer
+                  </CardTitle>
+                  <CardDescription>
+                    Choose from all 26 producers, sorted by distance from your location
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </button>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => handleCategoryItinerary()}
+            <button
+              className="text-left"
+              onClick={() => {
+                console.log('[DEBUG] Browse by Category button clicked');
+                handleCategoryItinerary();
+              }}
             >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <RouteIcon className="h-5 w-5 text-primary" />
-                  Browse by Category
-                </CardTitle>
-                <CardDescription>
-                  Select your interests and we'll create the perfect itinerary for you
-                </CardDescription>
-              </CardHeader>
-            </Card>
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <RouteIcon className="h-5 w-5 text-primary" />
+                    Browse by Category
+                  </CardTitle>
+                  <CardDescription>
+                    Select your interests and we'll create the perfect itinerary for you
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </button>
           </div>
         </div>
 
@@ -339,6 +353,7 @@ export const ItineraryBuilder: React.FC = () => {
                       <div className="pt-8">
                         <Button 
                           onClick={(e) => {
+                            console.log('[DEBUG] Start My Itinerary button clicked for tour:', tour.name);
                             e.stopPropagation();
                             handlePredefinedTour(tour);
                           }}
