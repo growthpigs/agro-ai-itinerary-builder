@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+// @ts-ignore - leaflet-routing-machine has type issues
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import type { Producer } from '@/types';
@@ -49,7 +50,7 @@ function NavigationControl({
   onError: (error: string) => void;
 }) {
   const map = useMap();
-  const routingControlRef = useRef<L.Routing.Control | null>(null);
+  const routingControlRef = useRef<any>(null);
 
   useEffect(() => {
     if (!isActive || !from || !to) return;
@@ -63,7 +64,7 @@ function NavigationControl({
     }, 15000);
 
     // Create routing control
-    const control = L.Routing.control({
+    const control = (L as any).Routing.control({
       waypoints: [
         L.latLng(from.lat, from.lng),
         L.latLng(to.location.lat, to.location.lng)
@@ -74,8 +75,8 @@ function NavigationControl({
         styles: [{ color: '#ea580c', weight: 6, opacity: 0.8 }],
         extendToWaypoints: true,
         missingRouteTolerance: 0
-      } as unknown as L.Routing.LineOptions,
-      router: L.Routing.osrmv1({
+      } as any,
+      router: (L as any).Routing.osrmv1({
         serviceUrl: 'https://router.project-osrm.org/route/v1',
         profile: 'driving',
         timeout: 10000 // 10 second timeout
@@ -86,7 +87,7 @@ function NavigationControl({
       show: false,
       // Remove default markers
       createMarker: () => null
-    } as unknown as L.Routing.RoutingControlOptions).addTo(map);
+    } as any).addTo(map);
 
     // Listen for routing events
     control.on('routesfound', (e: unknown) => {
@@ -193,7 +194,7 @@ function RoutingControl({
   isActive: boolean;
 }) {
   const map = useMap();
-  const routingControlRef = useRef<L.Routing.Control | null>(null);
+  const routingControlRef = useRef<any>(null);
 
   useEffect(() => {
     if (!isActive) {
@@ -204,7 +205,7 @@ function RoutingControl({
       return;
     }
 
-    const control = L.Routing.control({
+    const control = (L as any).Routing.control({
       waypoints: [
         L.latLng(from.lat, from.lng),
         L.latLng(to.lat, to.lng)
@@ -215,8 +216,8 @@ function RoutingControl({
         styles: [{ color: '#3b82f6', weight: 4, opacity: 0.7 }],
         extendToWaypoints: true,
         missingRouteTolerance: 0
-      } as unknown as L.Routing.LineOptions,
-      router: L.Routing.osrmv1({
+      } as any,
+      router: (L as any).Routing.osrmv1({
         serviceUrl: 'https://router.project-osrm.org/route/v1',
         profile: 'driving'
       }),
@@ -224,7 +225,7 @@ function RoutingControl({
       fitSelectedRoutes: false,
       show: false,
       createMarker: () => null
-    } as unknown as L.Routing.RoutingControlOptions);
+    } as any);
 
     control.addTo(map);
     routingControlRef.current = control;
