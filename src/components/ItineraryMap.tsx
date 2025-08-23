@@ -1,10 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Producer } from '@/types';
+
+// Navigation control types
+export interface NavigationInstruction {
+  text: string;
+  distance: number;
+  time: number;
+  type: string;
+  direction?: string;
+}
+
+export interface NavigationInfo {
+  totalDistance: number;
+  totalTime: number;
+  instructions: NavigationInstruction[];
+}
 
 // Fix Leaflet's default icon issue
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -19,12 +36,123 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// NavigationControl component that uses useMap hook
+function NavigationControl({ 
+  from, 
+  to, 
+  isActive, 
+  onRouteCalculated, 
+  onError 
+}: {
+  from: { lat: number; lng: number };
+  to: Producer;
+  isActive: boolean;
+  onRouteCalculated: (routeInfo: NavigationInfo) => void;
+  onError: (error: string) => void;
+}) {
+  const map = useMap();
+  const routingControlRef = useRef<L.Routing.Control | null>(null);
+
+  useEffect(() => {
+    if (!isActive || !from || !to) return;
+
+    console.log('🗺️ NavigationControl: Starting route calculation...', { from, to: to.location });
+
+    // Set timeout for route calculation
+    const timeoutId = setTimeout(() => {
+      console.error('⏰ NavigationControl: Route calculation timeout after 15 seconds');
+      onError('Route calculation is taking too long. Please try again or use Google Maps.');
+    }, 15000);
+
+    // Create routing control
+    const control = L.Routing.control({
+      waypoints: [
+        L.latLng(from.lat, from.lng),
+        L.latLng(to.location.lat, to.location.lng)
+      ],
+      routeWhileDragging: false,
+      addWaypoints: false,
+      lineOptions: {
+        styles: [{ color: '#ea580c', weight: 6, opacity: 0.8 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 0
+      } as unknown as L.Routing.LineOptions,
+      router: L.Routing.osrmv1({
+        serviceUrl: 'https://router.project-osrm.org/route/v1',
+        profile: 'driving',
+        timeout: 10000 // 10 second timeout
+      }),
+      showAlternatives: false,
+      fitSelectedRoutes: true,
+      // Hide default control UI (property not in typings)
+      show: false,
+      // Remove default markers
+      createMarker: () => null
+    } as unknown as L.Routing.RoutingControlOptions).addTo(map);
+
+    // Listen for routing events
+    control.on('routesfound', (e: unknown) => {
+      clearTimeout(timeoutId);
+      const routes = (e as { routes: unknown[] }).routes as Array<unknown>;
+      if (routes && routes.length > 0) {
+        const route = routes[0] as unknown;
+        
+        // Parse instructions
+        const routeWithInstructions = route as { instructions?: Array<{ text: string; distance: number; time: number; type: string; direction?: string }>; summary: { totalDistance: number; totalTime: number } };
+        const instructions = (routeWithInstructions.instructions || []).map((instruction) => ({
+          text: instruction.text,
+          distance: instruction.distance,
+          time: instruction.time,
+          type: instruction.type,
+          direction: instruction.direction
+        }));
+        
+        const routeInfo = {
+          totalDistance: routeWithInstructions.summary.totalDistance,
+          totalTime: routeWithInstructions.summary.totalTime,
+          instructions
+        };
+        console.log('🚦 NavigationControl: Route calculated successfully!', routeInfo);
+        onRouteCalculated(routeInfo);
+      } else {
+        console.error('❌ NavigationControl: No routes found in response');
+        onError('No route found between these locations.');
+      }
+    });
+
+    control.on('routingerror', (e: unknown) => {
+      clearTimeout(timeoutId);
+      console.error('❌ NavigationControl: Routing service error:', e);
+      onError('Unable to find route. The routing service may be unavailable. Please try Google Maps instead.');
+    });
+
+    routingControlRef.current = control;
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (routingControlRef.current) {
+        map.removeControl(routingControlRef.current);
+        routingControlRef.current = null;
+      }
+    };
+  }, [isActive, from, to, map, onRouteCalculated, onError]);
+
+  return null; // This component doesn't render anything
+}
+
 interface ItineraryMapProps {
   producers: Producer[];
   currentProducerIndex?: number;
   className?: string;
   height?: string;
   focusOnCurrent?: boolean;
+  isNavigating?: boolean;
+  userLocation?: { lat: number; lng: number } | null;
+  // Navigation props
+  navigationFrom?: { lat: number; lng: number };
+  navigationTo?: Producer;
+  onRouteCalculated?: (routeInfo: NavigationInfo) => void;
+  onNavigationError?: (error: string) => void;
 }
 
 // Custom numbered marker
@@ -56,36 +184,60 @@ const createNumberedIcon = (number: number, isActive: boolean = false) => {
   });
 };
 
-// Component to handle map initialization and bounds
-function MapController({ 
-  producers, 
-  currentProducerIndex, 
-  focusOnCurrent 
+// Component to handle routing
+function RoutingControl({ 
+  from, 
+  to,
+  isActive
 }: { 
-  producers: Producer[];
-  currentProducerIndex: number;
-  focusOnCurrent: boolean;
+  from: { lat: number; lng: number };
+  to: { lat: number; lng: number };
+  isActive: boolean;
 }) {
   const map = useMap();
+  const routingControlRef = useRef<L.Routing.Control | null>(null);
 
   useEffect(() => {
-    if (producers.length > 0) {
-      if (focusOnCurrent && currentProducerIndex >= 0 && currentProducerIndex < producers.length) {
-        // Focus on current producer when in navigation mode
-        const currentProducer = producers[currentProducerIndex];
-        map.setView([currentProducer.location.lat, currentProducer.location.lng], 15, {
-          animate: true,
-          duration: 1
-        });
-      } else {
-        // Show all producers
-        const bounds = L.latLngBounds(
-          producers.map(p => [p.location.lat, p.location.lng])
-        );
-        map.fitBounds(bounds, { padding: [50, 50] });
+    if (!isActive) {
+      if (routingControlRef.current) {
+        map.removeControl(routingControlRef.current);
+        routingControlRef.current = null;
       }
+      return;
     }
-  }, [producers, currentProducerIndex, focusOnCurrent, map]);
+
+    const control = L.Routing.control({
+      waypoints: [
+        L.latLng(from.lat, from.lng),
+        L.latLng(to.lat, to.lng)
+      ],
+      routeWhileDragging: false,
+      addWaypoints: false,
+      lineOptions: {
+        styles: [{ color: '#3b82f6', weight: 4, opacity: 0.7 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 0
+      } as unknown as L.Routing.LineOptions,
+      router: L.Routing.osrmv1({
+        serviceUrl: 'https://router.project-osrm.org/route/v1',
+        profile: 'driving'
+      }),
+      showAlternatives: false,
+      fitSelectedRoutes: false,
+      show: false,
+      createMarker: () => null
+    } as unknown as L.Routing.RoutingControlOptions);
+
+    control.addTo(map);
+    routingControlRef.current = control;
+
+    return () => {
+      if (routingControlRef.current) {
+        map.removeControl(routingControlRef.current);
+        routingControlRef.current = null;
+      }
+    };
+  }, [map, from, to, isActive]);
 
   return null;
 }
@@ -96,86 +248,111 @@ export const ItineraryMap: React.FC<ItineraryMapProps> = ({
   className = '',
   height = '400px',
   focusOnCurrent = false,
+  isNavigating = false,
+  userLocation,
+  navigationFrom,
+  navigationTo,
+  onRouteCalculated,
+  onNavigationError
 }) => {
-  // Get map center
-  const getMapCenter = (): [number, number] => {
-    if (producers.length === 0) {
-      return [45.4215, -75.6972]; // Ottawa as default
-    }
-    
-    // Calculate the center of all producers
-    const sumLat = producers.reduce((sum, p) => sum + p.location.lat, 0);
-    const sumLng = producers.reduce((sum, p) => sum + p.location.lng, 0);
-    return [sumLat / producers.length, sumLng / producers.length];
-  };
+  if (producers.length === 0) {
+    return (
+      <div className={`bg-gray-100 flex items-center justify-center ${className}`} style={{ height }}>
+        <p className="text-gray-500">No producers to display</p>
+      </div>
+    );
+  }
 
-  // Create route polyline
-  const routePositions = producers.map(p => [p.location.lat, p.location.lng] as [number, number]);
+  // Calculate center point
+  let center: [number, number];
+  
+  if (focusOnCurrent && currentProducerIndex < producers.length) {
+    const currentProducer = producers[currentProducerIndex];
+    center = [currentProducer.location.lat, currentProducer.location.lng];
+  } else if (userLocation) {
+    center = [userLocation.lat, userLocation.lng];
+  } else {
+    // Calculate center of all producers
+    const avgLat = producers.reduce((sum, p) => sum + p.location.lat, 0) / producers.length;
+    const avgLng = producers.reduce((sum, p) => sum + p.location.lng, 0) / producers.length;
+    center = [avgLat, avgLng];
+  }
+
+  const zoom = focusOnCurrent ? 13 : 10;
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${className}`} style={{ height }}>
+    <div className={`relative ${className}`} style={{ height }}>
       <MapContainer
-        center={getMapCenter()}
-        zoom={10}
+        center={center}
+        zoom={zoom}
         style={{ height: '100%', width: '100%' }}
-        scrollWheelZoom={false}
+        className="rounded-lg z-0"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        
-        <MapController 
-          producers={producers} 
-          currentProducerIndex={currentProducerIndex}
-          focusOnCurrent={focusOnCurrent}
-        />
-        
-        {/* Route polyline */}
-        {routePositions.length > 1 && (
-          <Polyline
-            positions={routePositions}
-            color="#3b82f6"
-            weight={4}
-            opacity={0.6}
-            dashArray="10, 10"
+
+        {/* User location marker */}
+        {userLocation && (
+          <Marker position={[userLocation.lat, userLocation.lng]} icon={DefaultIcon}>
+            <Popup>Your current location</Popup>
+          </Marker>
+        )}
+
+        {/* Producer markers */}
+        {producers.map((producer, index) => (
+          <Marker
+            key={producer.id}
+            position={[producer.location.lat, producer.location.lng]}
+            icon={createNumberedIcon(index + 1, index === currentProducerIndex)}
+          >
+            <Popup>
+              <div className="text-center">
+                <strong>{producer.name}</strong>
+                <p className="text-sm text-gray-600">{producer.location.address}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {producer.categories.slice(0, 2).map(category => (
+                    <span 
+                      key={category}
+                      className="px-2 py-1 bg-primary-100 text-primary-800 text-xs rounded"
+                    >
+                      {category}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+
+        {/* Route lines between producers (overview mode) */}
+        {!isNavigating && producers.length > 1 && (
+          <>
+            {producers.slice(0, -1).map((producer, index) => {
+              const nextProducer = producers[index + 1];
+              return (
+                <RoutingControl
+                  key={`${producer.id}-${nextProducer.id}`}
+                  from={producer.location}
+                  to={nextProducer.location}
+                  isActive={true}
+                />
+              );
+            })}
+          </>
+        )}
+
+        {/* Navigation control (turn-by-turn mode) */}
+        {isNavigating && navigationFrom && navigationTo && onRouteCalculated && onNavigationError && (
+          <NavigationControl
+            from={navigationFrom}
+            to={navigationTo}
+            isActive={true}
+            onRouteCalculated={onRouteCalculated}
+            onError={onNavigationError}
           />
         )}
-        
-        {/* Producer markers */}
-        {producers.map((producer, index) => {
-          const isActive = index === currentProducerIndex;
-          
-          return (
-            <Marker
-              key={producer.id}
-              position={[producer.location.lat, producer.location.lng]}
-              icon={createNumberedIcon(index + 1, isActive)}
-            >
-              <Popup>
-                <div className="p-2">
-                  <h3 className="font-semibold">{producer.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{producer.location.address}</p>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="gap-1"
-                      onClick={() => {
-                        const encodedAddress = encodeURIComponent(producer.location.address);
-                        const url = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&destination_place_id=&center=${producer.location.lat},${producer.location.lng}&travelmode=driving`;
-                        window.open(url, '_blank');
-                      }}
-                    >
-                      <Navigation className="h-3 w-3" />
-                      Navigate
-                    </Button>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
       </MapContainer>
     </div>
   );

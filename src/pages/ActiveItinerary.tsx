@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Navigation, ChevronLeft, ChevronRight, Map, List, Check, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Clock, Navigation, ChevronLeft, ChevronRight, Map, List, Check, ExternalLink, MapPin } from 'lucide-react';
 import { calculateDistance } from '@/utils/distance';
 import { useItinerary } from '@/hooks/useItinerary';
 import { useLocation } from '@/contexts/LocationContext';
@@ -8,22 +8,57 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { ProgressStats } from '@/components/ui/ProgressCard';
-import { ItineraryMap } from '@/components/ItineraryMap';
+import { ItineraryMap, type NavigationInfo } from '@/components/ItineraryMap';
+import { CollapsiblePanel } from '@/components/CollapsiblePanel';
+import { NavigationView } from '@/components/NavigationView';
 
 export const ActiveItinerary: React.FC = () => {
   const { selectedProducers } = useItinerary();
   const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { trackItineraryStarted, trackItineraryCompleted, trackProducerVisited, trackNavigationOpened } = useAnalytics();
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [visitedStops, setVisitedStops] = useState<Set<number>>(new Set());
+  const [isPanelExpanded, setIsPanelExpanded] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isOverview, setIsOverview] = useState(true);
   const [itineraryStartTime] = useState<number>(Date.now());
+  // Navigation state
+  const [routeInfo, setRouteInfo] = useState<NavigationInfo | null>(null);
+  const [navigationLoading, setNavigationLoading] = useState(false);
+  const [navigationError, setNavigationError] = useState<string | null>(null);
   
-  const userLocation = latitude && longitude 
+  // Demo mode for testing - use Ottawa location if user is too far from farms
+  const isUserLocationValid = latitude && longitude;
+  const isUserTooFarFromFarms = isUserLocationValid && 
+    selectedProducers.every(producer => {
+      const distance = calculateDistance(latitude!, longitude!, producer.location.lat, producer.location.lng);
+      return distance > 200000; // 200km
+    });
+  
+  const userLocation = isUserLocationValid && !isUserTooFarFromFarms
     ? { lat: latitude, lng: longitude }
-    : null;
+    : { lat: 45.4215, lng: -75.6972 }; // Ottawa default for demo/testing
+
+  // Check for auto-navigation parameter on mount
+  const hasInitializedRef = useRef(false);
+  useEffect(() => {
+    if (hasInitializedRef.current) return;
+    const shouldNavigate = searchParams.get('navigate') === 'true';
+    if (shouldNavigate && selectedProducers.length > 0) {
+      console.log('🚀 Auto-navigation triggered from URL parameter');
+      setIsOverview(false);
+      setIsNavigating(true);
+      setNavigationLoading(true);
+      setNavigationError(null);
+      setRouteInfo(null);
+      setIsPanelExpanded(false);
+      setViewMode('map');
+      hasInitializedRef.current = true;
+    }
+  }, [searchParams, selectedProducers.length]);
 
   // Track itinerary started on component mount
   useEffect(() => {
@@ -54,8 +89,23 @@ export const ActiveItinerary: React.FC = () => {
   };
 
   const navigateToStop = () => {
-    // Always open Google Maps with specific coordinates for accurate navigation
-    openInGoogleMaps();
+    console.log('🚀 Navigate button clicked - setting isNavigating to true');
+    console.log('📊 Current state:', { 
+      isNavigating, 
+      isOverview,
+      isPanelExpanded, 
+      viewMode,
+      currentStopIndex,
+      producer: currentStop.name 
+    });
+    // Exit overview mode and start navigation
+    setIsOverview(false);
+    setIsNavigating(true);
+    setNavigationLoading(true);
+    setNavigationError(null);
+    setRouteInfo(null);
+    setIsPanelExpanded(false); // Collapse panel to show more map
+    setViewMode('map'); // Switch to map view if not already
   };
 
   const openInGoogleMaps = () => {
@@ -63,6 +113,37 @@ export const ActiveItinerary: React.FC = () => {
     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&destination_place_id=&center=${currentStop.location.lat},${currentStop.location.lng}&travelmode=driving`;
     window.open(googleMapsUrl, '_blank');
     trackNavigationOpened(currentStop);
+  };
+
+  // Navigation handlers
+  const handleRouteCalculated = (info: NavigationInfo) => {
+    console.log('📍 Route calculated in ActiveItinerary:', info);
+    setRouteInfo(info);
+    setNavigationLoading(false);
+    setNavigationError(null);
+  };
+
+  const handleNavigationError = (error: string) => {
+    console.error('❌ Navigation error in ActiveItinerary:', error);
+    setNavigationError(error);
+    setNavigationLoading(false);
+  };
+
+  const handleEndNavigation = () => {
+    console.log('🛑 Navigation ended by user');
+    setIsNavigating(false);
+    setIsOverview(false);
+    setNavigationLoading(false);
+    setNavigationError(null);
+    setRouteInfo(null);
+    setIsPanelExpanded(true);
+  };
+
+  const handleRetryNavigation = () => {
+    console.log('🔄 Retrying navigation...');
+    setNavigationLoading(true);
+    setNavigationError(null);
+    setRouteInfo(null);
   };
 
   const goToNextStop = () => {
@@ -322,36 +403,59 @@ export const ActiveItinerary: React.FC = () => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Mobile: Full-screen map with collapsible panel */}
-        <div className="md:hidden">
-          <div className="fixed inset-0 top-[64px] bottom-0">
-            {/* Map - Full screen */}
+      {/* Navigation mode: Split layout for both mobile and desktop */}
+      {isNavigating ? (
+        <div className="flex flex-col h-screen">
+          {/* Navigation instructions at top - no gap */}
+          <div className="flex-shrink-0">
+            <NavigationView
+              to={currentStop}
+              onClose={handleEndNavigation}
+              routeInfo={routeInfo}
+              loading={navigationLoading}
+              error={navigationError}
+              onRetry={handleRetryNavigation}
+            />
+          </div>
+          
+          {/* Map takes remaining space */}
+          <div className="flex-1 min-h-0">
             <ItineraryMap
               producers={selectedProducers}
               currentProducerIndex={currentStopIndex}
               className="h-full"
               height="100%"
-              focusOnCurrent={isNavigating}
+              focusOnCurrent={true}
+              isNavigating={true}
+              userLocation={userLocation}
+              // Navigation props
+              navigationFrom={
+                currentStopIndex === 0
+                  ? userLocation
+                  : selectedProducers[currentStopIndex - 1].location
+              }
+              navigationTo={currentStop}
+              onRouteCalculated={handleRouteCalculated}
+              onNavigationError={handleNavigationError}
             />
-
-            {/* Navigation overlay when in navigation mode */}
-            {isNavigating && (
-              <div className="absolute top-4 left-4 right-4 z-10">
-                <div className="bg-white rounded-lg shadow-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Navigation className="h-5 w-5 text-orange-600" />
-                      <span className="font-medium">Navigating to:</span>
-                    </div>
-                    <span className="text-sm text-gray-600">{distance > 1000 ? `${(distance/1000).toFixed(0)}k km` : `${distance.toFixed(1)}km`}</span>
-                  </div>
-                  <h3 className="font-semibold text-lg">{currentStop.name}</h3>
-                  <p className="text-sm text-gray-600">{currentStop.location.address}</p>
-                </div>
-              </div>
-            )}
+          </div>
+        </div>
+      ) : (
+        /* Normal mode: Content */
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Mobile: Full-screen map with collapsible panel */}
+          <div className="md:hidden">
+            <div className="fixed inset-0 top-[64px] bottom-0">
+              {/* Map - Full screen */}
+              <ItineraryMap
+                producers={selectedProducers}
+                currentProducerIndex={currentStopIndex}
+                className="h-full"
+                height="100%"
+                focusOnCurrent={false}
+                isNavigating={false}
+                userLocation={userLocation}
+              />
 
             {/* Fixed bottom navigation bar - much thinner */}
             <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
@@ -415,85 +519,88 @@ export const ActiveItinerary: React.FC = () => {
           </div>
 
 
-        {/* Desktop: Toggle between list and map view */}
-        <div className="hidden md:block">
-          {viewMode === 'list' ? (
-            <>
-              <ProgressSection />
-              <CurrentStopDetails />
-              <ActionButtons />
-              <NavigationControls />
-            </>
-          ) : (
-            <div className="space-y-4">
-              <ItineraryMap
-                producers={selectedProducers}
-                currentProducerIndex={currentStopIndex}
-                height="600px"
-                className="shadow-sm border border-gray-200"
-                focusOnCurrent={isNavigating}
-              />
-              
-              {/* Compact info in map view */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div className="flex items-start gap-3">
-                  <ProducerImage 
-                    producerSlug={`${currentStop.id}-1`}
-                    alt={currentStop.name}
-                    size="thumb"
-                    className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{currentStop.name}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{currentStop.location.address}</p>
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        ~45 min visit
-                      </span>
+          {/* Desktop: Toggle between list and map view */}
+          <div className="hidden md:block">
+            {viewMode === 'list' ? (
+              <>
+                <ProgressSection />
+                <CurrentStopDetails />
+                <ActionButtons />
+                <NavigationControls />
+              </>
+            ) : (
+              <div className="space-y-4">
+                <ItineraryMap
+                  producers={selectedProducers}
+                  currentProducerIndex={currentStopIndex}
+                  height="600px"
+                  className="shadow-sm border border-gray-200"
+                  focusOnCurrent={false}
+                  isNavigating={false}
+                  userLocation={userLocation}
+                />
+                
+                {/* Compact info in map view */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                  <div className="flex items-start gap-3">
+                    <ProducerImage 
+                      producerSlug={`${currentStop.id}-1`}
+                      alt={currentStop.name}
+                      size="thumb"
+                      className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg">{currentStop.name}</h3>
+                      <p className="text-gray-600 text-sm mb-2">{currentStop.location.address}</p>
+                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {distance > 1000 ? `${(distance/1000).toFixed(0)}k km away` : `${distance.toFixed(1)}km away`}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          ~45 min visit
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="mt-4 space-y-2">
-                  <Button
-                    onClick={navigateToStop}
-                    className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
-                  >
-                    <Navigation className="h-5 w-5" />
-                    Get Directions
-                  </Button>
-                  {distance <= 1000 && (
+                  
+                  <div className="mt-4 space-y-2">
                     <Button
-                      onClick={openInGoogleMaps}
-                      className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+                      onClick={navigateToStop}
+                      className="w-full gap-2 bg-orange-600 hover:bg-orange-700"
                     >
-                      <ExternalLink className="h-5 w-5" />
-                      Open in Google Maps
+                      <Navigation className="h-5 w-5" />
+                      Get Directions
                     </Button>
-                  )}
-                  {!visitedStops.has(currentStopIndex) && (
-                    <Button
-                      onClick={markAsVisited}
-                      variant="outline"
-                      className="w-full gap-2"
-                    >
-                      <Check className="h-5 w-5" />
-                      Mark as Visited
-                    </Button>
-                  )}
+                    {distance <= 1000 && (
+                      <Button
+                        onClick={openInGoogleMaps}
+                        className="w-full gap-2 bg-[#4285F4] hover:bg-[#357ae8] text-white"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        Open in Google Maps
+                      </Button>
+                    )}
+                    {!visitedStops.has(currentStopIndex) && (
+                      <Button
+                        onClick={markAsVisited}
+                        variant="outline"
+                        className="w-full gap-2"
+                      >
+                        <Check className="h-5 w-5" />
+                        Mark as Visited
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <NavigationControls />
-            </div>
-          )}
+                <NavigationControls />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
