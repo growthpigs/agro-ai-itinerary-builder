@@ -4,12 +4,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    include: ['leaflet-routing-machine'],
+  },
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'map-vendor': ['leaflet', 'react-leaflet'],
+          'map-vendor': ['leaflet', 'react-leaflet', 'leaflet-routing-machine'],
           'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs', '@radix-ui/react-tooltip'],
         },
       },
