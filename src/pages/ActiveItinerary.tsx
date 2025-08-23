@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { ProducerImage } from '@/components/ui/ProducerImage';
 import { ProgressStats } from '@/components/ui/ProgressCard';
 import { ItineraryMap, type NavigationInfo } from '@/components/ItineraryMap';
-import { CollapsiblePanel } from '@/components/CollapsiblePanel';
 import { NavigationView } from '@/components/NavigationView';
 
 export const ActiveItinerary: React.FC = () => {

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import { Navigation } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import type { Producer } from '@/types';
 
 // Navigation control types
