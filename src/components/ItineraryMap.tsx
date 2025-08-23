@@ -4,19 +4,18 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Producer } from '@/types';
 
-// Dynamically import leaflet-routing-machine to avoid build issues
-let routingMachineLoaded = false;
-const loadRoutingMachine = async () => {
-  if (!routingMachineLoaded) {
-    try {
-      // @ts-ignore - dynamic imports for build compatibility
-      await import('leaflet-routing-machine');
-      // @ts-ignore - dynamic imports for build compatibility
-      await import('leaflet-routing-machine/dist/leaflet-routing-machine.css');
-      routingMachineLoaded = true;
-    } catch (error) {
-      console.error('Failed to load leaflet-routing-machine:', error);
-    }
+// Import leaflet-routing-machine - now bundled with map-vendor
+import 'leaflet-routing-machine';
+
+// Load CSS from CDN to avoid bundling issues
+let cssLoaded = false;
+const loadRoutingCSS = () => {
+  if (!cssLoaded && typeof document !== 'undefined') {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
+    document.head.appendChild(link);
+    cssLoaded = true;
   }
 };
 
@@ -70,9 +69,9 @@ function NavigationControl({
 
     console.log('🗺️ NavigationControl: Starting route calculation...', { from, to: to.location });
 
-    const setupRouting = async () => {
-      // Ensure routing machine is loaded
-      await loadRoutingMachine();
+    const setupRouting = () => {
+      // Load CSS for routing machine
+      loadRoutingCSS();
       
       // Set timeout for route calculation
       const timeoutId = setTimeout(() => {
@@ -153,10 +152,12 @@ function NavigationControl({
       };
     };
 
-    setupRouting().catch((error) => {
+    try {
+      setupRouting();
+    } catch (error) {
       console.error('❌ NavigationControl: Failed to setup routing:', error);
       onError('Failed to load routing functionality. Please try Google Maps instead.');
-    });
+    }
   }, [isActive, from, to, map, onRouteCalculated, onError]);
 
   return null; // This component doesn't render anything
@@ -228,9 +229,9 @@ function RoutingControl({
       return;
     }
 
-    const setupRouting = async () => {
-      // Ensure routing machine is loaded
-      await loadRoutingMachine();
+    const setupRouting = () => {
+      // Load CSS for routing machine
+      loadRoutingCSS();
 
       const control = (L as any).Routing.control({
         waypoints: [
@@ -265,9 +266,11 @@ function RoutingControl({
       };
     };
 
-    setupRouting().catch((error) => {
+    try {
+      setupRouting();
+    } catch (error) {
       console.error('❌ RoutingControl: Failed to setup routing:', error);
-    });
+    }
   }, [map, from, to, isActive]);
 
   return null;

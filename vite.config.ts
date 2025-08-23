@@ -9,11 +9,11 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ['leaflet-routing-machine', 'leaflet-routing-machine/dist/leaflet-routing-machine.css'],
+      external: ['leaflet-routing-machine/dist/leaflet-routing-machine.css'],
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'map-vendor': ['leaflet', 'react-leaflet'],
+          'map-vendor': ['leaflet', 'react-leaflet', 'leaflet-routing-machine'],
           'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs', '@radix-ui/react-tooltip'],
         },
       },
